@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin — AHCA Portal</title>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
+  <style>
+    :root{
+      --bg:#050D07;--green:#02B36A;--green-l:#5ECFA0;--green-d:#018F54;
+      --gold:#C9A84C;--text:#E8F5EC;--text-2:#9DB8A4;--text-3:#5C7A63;
+      --border:rgba(94,207,160,.12);--surface:rgba(8,22,12,.75);
+      --r:16px;--r-sm:10px;--r-f:100px;
+    }
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-height:100svh;display:flex}
+
+    .sidebar{
+      width:240px;flex-shrink:0;position:fixed;top:0;left:0;bottom:0;
+      background:rgba(4,11,6,.97);border-right:1px solid rgba(201,168,76,.15);
+      display:flex;flex-direction:column;padding:24px 14px;z-index:200;
+    }
+    .logo{display:flex;align-items:center;gap:10px;padding:4px 10px;margin-bottom:8px}
+    .logo-mark{
+      width:38px;height:38px;border-radius:10px;
+      background:linear-gradient(135deg,#a8722a,var(--gold));
+      display:flex;align-items:center;justify-content:center;
+      font-family:'Syne',sans-serif;font-weight:800;font-size:16px;color:var(--bg);
+    }
+    .logo-name{font-family:'Syne',sans-serif;font-weight:700;font-size:17px}
+    .logo-name span{color:var(--gold)}
+    .admin-tag{
+      display:inline-block;margin:0 10px 28px;
+      background:rgba(201,168,76,.1);border:1px solid rgba(201,168,76,.25);
+      border-radius:4px;font-size:9px;font-weight:700;color:var(--gold);
+      padding:3px 9px;letter-spacing:.08em;text-transform:uppercase;
+    }
+    .nav-label{font-size:10px;font-weight:700;color:var(--text-3);
+      letter-spacing:.1em;text-transform:uppercase;padding:0 10px;margin-bottom:6px}
+    .nav-link{
+      display:flex;align-items:center;gap:10px;padding:10px 12px;
+      border-radius:var(--r-sm);margin-bottom:2px;color:var(--text-2);
+      font-size:13px;font-weight:500;text-decoration:none;
+      transition:background .15s,color .15s;cursor:pointer;
+      border:none;background:none;width:100%;
+    }
+    .nav-link i{font-size:17px}
+    .nav-link:hover{background:rgba(201,168,76,.06);color:var(--text)}
+    .nav-link.active{background:rgba(201,168,76,.1);color:var(--gold);font-weight:600}
+    .sidebar-footer{margin-top:auto}
+
+    .main{flex:1;margin-left:240px;min-height:100svh}
+    .topbar{
+      display:flex;align-items:center;justify-content:space-between;
+      padding:18px 32px;border-bottom:1px solid var(--border);
+      background:rgba(5,13,7,.8);backdrop-filter:blur(12px);
+      position:sticky;top:0;z-index:100;
+    }
+    .topbar h1{font-family:'Syne',sans-serif;font-size:20px;font-weight:700}
+    .topbar p{font-size:13px;color:var(--text-2);margin-top:2px}
+
+    .content{padding:28px 32px}
+
+    /* Tabs */
+    .tabs{display:flex;gap:4px;background:rgba(255,255,255,.03);
+      border:1px solid var(--border);border-radius:var(--r-sm);padding:4px;
+      margin-bottom:28px;width:fit-content;
+    }
+    .tab{
+      padding:9px 20px;border-radius:8px;font-size:13px;font-weight:600;
+      cursor:pointer;border:none;background:none;color:var(--text-2);
+      transition:background .15s,color .15s;display:flex;align-items:center;gap:7px;
+    }
+    .tab i{font-size:15px}
+    .tab:hover{color:var(--text)}
+    .tab.active{background:rgba(201,168,76,.12);color:var(--gold)}
+
+    .tab-panel{display:none}
+    .tab-panel.active{display:block}
+
+    /* Cards */
+    .card{
+      background:var(--surface);border:1px solid var(--border);
+      border-radius:var(--r);padding:24px;backdrop-filter:blur(12px);
+      margin-bottom:20px;
+    }
+    .card-title{
+      font-family:'Syne',sans-serif;font-size:16px;font-weight:700;
+      margin-bottom:20px;display:flex;align-items:center;gap:8px;color:var(--text);
+    }
+    .card-title i{color:var(--gold)}
+
+    .grid-2{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+
+    /* Fields */
+    .field{margin-bottom:14px}
+    .field label{display:block;font-size:11px;font-weight:600;color:var(--text-3);
+      letter-spacing:.06em;text-transform:uppercase;margin-bottom:7px}
+    .field input,.field select,.field textarea{
+      width:100%;background:rgba(255,255,255,.04);border:1px solid var(--border);
+      border-radius:var(--r-sm);padding:11px 14px;color:var(--text);
+      font-size:13px;font-family:'Inter',sans-serif;outline:none;transition:border-color .2s;
+    }
+    .field input:focus,.field select:focus,.field textarea:focus{border-color:rgba(201,168,76,.4)}
+    .field input::placeholder,.field textarea::placeholder{color:var(--text-3)}
+    .field select option{background:#0a1a0e}
+    .field textarea{resize:vertical;min-height:70px}
+
+    /* Services checkboxes */
+    .services-check{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:4px}
+    .svc-check-item{
+      display:flex;align-items:center;gap:9px;padding:10px 12px;
+      background:rgba(255,255,255,.03);border:1px solid var(--border);
+      border-radius:var(--r-sm);cursor:pointer;transition:border-color .15s,background .15s;
+    }
+    .svc-check-item:hover{border-color:rgba(201,168,76,.3);background:rgba(201,168,76,.04)}
+    .svc-check-item.selected{border-color:rgba(201,168,76,.4);background:rgba(201,168,76,.08)}
+    .svc-check-item input[type=checkbox]{display:none}
+    .svc-check-box{
+      width:18px;height:18px;border-radius:5px;flex-shrink:0;
+      border:2px solid var(--border);display:flex;align-items:center;justify-content:center;
+      transition:border-color .15s,background .15s;font-size:11px;color:var(--bg);
+    }
+    .svc-check-item.selected .svc-check-box{background:var(--gold);border-color:var(--gold)}
+    .svc-check-label{font-size:12px;font-weight:500;color:var(--text-2)}
+    .svc-check-item.selected .svc-check-label{color:var(--text)}
+
+    /* Buttons */
+    .btn{
+      padding:11px 22px;border-radius:var(--r-f);border:none;cursor:pointer;
+      font-size:13px;font-weight:700;font-family:'Syne',sans-serif;
+      display:inline-flex;align-items:center;gap:7px;
+      transition:opacity .2s,transform .15s;
+    }
+    .btn:hover{opacity:.88;transform:translateY(-1px)}
+    .btn:disabled{opacity:.4;cursor:not-allowed;transform:none}
+    .btn--gold{background:linear-gradient(135deg,#a8722a,var(--gold));color:var(--bg)}
+    .btn--green{background:linear-gradient(135deg,var(--green-d),var(--green));color:var(--bg)}
+    .btn--sm{padding:7px 14px;font-size:11px}
+    .btn--ghost{background:rgba(255,255,255,.05);border:1px solid var(--border);color:var(--text-2)}
+    .btn--danger{background:rgba(239,68,68,.1);border:1px solid rgba(239,68,68,.2);color:#fca5a5}
+
+    /* Alert */
+    .alert{border-radius:var(--r-sm);padding:11px 15px;font-size:13px;
+      margin-bottom:16px;display:none;align-items:center;gap:9px}
+    .alert--ok{background:rgba(2,179,106,.08);border:1px solid rgba(2,179,106,.2);color:var(--green-l)}
+    .alert--err{background:rgba(239,68,68,.08);border:1px solid rgba(239,68,68,.2);color:#fca5a5}
+
+    /* Client list */
+    .client-table{width:100%;border-collapse:collapse}
+    .client-table th{
+      text-align:left;font-size:10px;font-weight:700;color:var(--text-3);
+      text-transform:uppercase;letter-spacing:.07em;padding:0 14px 12px;
+    }
+    .client-row-tr{border-bottom:1px solid var(--border)}
+    .client-row-tr:last-child{border-bottom:none}
+    .client-row-tr td{padding:14px;vertical-align:middle}
+    .client-av{
+      width:34px;height:34px;border-radius:50%;flex-shrink:0;
+      background:linear-gradient(135deg,var(--green-d),var(--green));
+      display:flex;align-items:center;justify-content:center;
+      font-family:'Syne',sans-serif;font-weight:700;font-size:13px;color:var(--bg);
+    }
+    .client-td-name{display:flex;align-items:center;gap:10px}
+    .client-name-txt{font-size:13px;font-weight:600}
+    .client-email-txt{font-size:11px;color:var(--text-3);margin-top:2px}
+    .svc-pill{
+      display:inline-flex;align-items:center;gap:4px;
+      background:rgba(2,179,106,.08);border:1px solid rgba(2,179,106,.15);
+      border-radius:var(--r-f);padding:3px 9px;font-size:10px;font-weight:600;color:var(--green-l);
+      margin:2px;
+    }
+    .empty-row td{text-align:center;padding:40px;color:var(--text-3);font-size:13px}
+
+    @keyframes spin{to{transform:rotate(360deg)}}
+    .loading{text-align:center;padding:36px;color:var(--text-3);font-size:13px}
+    .loading i{font-size:28px;animation:spin .8s linear infinite;display:block;margin-bottom:10px}
+
+    @media(max-width:900px){
+      .main{margin-left:0}
+      .sidebar{display:none}
+      .content{padding:20px 16px}
+      .grid-2{grid-template-columns:1fr}
+      .services-check{grid-template-columns:1fr}
+    }
+  </style>
+</head>
+<body>
+
+<aside class="sidebar">
+  <div class="logo">
+    <div class="logo-mark">A</div>
+    <div class="logo-name">AHCA <span>Admin</span></div>
+  </div>
+  <div class="admin-tag">Admin Panel</div>
+  <div class="nav-label">Management</div>
+  <a class="nav-link active" href="admin.html"><i class="ti ti-users"></i> Clients</a>
+  <a class="nav-link" href="../index.html" target="_blank"><i class="ti ti-world"></i> Website</a>
+  <div class="sidebar-footer">
+    <button class="nav-link" id="logoutBtn" style="color:#fca5a5;width:100%">
+      <i class="ti ti-logout"></i> Sign out
+    </button>
+  </div>
+</aside>
+
+<div class="main">
+  <div class="topbar">
+    <div>
+      <h1>Admin Panel</h1>
+      <p>Manage clients, assign services, and upload documents</p>
+    </div>
+  </div>
+
+  <div class="content">
+    <div class="tabs">
+      <button class="tab active" data-tab="clients"><i class="ti ti-users"></i> Clients</button>
+      <button class="tab" data-tab="add"><i class="ti ti-user-plus"></i> Add Client</button>
+      <button class="tab" data-tab="upload"><i class="ti ti-upload"></i> Upload Document</button>
+    </div>
+
+    <!-- CLIENTS TAB -->
+    <div class="tab-panel active" id="tab-clients">
+      <div class="card">
+        <div class="card-title"><i class="ti ti-users"></i> All Clients</div>
+        <div id="clientTableWrap">
+          <div class="loading"><i class="ti ti-loader"></i>Loading clients…</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ADD CLIENT TAB -->
+    <div class="tab-panel" id="tab-add">
+      <div class="grid-2">
+        <div class="card">
+          <div class="card-title"><i class="ti ti-user-plus"></i> Create Client Account</div>
+          <div class="alert alert--ok" id="addOk"></div>
+          <div class="alert alert--err" id="addErr"></div>
+          <div class="field"><label>Full Name</label><input type="text" id="cName" placeholder="Ahmed Al Rashid"></div>
+          <div class="field"><label>Email Address</label><input type="email" id="cEmail" placeholder="ahmed@company.ae"></div>
+          <div class="field"><label>Temporary Password</label><input type="text" id="cPass" placeholder="Min 6 characters"></div>
+          <div class="field"><label>Company</label><input type="text" id="cCompany" placeholder="Company name (optional)"></div>
+          <div class="field"><label>Phone</label><input type="text" id="cPhone" placeholder="+971 50 000 0000"></div>
+          <button class="btn btn--green" id="addClientBtn" style="width:100%;justify-content:center;margin-top:4px">
+            <i class="ti ti-user-plus"></i> Create Account
+          </button>
+        </div>
+
+        <div class="card">
+          <div class="card-title"><i class="ti ti-briefcase"></i> Assign Services</div>
+          <p style="font-size:12px;color:var(--text-3);margin-bottom:14px">Select after creating the client account — or assign later from the Clients tab.</p>
+          <div class="field"><label>Select Client</label>
+            <select id="svcClient"><option value="">— Select client —</option></select>
+          </div>
+          <div class="field">
+            <label>Services</label>
+            <div class="services-check" id="svcCheckboxes">
+              <div class="svc-check-item" data-svc="VAT Filing & Compliance">
+                <div class="svc-check-box"><i class="ti ti-check"></i></div>
+                <div class="svc-check-label">VAT Filing & Compliance</div>
+              </div>
+              <div class="svc-check-item" data-svc="Corporate Tax Filing">
+                <div class="svc-check-box"><i class="ti ti-check"></i></div>
+                <div class="svc-check-label">Corporate Tax Filing</div>
+              </div>
+              <div class="svc-check-item" data-svc="Bookkeeping & Payroll">
+                <div class="svc-check-box"><i class="ti ti-check"></i></div>
+                <div class="svc-check-label">Bookkeeping & Payroll</div>
+              </div>
+              <div class="svc-check-item" data-svc="Financial Reporting & Audit">
+                <div class="svc-check-box"><i class="ti ti-check"></i></div>
+                <div class="svc-check-label">Financial Reporting & Audit</div>
+              </div>
+              <div class="svc-check-item" data-svc="Business Advisory">
+                <div class="svc-check-box"><i class="ti ti-check"></i></div>
+                <div class="svc-check-label">Business Advisory</div>
+              </div>
+              <div class="svc-check-item" data-svc="FTA Registration">
+                <div class="svc-check-box"><i class="ti ti-check"></i></div>
+                <div class="svc-check-label">FTA Registration</div>
+              </div>
+            </div>
+          </div>
+          <div class="field"><label>Status</label>
+            <select id="svcStatus">
+              <option value="active">Active</option>
+              <option value="pending">In Progress</option>
+              <option value="completed">Completed</option>
+            </select>
+          </div>
+          <div class="field"><label>Notes (optional)</label>
+            <textarea id="svcNotes" placeholder="e.g. Quarterly VAT filing — next due date April 2025"></textarea>
+          </div>
+          <div class="alert alert--ok" id="svcOk"></div>
+          <div class="alert alert--err" id="svcErr"></div>
+          <button class="btn btn--gold" id="assignSvcBtn" style="width:100%;justify-content:center">
+            <i class="ti ti-check"></i> Assign Services
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- UPLOAD DOCUMENT TAB -->
+    <div class="tab-panel" id="tab-upload">
+      <div class="card" style="max-width:600px">
+        <div class="card-title"><i class="ti ti-upload"></i> Upload Document to Client</div>
+        <div class="alert alert--ok" id="upOk"></div>
+        <div class="alert alert--err" id="upErr"></div>
+        <div class="field"><label>Select Client</label>
+          <select id="upClient"><option value="">— Select client —</option></select>
+        </div>
+        <div class="field"><label>File Name</label>
+          <input type="text" id="upName" placeholder="VAT_Return_Q1_2025.pdf">
+        </div>
+        <div class="field"><label>Document Link (Google Drive / Dropbox)</label>
+          <input type="url" id="upUrl" placeholder="https://drive.google.com/file/...">
+        </div>
+        <div class="field"><label>Notes for client (optional)</label>
+          <textarea id="upNotes" placeholder="e.g. Please review and sign — deadline 28 April"></textarea>
+        </div>
+        <button class="btn btn--gold" id="uploadBtn" style="width:100%;justify-content:center;margin-top:4px">
+          <i class="ti ti-upload"></i> Upload Document
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+const sb = supabase.createClient(
+  'https://bhcadrznoyjpaozpweai.supabase.co',
+  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJoY2Fkcnpub3lqcGFvenB3ZWFpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODE2MzUzMjYsImV4cCI6MjA5NzIxMTMyNn0._hmQ-jRicwa3uhQc45ZKer9MVrN4NpJqk3t8FzXtkb4'
+);
+const ADMIN = 'abedalfattah.91p@gmail.com';
+
+async function init(){
+  const {data:{session}} = await sb.auth.getSession();
+  if(!session){window.location.href='login.html';return}
+  if(session.user.email!==ADMIN){alert('Access denied');window.location.href='dashboard.html';return}
+  loadClients();
+}
+
+let allClients=[];
+
+async function loadClients(){
+  const {data} = await sb.from('clients').select('*').order('created_at',{ascending:false});
+  allClients = data||[];
+  renderClientTable(allClients);
+  populateSelects(allClients);
+}
+
+function renderClientTable(list){
+  const el = document.getElementById('clientTableWrap');
+  if(!list.length){
+    el.innerHTML=`<table class="client-table"><tr class="empty-row"><td colspan="4"><i class="ti ti-users" style="font-size:32px;display:block;margin-bottom:10px"></i>No clients yet. Add your first client.</td></tr></table>`;
+    return;
+  }
+  el.innerHTML=`<table class="client-table">
+    <thead><tr>
+      <th>Client</th><th>Company</th><th>Services</th><th>Actions</th>
+    </tr></thead>
+    <tbody>${list.map(c=>`
+    <tr class="client-row-tr">
+      <td><div class="client-td-name">
+        <div class="client-av">${(c.full_name||c.email)[0].toUpperCase()}</div>
+        <div><div class="client-name-txt">${c.full_name||'—'}</div>
+             <div class="client-email-txt">${c.email}</div></div>
+      </div></td>
+      <td style="color:var(--text-2);font-size:13px">${c.company||'—'}</td>
+      <td id="svc-${c.id}"><span style="color:var(--text-3);font-size:12px">Loading…</span></td>
+      <td><div style="display:flex;gap:6px">
+        <button class="btn btn--gold btn--sm" onclick="quickAssign('${c.id}','${c.full_name||c.email}')">
+          <i class="ti ti-briefcase"></i> Services
+        </button>
+        <button class="btn btn--ghost btn--sm" onclick="quickUpload('${c.id}')">
+          <i class="ti ti-upload"></i>
+        </button>
+      </div></td>
+    </tr>`).join('')}
+    </tbody></table>`;
+  // Load services for each client
+  list.forEach(c=>loadClientSvcs(c.id));
+}
+
+async function loadClientSvcs(id){
+  const {data} = await sb.from('client_services').select('service_name').eq('client_id',id);
+  const el = document.getElementById('svc-'+id);
+  if(!el) return;
+  if(!data?.length){el.innerHTML=`<span style="color:var(--text-3);font-size:12px">None assigned</span>`;return}
+  el.innerHTML=data.map(s=>`<span class="svc-pill"><i class="ti ti-check" style="font-size:9px"></i>${s.service_name}</span>`).join('');
+}
+
+function populateSelects(list){
+  const opts='<option value="">— Select client —</option>'+list.map(c=>`<option value="${c.id}">${c.full_name||c.email}${c.company?' · '+c.company:''}</option>`).join('');
+  document.getElementById('svcClient').innerHTML=opts;
+  document.getElementById('upClient').innerHTML=opts;
+}
+
+// Tabs
+document.querySelectorAll('.tab').forEach(t=>{
+  t.addEventListener('click',()=>{
+    document.querySelectorAll('.tab').forEach(x=>x.classList.remove('active'));
+    document.querySelectorAll('.tab-panel').forEach(x=>x.classList.remove('active'));
+    t.classList.add('active');
+    document.getElementById('tab-'+t.dataset.tab).classList.add('active');
+  });
+});
+
+// Service checkboxes
+document.querySelectorAll('.svc-check-item').forEach(item=>{
+  item.addEventListener('click',()=>item.classList.toggle('selected'));
+});
+
+function showAlert(id,msg,type='ok'){
+  const el=document.getElementById(id);
+  el.textContent=msg; el.style.display='flex';
+  if(type==='err') el.className='alert alert--err';
+  else el.className='alert alert--ok';
+  setTimeout(()=>el.style.display='none',4000);
+}
+
+// Add client
+document.getElementById('addClientBtn').addEventListener('click', async()=>{
+  const name=document.getElementById('cName').value.trim();
+  const email=document.getElementById('cEmail').value.trim();
+  const pass=document.getElementById('cPass').value.trim();
+  const company=document.getElementById('cCompany').value.trim();
+  const phone=document.getElementById('cPhone').value.trim();
+  if(!email||!pass){showAlert('addErr','Email and password required.','err');return}
+
+  const btn=document.getElementById('addClientBtn');
+  btn.disabled=true;btn.innerHTML='<i class="ti ti-loader"></i> Creating…';
+
+  const {data,error}=await sb.auth.signUp({email,password:pass});
+  if(error){showAlert('addErr',error.message,'err')}
+  else{
+    await sb.from('clients').upsert({id:data.user.id,email,full_name:name,company,phone});
+    showAlert('addOk',`✓ ${name||email} created! Confirmation email sent.`);
+    ['cName','cEmail','cPass','cCompany','cPhone'].forEach(id=>document.getElementById(id).value='');
+    loadClients();
+  }
+  btn.disabled=false;btn.innerHTML='<i class="ti ti-user-plus"></i> Create Account';
+});
+
+// Assign services
+document.getElementById('assignSvcBtn').addEventListener('click', async()=>{
+  const clientId=document.getElementById('svcClient').value;
+  const status=document.getElementById('svcStatus').value;
+  const notes=document.getElementById('svcNotes').value.trim();
+  const selected=[...document.querySelectorAll('.svc-check-item.selected')].map(el=>el.dataset.svc);
+  if(!clientId){showAlert('svcErr','Please select a client.','err');return}
+  if(!selected.length){showAlert('svcErr','Please select at least one service.','err');return}
+
+  const btn=document.getElementById('assignSvcBtn');
+  btn.disabled=true;btn.innerHTML='<i class="ti ti-loader"></i> Saving…';
+
+  // Remove existing and re-insert
+  await sb.from('client_services').delete().eq('client_id',clientId).in('service_name',selected);
+  const rows=selected.map(s=>({client_id:clientId,service_name:s,status,notes}));
+  const {error}=await sb.from('client_services').insert(rows);
+  if(error){showAlert('svcErr',error.message,'err')}
+  else{
+    showAlert('svcOk',`✓ ${selected.length} service${selected.length>1?'s':''} assigned!`);
+    document.querySelectorAll('.svc-check-item').forEach(el=>el.classList.remove('selected'));
+    loadClients();
+  }
+  btn.disabled=false;btn.innerHTML='<i class="ti ti-check"></i> Assign Services';
+});
+
+// Upload document
+document.getElementById('uploadBtn').addEventListener('click', async()=>{
+  const clientId=document.getElementById('upClient').value;
+  const name=document.getElementById('upName').value.trim();
+  const url=document.getElementById('upUrl').value.trim();
+  const notes=document.getElementById('upNotes').value.trim();
+  if(!clientId||!name||!url){showAlert('upErr','Please fill all required fields.','err');return}
+
+  const btn=document.getElementById('uploadBtn');
+  btn.disabled=true;btn.innerHTML='<i class="ti ti-loader"></i> Uploading…';
+
+  const {error}=await sb.from('documents').insert({client_id:clientId,file_name:name,file_url:url,notes});
+  if(error){showAlert('upErr',error.message,'err')}
+  else{
+    showAlert('upOk','✓ Document uploaded successfully!');
+    document.getElementById('upName').value='';
+    document.getElementById('upUrl').value='';
+    document.getElementById('upNotes').value='';
+  }
+  btn.disabled=false;btn.innerHTML='<i class="ti ti-upload"></i> Upload Document';
+});
+
+// Quick actions from client table
+function quickAssign(id,name){
+  document.querySelector('[data-tab="add"]').click();
+  document.getElementById('svcClient').value=id;
+}
+function quickUpload(id){
+  document.querySelector('[data-tab="upload"]').click();
+  document.getElementById('upClient').value=id;
+}
+
+document.getElementById('logoutBtn').addEventListener('click',async()=>{await sb.auth.signOut();window.location.href='login.html'});
+init();
+</script>
+</body>
+</html>

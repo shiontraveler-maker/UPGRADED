@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My Dashboard — AHCA Portal</title>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
+  <style>
+    :root{
+      --bg:#050D07;--green:#02B36A;--green-l:#5ECFA0;--green-d:#018F54;
+      --gold:#C9A84C;--text:#E8F5EC;--text-2:#9DB8A4;--text-3:#5C7A63;
+      --border:rgba(94,207,160,.12);--surface:rgba(8,22,12,.75);
+      --r:16px;--r-sm:10px;--r-f:100px;
+    }
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-height:100svh;display:flex}
+
+    /* ── SIDEBAR ── */
+    .sidebar{
+      width:260px;flex-shrink:0;position:fixed;top:0;left:0;bottom:0;
+      background:rgba(4,11,6,.97);border-right:1px solid var(--border);
+      display:flex;flex-direction:column;padding:24px 14px;z-index:200;
+      transition:transform .3s;
+    }
+    .logo{display:flex;align-items:center;gap:10px;padding:4px 10px;margin-bottom:36px}
+    .logo-mark{
+      width:38px;height:38px;border-radius:10px;
+      background:linear-gradient(135deg,var(--green-d),var(--green));
+      display:flex;align-items:center;justify-content:center;
+      font-family:'Syne',sans-serif;font-weight:800;font-size:16px;color:var(--bg);flex-shrink:0;
+    }
+    .logo-name{font-family:'Syne',sans-serif;font-weight:700;font-size:17px}
+    .logo-name span{color:var(--green-l)}
+
+    .nav-section{margin-bottom:28px}
+    .nav-label{font-size:10px;font-weight:700;color:var(--text-3);
+      letter-spacing:.1em;text-transform:uppercase;padding:0 10px;margin-bottom:6px}
+    .nav-link{
+      display:flex;align-items:center;gap:10px;padding:10px 12px;
+      border-radius:var(--r-sm);margin-bottom:2px;color:var(--text-2);
+      font-size:13px;font-weight:500;text-decoration:none;
+      transition:background .15s,color .15s;cursor:pointer;
+      border:none;background:none;width:100%;text-align:left;
+    }
+    .nav-link i{font-size:17px;flex-shrink:0}
+    .nav-link:hover{background:rgba(94,207,160,.06);color:var(--text)}
+    .nav-link.active{background:rgba(2,179,106,.1);color:var(--green-l);font-weight:600}
+    .nav-link .badge-count{
+      margin-left:auto;background:var(--green);color:var(--bg);
+      font-size:10px;font-weight:700;padding:2px 7px;border-radius:var(--r-f);
+    }
+
+    .sidebar-footer{margin-top:auto}
+    .user-pill{
+      background:rgba(255,255,255,.03);border:1px solid var(--border);
+      border-radius:var(--r-sm);padding:14px;margin-bottom:6px;
+    }
+    .user-pill-top{display:flex;align-items:center;gap:10px}
+    .user-avatar{
+      width:34px;height:34px;border-radius:50%;flex-shrink:0;
+      background:linear-gradient(135deg,var(--green-d),var(--green));
+      display:flex;align-items:center;justify-content:center;
+      font-family:'Syne',sans-serif;font-weight:700;font-size:14px;color:var(--bg);
+    }
+    .user-info{flex:1;min-width:0}
+    .user-name{font-size:13px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    .user-tag{
+      display:inline-block;margin-top:5px;
+      background:rgba(2,179,106,.1);border:1px solid rgba(2,179,106,.2);
+      border-radius:4px;font-size:9px;font-weight:700;color:var(--green-l);
+      padding:2px 7px;letter-spacing:.06em;text-transform:uppercase;
+    }
+
+    /* ── MAIN ── */
+    .main{flex:1;margin-left:260px;min-height:100svh;display:flex;flex-direction:column}
+
+    /* Topbar */
+    .topbar{
+      display:flex;align-items:center;justify-content:space-between;
+      padding:20px 36px;border-bottom:1px solid var(--border);
+      background:rgba(5,13,7,.8);backdrop-filter:blur(12px);
+      position:sticky;top:0;z-index:100;
+    }
+    .topbar-left h1{font-family:'Syne',sans-serif;font-size:20px;font-weight:700}
+    .topbar-left p{font-size:13px;color:var(--text-2);margin-top:2px}
+    .topbar-right{display:flex;align-items:center;gap:12px}
+    .wa-btn{
+      display:flex;align-items:center;gap:7px;
+      background:rgba(37,211,102,.1);border:1px solid rgba(37,211,102,.25);
+      color:#4ade80;border-radius:var(--r-f);padding:9px 16px;
+      font-size:13px;font-weight:600;text-decoration:none;
+      transition:background .2s;
+    }
+    .wa-btn:hover{background:rgba(37,211,102,.18)}
+
+    /* Content */
+    .content{padding:32px 36px;flex:1}
+
+    /* Service cards */
+    .section-head{
+      display:flex;align-items:center;justify-content:space-between;
+      margin-bottom:18px;
+    }
+    .section-title{font-family:'Syne',sans-serif;font-size:18px;font-weight:700;
+      display:flex;align-items:center;gap:8px}
+    .section-title i{color:var(--green-l)}
+
+    .services-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:14px;margin-bottom:36px}
+
+    .svc-card{
+      background:var(--surface);border:1px solid var(--border);
+      border-radius:var(--r);padding:22px;
+      backdrop-filter:blur(12px);transition:border-color .2s,transform .2s;
+      position:relative;overflow:hidden;
+    }
+    .svc-card:hover{border-color:rgba(2,179,106,.28);transform:translateY(-2px)}
+    .svc-card-glow{
+      position:absolute;top:-40px;right:-40px;width:120px;height:120px;
+      border-radius:50%;filter:blur(40px);pointer-events:none;opacity:.5;
+    }
+    .svc-top{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:14px}
+    .svc-icon{
+      width:44px;height:44px;border-radius:12px;
+      display:flex;align-items:center;justify-content:center;font-size:20px;
+    }
+    .svc-status{
+      display:inline-flex;align-items:center;gap:5px;
+      border-radius:var(--r-f);padding:4px 10px;
+      font-size:10px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;
+    }
+    .svc-status--active{background:rgba(2,179,106,.1);color:var(--green-l);border:1px solid rgba(2,179,106,.2)}
+    .svc-status--active::before{content:'';width:6px;height:6px;border-radius:50%;background:var(--green);animation:blink 2s infinite}
+    .svc-status--pending{background:rgba(201,168,76,.1);color:var(--gold);border:1px solid rgba(201,168,76,.2)}
+    .svc-status--completed{background:rgba(94,207,160,.07);color:var(--text-2);border:1px solid var(--border)}
+    @keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
+
+    .svc-name{font-family:'Syne',sans-serif;font-size:15px;font-weight:700;margin-bottom:5px}
+    .svc-notes{font-size:12px;color:var(--text-2);line-height:1.55}
+    .svc-date{font-size:11px;color:var(--text-3);margin-top:10px;display:flex;align-items:center;gap:5px}
+
+    /* Documents */
+    .docs-list{display:flex;flex-direction:column;gap:8px}
+    .doc-row{
+      background:var(--surface);border:1px solid var(--border);
+      border-radius:var(--r-sm);padding:14px 18px;
+      display:flex;align-items:center;gap:14px;
+      transition:border-color .2s,background .2s;
+    }
+    .doc-row:hover{border-color:rgba(2,179,106,.25);background:rgba(2,179,106,.03)}
+    .doc-ico{
+      width:40px;height:40px;border-radius:10px;flex-shrink:0;
+      display:flex;align-items:center;justify-content:center;font-size:19px;
+    }
+    .doc-ico--pdf{background:rgba(239,68,68,.1);color:#fca5a5}
+    .doc-ico--xls{background:rgba(34,197,94,.1);color:#86efac}
+    .doc-ico--doc{background:rgba(59,130,246,.1);color:#93c5fd}
+    .doc-ico--other{background:rgba(94,207,160,.1);color:var(--green-l)}
+    .doc-body{flex:1;min-width:0}
+    .doc-name{font-size:13px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    .doc-meta{font-size:11px;color:var(--text-3);margin-top:3px}
+    .doc-note{font-size:11px;color:var(--text-2);margin-top:3px;font-style:italic}
+    .doc-dl{
+      flex-shrink:0;width:34px;height:34px;border-radius:8px;
+      background:rgba(2,179,106,.08);border:1px solid rgba(2,179,106,.18);
+      color:var(--green-l);display:flex;align-items:center;justify-content:center;
+      text-decoration:none;font-size:15px;transition:background .2s;
+    }
+    .doc-dl:hover{background:rgba(2,179,106,.2)}
+
+    .empty{
+      text-align:center;padding:48px 20px;
+      background:var(--surface);border:1px dashed var(--border);border-radius:var(--r);
+    }
+    .empty i{font-size:40px;color:var(--text-3);display:block;margin-bottom:12px}
+    .empty p{font-size:13px;color:var(--text-2);line-height:1.6}
+
+    @keyframes spin{to{transform:rotate(360deg)}}
+    .loading{text-align:center;padding:36px;color:var(--text-3);font-size:13px}
+    .loading i{font-size:28px;animation:spin .8s linear infinite;display:block;margin-bottom:10px}
+
+    /* Mobile */
+    .mob-header{
+      display:none;position:fixed;top:0;left:0;right:0;z-index:300;
+      background:rgba(4,11,6,.97);border-bottom:1px solid var(--border);
+      padding:14px 20px;align-items:center;justify-content:space-between;
+    }
+    .mob-menu{background:none;border:none;color:var(--text);font-size:22px;cursor:pointer}
+    .overlay{
+      display:none;position:fixed;inset:0;background:rgba(0,0,0,.65);
+      z-index:199;backdrop-filter:blur(3px);
+    }
+    @media(max-width:900px){
+      .mob-header{display:flex}
+      .sidebar{transform:translateX(-100%)}
+      .sidebar.open{transform:translateX(0)}
+      .overlay.open{display:block}
+      .main{margin-left:0}
+      .topbar{display:none}
+      .content{padding:80px 16px 24px}
+      .services-grid{grid-template-columns:1fr}
+    }
+  </style>
+</head>
+<body>
+
+<div class="overlay" id="overlay"></div>
+
+<div class="mob-header">
+  <div class="logo" style="margin:0">
+    <div class="logo-mark">A</div>
+    <div class="logo-name">AHCA <span>Portal</span></div>
+  </div>
+  <button class="mob-menu" id="mobMenu"><i class="ti ti-menu-2"></i></button>
+</div>
+
+<aside class="sidebar" id="sidebar">
+  <div class="logo">
+    <div class="logo-mark">A</div>
+    <div class="logo-name">AHCA <span>Portal</span></div>
+  </div>
+
+  <div class="nav-section">
+    <div class="nav-label">Main</div>
+    <a class="nav-link active" href="dashboard.html"><i class="ti ti-layout-dashboard"></i> Dashboard</a>
+    <a class="nav-link" href="dashboard.html#services"><i class="ti ti-briefcase"></i> My Services</a>
+    <a class="nav-link" href="dashboard.html#documents"><i class="ti ti-files"></i> Documents</a>
+  </div>
+  <div class="nav-section">
+    <div class="nav-label">Support</div>
+    <a class="nav-link" href="https://wa.me/971545050689" target="_blank"><i class="ti ti-brand-whatsapp"></i> WhatsApp AHCA</a>
+    <a class="nav-link" href="../index.html" target="_blank"><i class="ti ti-world"></i> AHCA Website</a>
+  </div>
+
+  <div class="sidebar-footer">
+    <div class="user-pill">
+      <div class="user-pill-top">
+        <div class="user-avatar" id="userAv">?</div>
+        <div class="user-info">
+          <div class="user-name" id="userName">Loading…</div>
+          <div style="font-size:11px;color:var(--text-3);margin-top:2px" id="userEmail">—</div>
+        </div>
+      </div>
+      <div class="user-tag">Client</div>
+    </div>
+    <button class="nav-link" id="logoutBtn" style="color:#fca5a5;width:100%">
+      <i class="ti ti-logout"></i> Sign out
+    </button>
+  </div>
+</aside>
+
+<div class="main">
+  <div class="topbar">
+    <div class="topbar-left">
+      <h1 id="welcomeTitle">Dashboard</h1>
+      <p id="welcomeSub">Here's an overview of your account</p>
+    </div>
+    <div class="topbar-right">
+      <a href="https://wa.me/971545050689" class="wa-btn" target="_blank">
+        <i class="ti ti-brand-whatsapp"></i> Contact AHCA
+      </a>
+    </div>
+  </div>
+
+  <div class="content">
+
+    <!-- Services -->
+    <div id="services" style="margin-bottom:36px">
+      <div class="section-head">
+        <div class="section-title"><i class="ti ti-briefcase"></i> My Services</div>
+      </div>
+      <div id="servicesContainer">
+        <div class="loading"><i class="ti ti-loader"></i>Loading your services…</div>
+      </div>
+    </div>
+
+    <!-- Documents -->
+    <div id="documents">
+      <div class="section-head">
+        <div class="section-title"><i class="ti ti-files"></i> My Documents</div>
+        <span id="docCount" style="font-size:12px;color:var(--text-3)"></span>
+      </div>
+      <div id="docsContainer">
+        <div class="loading"><i class="ti ti-loader"></i>Loading documents…</div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+const sb = supabase.createClient(
+  'https://bhcadrznoyjpaozpweai.supabase.co',
+  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJoY2Fkcnpub3lqcGFvenB3ZWFpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODE2MzUzMjYsImV4cCI6MjA5NzIxMTMyNn0._hmQ-jRicwa3uhQc45ZKer9MVrN4NpJqk3t8FzXtkb4'
+);
+
+const SERVICE_ICONS = {
+  'VAT Filing & Compliance':        {icon:'ti-receipt-tax',   color:'#5ECFA0', bg:'rgba(2,179,106,.1)'},
+  'Corporate Tax Filing':           {icon:'ti-building-bank', color:'#C9A84C', bg:'rgba(201,168,76,.1)'},
+  'Bookkeeping & Payroll':          {icon:'ti-book',          color:'#93c5fd', bg:'rgba(59,130,246,.1)'},
+  'Financial Reporting & Audit':    {icon:'ti-chart-bar',     color:'#fca5a5', bg:'rgba(239,68,68,.1)'},
+  'Business Advisory':              {icon:'ti-bulb',          color:'#fde68a', bg:'rgba(234,179,8,.1)'},
+  'FTA Registration':               {icon:'ti-shield-check',  color:'#86efac', bg:'rgba(34,197,94,.1)'},
+};
+
+function getDocIcon(name){
+  const e=name.split('.').pop().toLowerCase();
+  if(e==='pdf') return ['ti-file-type-pdf','pdf'];
+  if(['xlsx','xls','csv'].includes(e)) return ['ti-file-type-xls','xls'];
+  if(['doc','docx'].includes(e)) return ['ti-file-type-doc','doc'];
+  return ['ti-file','other'];
+}
+function fmtDate(d){ return new Date(d).toLocaleDateString('en-AE',{day:'numeric',month:'short',year:'numeric'}); }
+
+async function init(){
+  const {data:{session}} = await sb.auth.getSession();
+  if(!session){ window.location.href='login.html'; return; }
+  const u = session.user;
+
+  const {data:profile} = await sb.from('clients').select('*').eq('id',u.id).single();
+  const name = profile?.full_name || u.email.split('@')[0];
+  const initials = name.split(' ').map(w=>w[0]).join('').toUpperCase().slice(0,2);
+
+  document.getElementById('userName').textContent = name;
+  document.getElementById('userEmail').textContent = u.email;
+  document.getElementById('userAv').textContent = initials;
+  document.getElementById('welcomeTitle').textContent = `Good day, ${name.split(' ')[0]} 👋`;
+  document.getElementById('welcomeSub').textContent = profile?.company ? `${profile.company} · Client Portal` : 'Client Portal';
+
+  // Services
+  const {data:services} = await sb.from('client_services').select('*').eq('client_id',u.id).order('created_at');
+  renderServices(services||[]);
+
+  // Documents
+  const {data:docs} = await sb.from('documents').select('*').eq('client_id',u.id).order('uploaded_at',{ascending:false});
+  document.getElementById('docCount').textContent = docs?.length ? `${docs.length} file${docs.length>1?'s':''}` : '';
+  renderDocs(docs||[]);
+}
+
+function renderServices(list){
+  const el = document.getElementById('servicesContainer');
+  if(!list.length){
+    el.innerHTML=`<div class="empty"><i class="ti ti-briefcase"></i><p>No services assigned yet.<br>Contact AHCA to get started.</p></div>`;
+    return;
+  }
+  el.innerHTML=`<div class="services-grid">${list.map(s=>{
+    const cfg = SERVICE_ICONS[s.service_name] || {icon:'ti-file',color:'var(--green-l)',bg:'rgba(2,179,106,.1)'};
+    const statusClass = `svc-status--${s.status||'active'}`;
+    const statusLabel = s.status==='active'?'Active':s.status==='pending'?'In Progress':'Completed';
+    return `<div class="svc-card">
+      <div class="svc-card-glow" style="background:${cfg.color}"></div>
+      <div class="svc-top">
+        <div class="svc-icon" style="background:${cfg.bg};color:${cfg.color}"><i class="ti ${cfg.icon}"></i></div>
+        <div class="svc-status ${statusClass}">${statusLabel}</div>
+      </div>
+      <div class="svc-name">${s.service_name}</div>
+      ${s.notes?`<div class="svc-notes">${s.notes}</div>`:''}
+      ${s.start_date?`<div class="svc-date"><i class="ti ti-calendar"></i> Since ${fmtDate(s.start_date)}</div>`:''}
+    </div>`;
+  }).join('')}</div>`;
+}
+
+function renderDocs(list){
+  const el = document.getElementById('docsContainer');
+  if(!list.length){
+    el.innerHTML=`<div class="empty"><i class="ti ti-inbox"></i><p>No documents uploaded yet.<br>AHCA will upload your files here once ready.</p></div>`;
+    return;
+  }
+  el.innerHTML=`<div class="docs-list">${list.map(d=>{
+    const [icon,type] = getDocIcon(d.file_name);
+    return `<div class="doc-row">
+      <div class="doc-ico doc-ico--${type}"><i class="ti ${icon}"></i></div>
+      <div class="doc-body">
+        <div class="doc-name">${d.file_name}</div>
+        <div class="doc-meta"><i class="ti ti-calendar" style="font-size:11px"></i> ${fmtDate(d.uploaded_at)}</div>
+        ${d.notes?`<div class="doc-note">${d.notes}</div>`:''}
+      </div>
+      <a href="${d.file_url}" target="_blank" class="doc-dl" title="Download"><i class="ti ti-download"></i></a>
+    </div>`;
+  }).join('')}</div>`;
+}
+
+document.getElementById('logoutBtn').addEventListener('click', async()=>{ await sb.auth.signOut(); window.location.href='login.html'; });
+
+// Mobile menu
+const sidebar=document.getElementById('sidebar');
+const overlay=document.getElementById('overlay');
+document.getElementById('mobMenu').addEventListener('click',()=>{ sidebar.classList.toggle('open'); overlay.classList.toggle('open'); });
+overlay.addEventListener('click',()=>{ sidebar.classList.remove('open'); overlay.classList.remove('open'); });
+
+init();
+</script>
+</body>
+</html>
