@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My Dashboard — AHCA Portal</title>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
+  <style>
+    :root{
+      --bg:#050D07;--green:#02B36A;--green-l:#5ECFA0;--green-d:#018F54;
+      --gold:#C9A84C;--red:#ef4444;--text:#E8F5EC;--text-2:#9DB8A4;--text-3:#5C7A63;
+      --border:rgba(94,207,160,.12);--surface:rgba(8,22,12,.8);
+      --r:16px;--r-sm:10px;--r-f:100px;
+    }
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-height:100svh;display:flex}
+
+    /* SIDEBAR */
+    .sidebar{
+      width:240px;flex-shrink:0;position:fixed;top:0;left:0;bottom:0;
+      background:rgba(4,11,6,.97);border-right:1px solid var(--border);
+      display:flex;flex-direction:column;padding:24px 14px;z-index:200;transition:transform .3s;
+    }
+    .logo{display:flex;align-items:center;gap:10px;padding:4px 10px;margin-bottom:36px}
+    .logo-mark{width:38px;height:38px;border-radius:10px;background:linear-gradient(135deg,var(--green-d),var(--green));display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-weight:800;font-size:16px;color:var(--bg)}
+    .logo-name{font-family:'Syne',sans-serif;font-weight:700;font-size:17px}
+    .logo-name span{color:var(--green-l)}
+    .nav-sec{margin-bottom:24px}
+    .nav-lbl{font-size:10px;font-weight:700;color:var(--text-3);letter-spacing:.1em;text-transform:uppercase;padding:0 10px;margin-bottom:6px}
+    .nav-a{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:var(--r-sm);margin-bottom:2px;color:var(--text-2);font-size:13px;font-weight:500;text-decoration:none;transition:background .15s,color .15s;cursor:pointer;border:none;background:none;width:100%}
+    .nav-a i{font-size:17px}
+    .nav-a:hover{background:rgba(94,207,160,.06);color:var(--text)}
+    .nav-a.active{background:rgba(2,179,106,.1);color:var(--green-l);font-weight:600}
+    .sidebar-foot{margin-top:auto}
+    .user-pill{background:rgba(255,255,255,.03);border:1px solid var(--border);border-radius:var(--r-sm);padding:12px;margin-bottom:6px}
+    .user-top{display:flex;align-items:center;gap:9px}
+    .user-av{width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,var(--green-d),var(--green));display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-weight:700;font-size:13px;color:var(--bg);flex-shrink:0}
+    .user-name{font-size:13px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    .user-email{font-size:11px;color:var(--text-3);margin-top:1px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    .u-badge{display:inline-block;margin-top:6px;background:rgba(2,179,106,.1);border:1px solid rgba(2,179,106,.2);border-radius:4px;font-size:9px;font-weight:700;color:var(--green-l);padding:2px 7px;letter-spacing:.06em;text-transform:uppercase}
+
+    /* MAIN */
+    .main{flex:1;margin-left:240px;display:flex;flex-direction:column}
+    .topbar{display:flex;align-items:center;justify-content:space-between;padding:18px 32px;border-bottom:1px solid var(--border);background:rgba(5,13,7,.85);backdrop-filter:blur(12px);position:sticky;top:0;z-index:100}
+    .tb-left h1{font-family:'Syne',sans-serif;font-size:20px;font-weight:700}
+    .tb-left p{font-size:13px;color:var(--text-2);margin-top:2px}
+    .wa-btn{display:flex;align-items:center;gap:7px;background:rgba(37,211,102,.1);border:1px solid rgba(37,211,102,.25);color:#4ade80;border-radius:var(--r-f);padding:9px 16px;font-size:13px;font-weight:600;text-decoration:none;transition:background .2s}
+    .wa-btn:hover{background:rgba(37,211,102,.18)}
+    .content{padding:28px 32px;flex:1}
+
+    /* SECTION */
+    .sec-head{display:flex;align-items:center;gap:8px;margin-bottom:16px}
+    .sec-title{font-family:'Syne',sans-serif;font-size:17px;font-weight:700}
+    .sec-title i{color:var(--green-l)}
+
+    /* SERVICE CARDS */
+    .svc-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:14px;margin-bottom:36px}
+    .svc-card{
+      background:var(--surface);border:1px solid var(--border);border-radius:var(--r);
+      padding:20px;cursor:pointer;position:relative;overflow:hidden;
+      transition:border-color .2s,transform .2s,box-shadow .2s;
+    }
+    .svc-card:hover{border-color:rgba(2,179,106,.3);transform:translateY(-3px);box-shadow:0 12px 32px rgba(0,0,0,.3)}
+    .svc-card-glow{position:absolute;top:-30px;right:-30px;width:100px;height:100px;border-radius:50%;filter:blur(35px);pointer-events:none}
+    .svc-top{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:14px}
+    .svc-ico{width:42px;height:42px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:19px;flex-shrink:0}
+    .svc-badge{display:inline-flex;align-items:center;gap:4px;border-radius:var(--r-f);padding:4px 10px;font-size:10px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;white-space:nowrap}
+    .badge-active{background:rgba(2,179,106,.1);color:var(--green-l);border:1px solid rgba(2,179,106,.2)}
+    .badge-active::before{content:'';width:5px;height:5px;border-radius:50%;background:var(--green);animation:blink 2s infinite}
+    .badge-pending{background:rgba(201,168,76,.1);color:var(--gold);border:1px solid rgba(201,168,76,.2)}
+    .badge-completed{background:rgba(94,207,160,.06);color:var(--text-3);border:1px solid var(--border)}
+    @keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
+    .svc-name{font-family:'Syne',sans-serif;font-size:14px;font-weight:700;margin-bottom:12px}
+    .svc-meta{display:flex;flex-direction:column;gap:5px}
+    .svc-meta-row{display:flex;align-items:center;justify-content:space-between;font-size:11px}
+    .svc-meta-lbl{color:var(--text-3)}
+    .svc-meta-val{color:var(--text-2);font-weight:500}
+    .svc-progress-wrap{margin-top:12px}
+    .svc-progress-lbl{display:flex;justify-content:space-between;font-size:11px;color:var(--text-3);margin-bottom:5px}
+    .svc-progress-bar{height:4px;background:rgba(255,255,255,.06);border-radius:2px;overflow:hidden}
+    .svc-progress-fill{height:100%;border-radius:2px;background:linear-gradient(90deg,var(--green-d),var(--green-l));transition:width .6s ease}
+    .svc-click-hint{display:flex;align-items:center;gap:4px;font-size:10px;color:var(--text-3);margin-top:12px}
+
+    /* DOCS */
+    .docs-list{display:flex;flex-direction:column;gap:8px}
+    .doc-row{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-sm);padding:13px 16px;display:flex;align-items:center;gap:13px;transition:border-color .2s}
+    .doc-row:hover{border-color:rgba(2,179,106,.25)}
+    .doc-ico{width:38px;height:38px;border-radius:9px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:17px}
+    .d-pdf{background:rgba(239,68,68,.1);color:#fca5a5}
+    .d-xls{background:rgba(34,197,94,.1);color:#86efac}
+    .d-doc{background:rgba(59,130,246,.1);color:#93c5fd}
+    .d-other{background:rgba(94,207,160,.1);color:var(--green-l)}
+    .doc-body{flex:1;min-width:0}
+    .doc-name{font-size:13px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    .doc-meta{font-size:11px;color:var(--text-3);margin-top:2px}
+    .doc-note{font-size:11px;color:var(--text-2);font-style:italic;margin-top:2px}
+    .doc-dl{flex-shrink:0;width:32px;height:32px;border-radius:8px;background:rgba(2,179,106,.08);border:1px solid rgba(2,179,106,.18);color:var(--green-l);display:flex;align-items:center;justify-content:center;text-decoration:none;font-size:14px;transition:background .2s}
+    .doc-dl:hover{background:rgba(2,179,106,.2)}
+
+    .empty{text-align:center;padding:40px;background:var(--surface);border:1px dashed var(--border);border-radius:var(--r)}
+    .empty i{font-size:36px;color:var(--text-3);display:block;margin-bottom:10px}
+    .empty p{font-size:13px;color:var(--text-2);line-height:1.6}
+
+    /* SERVICE DETAIL PANEL */
+    .panel-overlay{position:fixed;inset:0;background:rgba(0,0,0,.65);backdrop-filter:blur(4px);z-index:400;opacity:0;pointer-events:none;transition:opacity .3s}
+    .panel-overlay.open{opacity:1;pointer-events:all}
+    .panel{
+      position:fixed;top:0;right:0;bottom:0;width:520px;max-width:100vw;
+      background:rgba(6,16,9,.97);border-left:1px solid var(--border);
+      z-index:500;transform:translateX(100%);transition:transform .35s cubic-bezier(.22,.68,0,1.2);
+      display:flex;flex-direction:column;overflow:hidden;
+    }
+    .panel.open{transform:translateX(0)}
+    .panel-head{
+      display:flex;align-items:center;justify-content:space-between;
+      padding:22px 24px;border-bottom:1px solid var(--border);flex-shrink:0;
+    }
+    .panel-title{font-family:'Syne',sans-serif;font-size:18px;font-weight:700}
+    .panel-close{background:none;border:none;color:var(--text-3);font-size:20px;cursor:pointer;padding:4px;transition:color .15s}
+    .panel-close:hover{color:var(--text)}
+    .panel-body{flex:1;overflow-y:auto;padding:24px;display:flex;flex-direction:column;gap:20px;scrollbar-width:thin;scrollbar-color:rgba(2,179,106,.2) transparent}
+
+    /* Detail sections */
+    .detail-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+    .detail-box{background:rgba(255,255,255,.03);border:1px solid var(--border);border-radius:var(--r-sm);padding:14px}
+    .detail-box-lbl{font-size:10px;font-weight:700;color:var(--text-3);text-transform:uppercase;letter-spacing:.07em;margin-bottom:6px}
+    .detail-box-val{font-size:15px;font-weight:600;color:var(--text)}
+    .detail-box-sub{font-size:11px;color:var(--text-3);margin-top:3px}
+
+    /* Fee summary */
+    .fee-card{background:rgba(2,179,106,.05);border:1px solid rgba(2,179,106,.15);border-radius:var(--r);padding:18px}
+    .fee-title{font-family:'Syne',sans-serif;font-size:14px;font-weight:700;margin-bottom:14px;display:flex;align-items:center;gap:7px}
+    .fee-title i{color:var(--green-l)}
+    .fee-row{display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid rgba(2,179,106,.08)}
+    .fee-row:last-child{border-bottom:none;padding-top:12px;margin-top:4px}
+    .fee-lbl{font-size:13px;color:var(--text-2)}
+    .fee-val{font-size:14px;font-weight:600}
+    .fee-total{font-family:'Syne',sans-serif;font-size:16px;font-weight:700;color:var(--text)}
+    .fee-paid{color:var(--green-l)}
+    .fee-balance{color:var(--gold)}
+    .fee-zero{color:var(--green-l)}
+
+    /* Payments */
+    .payments-list{display:flex;flex-direction:column;gap:8px}
+    .pay-row{
+      display:flex;align-items:center;gap:12px;
+      background:rgba(255,255,255,.03);border:1px solid var(--border);
+      border-radius:var(--r-sm);padding:12px 14px;
+    }
+    .pay-ico{width:34px;height:34px;border-radius:8px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:15px}
+    .pay-ico--advance{background:rgba(201,168,76,.1);color:var(--gold)}
+    .pay-ico--second{background:rgba(2,179,106,.1);color:var(--green-l)}
+    .pay-ico--final{background:rgba(94,207,160,.1);color:var(--green-l)}
+    .pay-ico--other{background:rgba(59,130,246,.1);color:#93c5fd}
+    .pay-info{flex:1}
+    .pay-type{font-size:12px;font-weight:600;color:var(--text);text-transform:capitalize}
+    .pay-date{font-size:11px;color:var(--text-3);margin-top:2px}
+    .pay-note{font-size:11px;color:var(--text-2);font-style:italic;margin-top:2px}
+    .pay-amount{font-family:'Syne',sans-serif;font-size:15px;font-weight:700;color:var(--green-l);flex-shrink:0}
+
+    @keyframes spin{to{transform:rotate(360deg)}}
+    .loading{text-align:center;padding:36px;color:var(--text-3);font-size:13px}
+    .loading i{font-size:28px;animation:spin .8s linear infinite;display:block;margin-bottom:10px}
+
+    /* Mobile */
+    .mob-header{display:none;position:fixed;top:0;left:0;right:0;z-index:300;background:rgba(4,11,6,.97);border-bottom:1px solid var(--border);padding:13px 18px;align-items:center;justify-content:space-between}
+    .mob-btn{background:none;border:none;color:var(--text);font-size:22px;cursor:pointer}
+    .overlay-mob{display:none;position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:199}
+    @media(max-width:900px){
+      .mob-header{display:flex}
+      .sidebar{transform:translateX(-100%)}
+      .sidebar.open{transform:translateX(0)}
+      .overlay-mob.open{display:block}
+      .main{margin-left:0}
+      .topbar{display:none}
+      .content{padding:80px 16px 24px}
+      .svc-grid{grid-template-columns:1fr}
+      .panel{width:100vw}
+      .detail-grid{grid-template-columns:1fr 1fr}
+    }
+    @media(max-width:480px){.detail-grid{grid-template-columns:1fr}}
+  </style>
+</head>
+<body>
+
+<div class="overlay-mob" id="overlayMob"></div>
+
+<div class="mob-header">
+  <div class="logo" style="margin:0"><div class="logo-mark">A</div><div class="logo-name">AHCA <span>Portal</span></div></div>
+  <button class="mob-btn" id="mobBtn"><i class="ti ti-menu-2"></i></button>
+</div>
+
+<aside class="sidebar" id="sidebar">
+  <div class="logo"><div class="logo-mark">A</div><div class="logo-name">AHCA <span>Portal</span></div></div>
+  <div class="nav-sec">
+    <div class="nav-lbl">Menu</div>
+    <a class="nav-a active" href="dashboard.html"><i class="ti ti-layout-dashboard"></i> Dashboard</a>
+    <a class="nav-a" href="dashboard.html#services"><i class="ti ti-briefcase"></i> My Services</a>
+    <a class="nav-a" href="dashboard.html#documents"><i class="ti ti-files"></i> Documents</a>
+  </div>
+  <div class="nav-sec">
+    <div class="nav-lbl">Support</div>
+    <a class="nav-a" href="https://wa.me/971545050689" target="_blank"><i class="ti ti-brand-whatsapp"></i> WhatsApp AHCA</a>
+    <a class="nav-a" href="../index.html" target="_blank"><i class="ti ti-world"></i> Website</a>
+  </div>
+  <div class="sidebar-foot">
+    <div class="user-pill">
+      <div class="user-top">
+        <div class="user-av" id="userAv">?</div>
+        <div style="flex:1;min-width:0">
+          <div class="user-name" id="userName">Loading…</div>
+          <div class="user-email" id="userEmail">—</div>
+        </div>
+      </div>
+      <div class="u-badge">Client</div>
+    </div>
+    <button class="nav-a" id="logoutBtn" style="color:#fca5a5;width:100%"><i class="ti ti-logout"></i> Sign out</button>
+  </div>
+</aside>
+
+<div class="main">
+  <div class="topbar">
+    <div class="tb-left"><h1 id="welcomeTitle">Dashboard</h1><p id="welcomeSub">Client Portal</p></div>
+    <a href="https://wa.me/971545050689" class="wa-btn" target="_blank"><i class="ti ti-brand-whatsapp"></i> Contact AHCA</a>
+  </div>
+  <div class="content">
+    <div id="services" style="margin-bottom:36px">
+      <div class="sec-head"><div class="sec-title"><i class="ti ti-briefcase"></i> My Services</div></div>
+      <div id="svcContainer"><div class="loading"><i class="ti ti-loader"></i>Loading…</div></div>
+    </div>
+    <div id="documents">
+      <div class="sec-head"><div class="sec-title"><i class="ti ti-files"></i> My Documents</div></div>
+      <div id="docsContainer"><div class="loading"><i class="ti ti-loader"></i>Loading…</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- SERVICE DETAIL PANEL -->
+<div class="panel-overlay" id="panelOverlay" onclick="closePanel()"></div>
+<div class="panel" id="panel">
+  <div class="panel-head">
+    <div>
+      <div class="panel-title" id="panelTitle">Service Details</div>
+      <div id="panelBadge" style="margin-top:6px"></div>
+    </div>
+    <button class="panel-close" onclick="closePanel()"><i class="ti ti-x"></i></button>
+  </div>
+  <div class="panel-body" id="panelBody">
+    <div class="loading"><i class="ti ti-loader"></i>Loading…</div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+const sb = supabase.createClient(
+  'https://bhcadrznoyjpaozpweai.supabase.co',
+  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJoY2Fkcnpub3lqcGFvenB3ZWFpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODE2MzUzMjYsImV4cCI6MjA5NzIxMTMyNn0._hmQ-jRicwa3uhQc45ZKer9MVrN4NpJqk3t8FzXtkb4'
+);
+
+const SVC_CFG = {
+  'VAT Filing & Compliance':     {icon:'ti-receipt-tax',   color:'#5ECFA0',bg:'rgba(2,179,106,.1)'},
+  'Corporate Tax Filing':        {icon:'ti-building-bank', color:'#C9A84C',bg:'rgba(201,168,76,.1)'},
+  'Bookkeeping & Payroll':       {icon:'ti-book',          color:'#93c5fd',bg:'rgba(59,130,246,.1)'},
+  'Financial Reporting & Audit': {icon:'ti-chart-bar',     color:'#fca5a5',bg:'rgba(239,68,68,.1)'},
+  'Business Advisory':           {icon:'ti-bulb',          color:'#fde68a',bg:'rgba(234,179,8,.1)'},
+  'FTA Registration':            {icon:'ti-shield-check',  color:'#86efac',bg:'rgba(34,197,94,.1)'},
+};
+function getCfg(name){ return SVC_CFG[name]||{icon:'ti-file',color:'var(--green-l)',bg:'rgba(2,179,106,.1)'}; }
+function fmtDate(d){ return d ? new Date(d).toLocaleDateString('en-AE',{day:'numeric',month:'short',year:'numeric'}) : '—'; }
+function fmtAED(n){ return n ? 'AED '+Number(n).toLocaleString('en-AE',{minimumFractionDigits:0}) : 'AED 0'; }
+function docIcon(name){
+  const e=name.split('.').pop().toLowerCase();
+  if(e==='pdf') return ['ti-file-type-pdf','d-pdf'];
+  if(['xlsx','xls','csv'].includes(e)) return ['ti-file-type-xls','d-xls'];
+  if(['doc','docx'].includes(e)) return ['ti-file-type-doc','d-doc'];
+  return ['ti-file','d-other'];
+}
+
+let currentUser=null;
+
+async function init(){
+  const {data:{session}}=await sb.auth.getSession();
+  if(!session){window.location.href='login.html';return}
+  currentUser=session.user;
+  const {data:p}=await sb.from('clients').select('*').eq('id',currentUser.id).single();
+  const name=p?.full_name||currentUser.email.split('@')[0];
+  const initials=name.split(' ').map(w=>w[0]).join('').toUpperCase().slice(0,2);
+  document.getElementById('userName').textContent=name;
+  document.getElementById('userEmail').textContent=currentUser.email;
+  document.getElementById('userAv').textContent=initials;
+  document.getElementById('welcomeTitle').textContent=`Good day, ${name.split(' ')[0]} 👋`;
+  document.getElementById('welcomeSub').textContent=p?.company?`${p.company} · Client Portal`:'Client Portal';
+  await loadServices();
+  await loadDocs();
+}
+
+async function loadServices(){
+  const {data}=await sb.from('client_services').select('*').eq('client_id',currentUser.id).order('created_at');
+  renderServices(data||[]);
+}
+
+async function loadDocs(){
+  const {data}=await sb.from('documents').select('*').eq('client_id',currentUser.id).order('uploaded_at',{ascending:false});
+  renderDocs(data||[]);
+}
+
+function renderServices(list){
+  const el=document.getElementById('svcContainer');
+  if(!list.length){
+    el.innerHTML=`<div class="empty"><i class="ti ti-briefcase"></i><p>No services assigned yet.<br>Contact AHCA to get started.</p></div>`;
+    return;
+  }
+  el.innerHTML=`<div class="svc-grid">${list.map(s=>{
+    const cfg=getCfg(s.service_name);
+    const displayName=s.custom_name||s.service_name;
+    const fees=Number(s.fees||0);
+    const pct=fees>0?Math.min(100,Math.round((Number(s.total_paid||0)/fees)*100)):0;
+    const status=s.status||'active';
+    const badgeClass=status==='active'?'badge-active':status==='pending'?'badge-pending':'badge-completed';
+    const badgeLabel=status==='active'?'Active':status==='pending'?'In Progress':'Closed';
+    return `<div class="svc-card" onclick="openPanel('${s.id}')">
+      <div class="svc-card-glow" style="background:${cfg.color}"></div>
+      <div class="svc-top">
+        <div class="svc-ico" style="background:${cfg.bg};color:${cfg.color}"><i class="ti ${cfg.icon}"></i></div>
+        <span class="svc-badge ${badgeClass}">${badgeLabel}</span>
+      </div>
+      <div class="svc-name">${displayName}</div>
+      <div class="svc-meta">
+        ${s.start_date?`<div class="svc-meta-row"><span class="svc-meta-lbl">Assigned</span><span class="svc-meta-val">${fmtDate(s.start_date)}</span></div>`:''}
+        ${s.submission_date?`<div class="svc-meta-row"><span class="svc-meta-lbl">Submission</span><span class="svc-meta-val">${fmtDate(s.submission_date)}</span></div>`:''}
+        ${fees>0?`<div class="svc-meta-row"><span class="svc-meta-lbl">Total Fees</span><span class="svc-meta-val">${fmtAED(fees)}</span></div>`:''}
+      </div>
+      ${fees>0?`<div class="svc-progress-wrap">
+        <div class="svc-progress-lbl"><span>Payment</span><span>${pct}%</span></div>
+        <div class="svc-progress-bar"><div class="svc-progress-fill" style="width:${pct}%"></div></div>
+      </div>`:''}
+      <div class="svc-click-hint"><i class="ti ti-eye" style="font-size:11px"></i> View full details</div>
+    </div>`;
+  }).join('')}</div>`;
+}
+
+function renderDocs(list){
+  const el=document.getElementById('docsContainer');
+  if(!list.length){
+    el.innerHTML=`<div class="empty"><i class="ti ti-inbox"></i><p>No documents uploaded yet.<br>AHCA will upload your files here.</p></div>`;
+    return;
+  }
+  el.innerHTML=`<div class="docs-list">${list.map(d=>{
+    const [icon,cls]=docIcon(d.file_name);
+    return `<div class="doc-row">
+      <div class="doc-ico ${cls}"><i class="ti ${icon}"></i></div>
+      <div class="doc-body">
+        <div class="doc-name">${d.file_name}</div>
+        <div class="doc-meta">${fmtDate(d.uploaded_at)}</div>
+        ${d.notes?`<div class="doc-note">${d.notes}</div>`:''}
+      </div>
+      <a href="${d.file_url}" target="_blank" class="doc-dl"><i class="ti ti-download"></i></a>
+    </div>`;
+  }).join('')}</div>`;
+}
+
+// PANEL
+async function openPanel(svcId){
+  document.getElementById('panelOverlay').classList.add('open');
+  document.getElementById('panel').classList.add('open');
+  document.getElementById('panelBody').innerHTML=`<div class="loading"><i class="ti ti-loader"></i>Loading details…</div>`;
+
+  const {data:s}=await sb.from('client_services').select('*').eq('id',svcId).single();
+  const {data:pays}=await sb.from('payments').select('*').eq('service_id',svcId).order('payment_date');
+
+  const displayName=s.custom_name||s.service_name;
+  const cfg=getCfg(s.service_name);
+  const fees=Number(s.fees||0);
+  const totalPaid=(pays||[]).reduce((acc,p)=>acc+Number(p.amount),0);
+  const balance=fees-totalPaid;
+  const status=s.status||'active';
+  const badgeClass=status==='active'?'badge-active':status==='pending'?'badge-pending':'badge-completed';
+  const badgeLabel=status==='active'?'● Active':status==='pending'?'In Progress':'✓ Closed';
+
+  document.getElementById('panelTitle').textContent=displayName;
+  document.getElementById('panelBadge').innerHTML=`<span class="svc-badge ${badgeClass}" style="font-size:11px">${badgeLabel}</span>`;
+
+  const payIco={advance:'pay-ico--advance',second:'pay-ico--second',final:'pay-ico--final',other:'pay-ico--other'};
+  const payIcoIcon={advance:'ti-coins',second:'ti-cash',final:'ti-circle-check',other:'ti-credit-card'};
+
+  document.getElementById('panelBody').innerHTML=`
+    <div class="detail-grid">
+      <div class="detail-box">
+        <div class="detail-box-lbl">Service</div>
+        <div class="detail-box-val" style="font-size:13px">${s.service_name}</div>
+      </div>
+      <div class="detail-box">
+        <div class="detail-box-lbl">Status</div>
+        <div class="detail-box-val" style="color:${status==='completed'?'var(--text-3)':status==='pending'?'var(--gold)':'var(--green-l)'}">${badgeLabel}</div>
+      </div>
+      <div class="detail-box">
+        <div class="detail-box-lbl">Assignment Date</div>
+        <div class="detail-box-val">${fmtDate(s.start_date)}</div>
+      </div>
+      <div class="detail-box">
+        <div class="detail-box-lbl">Submission Date</div>
+        <div class="detail-box-val" style="${s.submission_date&&new Date(s.submission_date)<new Date()?'color:var(--gold)':''}">${fmtDate(s.submission_date)}</div>
+        ${s.submission_date&&new Date(s.submission_date)<new Date()&&status!=='completed'?`<div class="detail-box-sub" style="color:var(--gold)">⚠ Deadline passed</div>`:''}
+      </div>
+    </div>
+
+    ${s.notes?`<div style="background:rgba(255,255,255,.03);border:1px solid var(--border);border-radius:var(--r-sm);padding:14px">
+      <div style="font-size:10px;font-weight:700;color:var(--text-3);text-transform:uppercase;letter-spacing:.07em;margin-bottom:6px">Notes from AHCA</div>
+      <div style="font-size:13px;color:var(--text-2);line-height:1.6">${s.notes}</div>
+    </div>`:''}
+
+    ${fees>0?`<div class="fee-card">
+      <div class="fee-title"><i class="ti ti-wallet"></i> Payment Summary</div>
+      <div class="fee-row"><span class="fee-lbl">Total Fees</span><span class="fee-val fee-total">${fmtAED(fees)}</span></div>
+      <div class="fee-row"><span class="fee-lbl">Amount Paid</span><span class="fee-val fee-paid">${fmtAED(totalPaid)}</span></div>
+      <div class="fee-row">
+        <span class="fee-lbl" style="font-weight:700;color:var(--text)">${balance<=0?'Fully Paid ✓':'Balance Due'}</span>
+        <span class="fee-val ${balance<=0?'fee-zero':'fee-balance'}">${balance<=0?'AED 0':fmtAED(balance)}</span>
+      </div>
+    </div>`:''}
+
+    <div>
+      <div style="font-family:'Syne',sans-serif;font-size:14px;font-weight:700;margin-bottom:12px;display:flex;align-items:center;gap:7px">
+        <i class="ti ti-receipt" style="color:var(--green-l)"></i> Payment History
+      </div>
+      ${pays&&pays.length?`<div class="payments-list">${pays.map(p=>{
+        const icoClass=payIco[p.payment_type]||'pay-ico--other';
+        const icoIcon=payIcoIcon[p.payment_type]||'ti-credit-card';
+        return `<div class="pay-row">
+          <div class="pay-ico ${icoClass}"><i class="ti ${icoIcon}"></i></div>
+          <div class="pay-info">
+            <div class="pay-type">${p.payment_type.replace('_',' ')} Payment</div>
+            <div class="pay-date">${fmtDate(p.payment_date)}</div>
+            ${p.notes?`<div class="pay-note">${p.notes}</div>`:''}
+          </div>
+          <div class="pay-amount">${fmtAED(p.amount)}</div>
+        </div>`;
+      }).join('')}</div>`:
+      `<div style="text-align:center;padding:24px;background:rgba(255,255,255,.02);border:1px dashed var(--border);border-radius:var(--r-sm)">
+        <i class="ti ti-receipt-off" style="font-size:28px;color:var(--text-3);display:block;margin-bottom:8px"></i>
+        <p style="font-size:12px;color:var(--text-3)">No payments recorded yet</p>
+      </div>`}
+    </div>
+
+    <a href="https://wa.me/971545050689" target="_blank" class="wa-btn" style="justify-content:center;border-radius:var(--r-f);padding:13px">
+      <i class="ti ti-brand-whatsapp"></i> Contact AHCA about this service
+    </a>
+  `;
+}
+
+function closePanel(){
+  document.getElementById('panelOverlay').classList.remove('open');
+  document.getElementById('panel').classList.remove('open');
+}
+
+document.getElementById('logoutBtn').addEventListener('click',async()=>{await sb.auth.signOut();window.location.href='login.html'});
+const sidebar=document.getElementById('sidebar');
+const overlayMob=document.getElementById('overlayMob');
+document.getElementById('mobBtn').addEventListener('click',()=>{sidebar.classList.toggle('open');overlayMob.classList.toggle('open')});
+overlayMob.addEventListener('click',()=>{sidebar.classList.remove('open');overlayMob.classList.remove('open')});
+
+init();
+</script>
+</body>
+</html>
