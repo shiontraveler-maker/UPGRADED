@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Client Portal — AHCA</title>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
+  <style>
+    :root {
+      --bg:#050D07;--green:#02B36A;--green-l:#5ECFA0;--green-d:#018F54;
+      --gold:#C9A84C;--text:#E8F5EC;--text-2:#9DB8A4;--text-3:#5C7A63;
+      --border:rgba(94,207,160,.12);--r:14px;--r-f:100px;
+    }
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    html,body{height:100%}
+    body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);display:flex;min-height:100svh}
+
+    /* LEFT PANEL */
+    .left{
+      flex:1;display:flex;flex-direction:column;justify-content:space-between;
+      padding:48px;background:linear-gradient(145deg,rgba(2,179,106,.06) 0%,transparent 60%);
+      border-right:1px solid var(--border);position:relative;overflow:hidden;
+    }
+    .left-blob{
+      position:absolute;width:500px;height:500px;border-radius:50%;
+      background:radial-gradient(ellipse,rgba(2,179,106,.12),transparent 70%);
+      filter:blur(80px);top:-100px;left:-100px;pointer-events:none;
+      animation:blob 20s ease-in-out infinite;
+    }
+    @keyframes blob{0%,100%{transform:translate(0,0) scale(1)}50%{transform:translate(5%,8%) scale(1.1)}}
+
+    .left-logo{display:flex;align-items:center;gap:12px;position:relative}
+    .logo-mark{
+      width:44px;height:44px;border-radius:12px;
+      background:linear-gradient(135deg,var(--green-d),var(--green));
+      display:flex;align-items:center;justify-content:center;
+      font-family:'Syne',sans-serif;font-weight:800;font-size:18px;color:var(--bg);
+    }
+    .logo-name{font-family:'Syne',sans-serif;font-weight:700;font-size:20px}
+    .logo-name span{color:var(--green-l)}
+
+    .left-hero{position:relative}
+    .left-eyebrow{
+      display:inline-flex;align-items:center;gap:7px;
+      background:rgba(2,179,106,.08);border:1px solid rgba(2,179,106,.2);
+      border-radius:var(--r-f);padding:6px 14px;
+      font-size:12px;font-weight:600;color:var(--green-l);letter-spacing:.04em;
+      margin-bottom:24px;
+    }
+    .left-eyebrow span{width:7px;height:7px;border-radius:50%;background:var(--green);animation:pulse 2s infinite}
+    @keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+    .left-title{font-family:'Syne',sans-serif;font-size:40px;font-weight:800;line-height:1.15;margin-bottom:16px}
+    .left-title em{color:var(--green-l);font-style:normal}
+    .left-sub{font-size:15px;color:var(--text-2);line-height:1.7;max-width:380px;margin-bottom:40px}
+
+    .features{display:flex;flex-direction:column;gap:14px}
+    .feature{display:flex;align-items:center;gap:14px}
+    .feature-icon{
+      width:40px;height:40px;border-radius:10px;flex-shrink:0;
+      background:rgba(2,179,106,.08);border:1px solid rgba(2,179,106,.15);
+      display:flex;align-items:center;justify-content:center;
+      color:var(--green-l);font-size:18px;
+    }
+    .feature-text{font-size:14px;color:var(--text-2)}
+    .feature-text strong{color:var(--text);display:block;font-size:13px;margin-bottom:1px}
+
+    .left-footer{font-size:12px;color:var(--text-3);position:relative}
+
+    /* RIGHT PANEL */
+    .right{
+      width:480px;flex-shrink:0;display:flex;align-items:center;justify-content:center;
+      padding:48px 56px;
+    }
+    .form-wrap{width:100%}
+
+    .form-title{font-family:'Syne',sans-serif;font-size:28px;font-weight:700;margin-bottom:6px}
+    .form-sub{font-size:14px;color:var(--text-2);margin-bottom:36px}
+
+    .field{margin-bottom:18px}
+    .field label{
+      display:block;font-size:11px;font-weight:600;color:var(--text-3);
+      letter-spacing:.07em;text-transform:uppercase;margin-bottom:8px;
+    }
+    .input-wrap{position:relative}
+    .input-icon{
+      position:absolute;left:14px;top:50%;transform:translateY(-50%);
+      color:var(--text-3);font-size:16px;pointer-events:none;
+    }
+    .field input{
+      width:100%;background:rgba(255,255,255,.04);
+      border:1px solid var(--border);border-radius:var(--r);
+      padding:13px 14px 13px 42px;color:var(--text);font-size:14px;
+      font-family:'Inter',sans-serif;outline:none;transition:border-color .2s,background .2s;
+    }
+    .field input::placeholder{color:var(--text-3)}
+    .field input:focus{border-color:rgba(2,179,106,.5);background:rgba(2,179,106,.03)}
+
+    .field-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
+    .field-row label{margin-bottom:0}
+    .forgot{font-size:12px;color:var(--green-l);text-decoration:none}
+    .forgot:hover{text-decoration:underline}
+
+    .error-box{
+      background:rgba(239,68,68,.08);border:1px solid rgba(239,68,68,.2);
+      border-radius:var(--r);padding:12px 16px;font-size:13px;color:#fca5a5;
+      margin-bottom:20px;display:none;align-items:center;gap:10px;
+    }
+
+    .btn-submit{
+      width:100%;padding:15px;border-radius:var(--r-f);
+      background:linear-gradient(135deg,var(--green-d),var(--green));
+      color:var(--bg);font-size:15px;font-weight:700;
+      font-family:'Syne',sans-serif;border:none;cursor:pointer;
+      transition:opacity .2s,transform .2s;
+      display:flex;align-items:center;justify-content:center;gap:9px;
+      box-shadow:0 8px 28px rgba(2,179,106,.3);
+    }
+    .btn-submit:hover{opacity:.9;transform:translateY(-1px)}
+    .btn-submit:disabled{opacity:.5;cursor:not-allowed;transform:none}
+    @keyframes spin{to{transform:rotate(360deg)}}
+    .spin{width:16px;height:16px;border-radius:50%;border:2px solid rgba(5,13,7,.3);
+      border-top-color:var(--bg);animation:spin .6s linear infinite;display:none}
+
+    .divider{display:flex;align-items:center;gap:12px;margin:24px 0;color:var(--text-3);font-size:12px}
+    .divider::before,.divider::after{content:'';flex:1;height:1px;background:var(--border)}
+
+    .back-link{text-align:center;font-size:13px;color:var(--text-3)}
+    .back-link a{color:var(--green-l);text-decoration:none}
+    .back-link a:hover{text-decoration:underline}
+
+    /* Mobile */
+    @media(max-width:900px){
+      .left{display:none}
+      .right{width:100%;padding:40px 24px}
+    }
+  </style>
+</head>
+<body>
+
+  <div class="left">
+    <div class="left-blob"></div>
+    <div class="left-logo">
+      <div class="logo-mark">A</div>
+      <div class="logo-name">AHCA <span>Portal</span></div>
+    </div>
+
+    <div class="left-hero">
+      <div class="left-eyebrow"><span></span> UAE FTA Approved Tax Agent</div>
+      <h1 class="left-title">Your finances,<br><em>organised.</em></h1>
+      <p class="left-sub">Access your tax documents, track your services, and stay on top of your UAE compliance — all in one secure place.</p>
+      <div class="features">
+        <div class="feature">
+          <div class="feature-icon"><i class="ti ti-files"></i></div>
+          <div class="feature-text"><strong>Secure Documents</strong>Access all your tax filings and reports</div>
+        </div>
+        <div class="feature">
+          <div class="feature-icon"><i class="ti ti-chart-bar"></i></div>
+          <div class="feature-text"><strong>Service Tracking</strong>See the status of your VAT & corporate tax</div>
+        </div>
+        <div class="feature">
+          <div class="feature-icon"><i class="ti ti-shield-check"></i></div>
+          <div class="feature-text"><strong>FTA Compliance</strong>Always compliant, always protected</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="left-footer">© 2025 AHCA · Dubai & Abu Dhabi · <a href="mailto:info@ahca.ae" style="color:var(--green-l);text-decoration:none">info@ahca.ae</a></div>
+  </div>
+
+  <div class="right">
+    <div class="form-wrap">
+      <h2 class="form-title">Welcome back</h2>
+      <p class="form-sub">Sign in to your client portal</p>
+
+      <div class="error-box" id="errorBox">
+        <i class="ti ti-alert-circle"></i>
+        <span id="errorMsg">Invalid email or password.</span>
+      </div>
+
+      <form id="loginForm">
+        <div class="field">
+          <label>Email address</label>
+          <div class="input-wrap">
+            <i class="ti ti-mail input-icon"></i>
+            <input type="email" id="email" placeholder="you@company.com" required autocomplete="email">
+          </div>
+        </div>
+        <div class="field">
+          <div class="field-row">
+            <label>Password</label>
+            <a href="#" class="forgot">Forgot password?</a>
+          </div>
+          <div class="input-wrap">
+            <i class="ti ti-lock input-icon"></i>
+            <input type="password" id="password" placeholder="••••••••" required autocomplete="current-password">
+          </div>
+        </div>
+
+        <button type="submit" class="btn-submit" id="loginBtn">
+          <div class="spin" id="spin"></div>
+          <span id="btnText">Sign in to portal</span>
+          <i class="ti ti-arrow-right" id="btnArrow"></i>
+        </button>
+      </form>
+
+      <div class="divider">need access?</div>
+      <div class="back-link">Contact AHCA to get your account — <a href="https://wa.me/971545050689" target="_blank">WhatsApp us</a></div>
+      <div class="back-link" style="margin-top:14px"><a href="../index.html">← Back to website</a></div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script>
+    const sb = supabase.createClient(
+      'https://bhcadrznoyjpaozpweai.supabase.co',
+      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJoY2Fkcnpub3lqcGFvenB3ZWFpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODE2MzUzMjYsImV4cCI6MjA5NzIxMTMyNn0._hmQ-jRicwa3uhQc45ZKer9MVrN4NpJqk3t8FzXtkb4'
+    );
+    sb.auth.getSession().then(({data})=>{ if(data.session) window.location.href='dashboard.html'; });
+
+    document.getElementById('loginForm').addEventListener('submit', async e => {
+      e.preventDefault();
+      const email = document.getElementById('email').value.trim();
+      const pass  = document.getElementById('password').value;
+      const btn   = document.getElementById('loginBtn');
+      const spin  = document.getElementById('spin');
+      const arrow = document.getElementById('btnArrow');
+      const errBox= document.getElementById('errorBox');
+
+      btn.disabled=true; spin.style.display='block'; arrow.style.display='none';
+      document.getElementById('btnText').textContent='Signing in…';
+      errBox.style.display='none';
+
+      const {error} = await sb.auth.signInWithPassword({email, password:pass});
+      if(error){
+        errBox.style.display='flex';
+        btn.disabled=false; spin.style.display='none'; arrow.style.display='';
+        document.getElementById('btnText').textContent='Sign in to portal';
+      } else {
+        window.location.href='dashboard.html';
+      }
+    });
+  </script>
+</body>
+</html>
