@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Client Portal — AHCA</title>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
+  <style>
+    :root {
+      --bg:#050D07;--green:#02B36A;--green-l:#5ECFA0;--green-d:#018F54;
+      --gold:#C9A84C;--text:#E8F5EC;--text-2:#9DB8A4;--text-3:#5C7A63;
+      --border:rgba(94,207,160,.12);--r:14px;--r-f:100px;
+    }
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    html,body{height:100%}
+    body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);display:flex;min-height:100svh;cursor:none}
+    *{cursor:none!important}
+
+    /* cursor (same as pulse-beams-preview) */
+    .cursor{position:fixed;pointer-events:none;z-index:99998;left:0;top:0;width:10px;height:10px;background:var(--green-l);border-radius:50%;transform:translate(-200px,-200px);transition:width .15s,height .15s,background .15s,box-shadow .15s;will-change:transform;box-shadow:0 0 8px rgba(94,207,160,.9),0 0 20px rgba(94,207,160,.45)}
+    .cursor-ring{position:fixed;pointer-events:none;z-index:99997;left:0;top:0;width:36px;height:36px;border:1.5px solid rgba(94,207,160,.5);border-radius:50%;transform:translate(-200px,-200px);transition:width .25s,height .25s,border-color .25s;will-change:transform;box-shadow:0 0 12px rgba(94,207,160,.15) inset}
+    body:has(button:hover) .cursor,body:has(a:hover) .cursor{width:22px;height:22px;background:var(--gold);box-shadow:0 0 14px rgba(201,168,76,1),0 0 32px rgba(201,168,76,.5)}
+    body:has(button:hover) .cursor-ring,body:has(a:hover) .cursor-ring{width:48px;height:48px;border-color:rgba(229,201,122,.7)}
+    .cursor-trail{position:fixed;border-radius:50%;pointer-events:none;z-index:99990;transform:translate(-50%,-50%);background:var(--green-l);box-shadow:0 0 6px rgba(94,207,160,.6);animation:trail-fade .55s ease forwards}
+    @keyframes trail-fade{from{opacity:.45;transform:translate(-50%,-50%) scale(1)}to{opacity:0;transform:translate(-50%,-50%) scale(0)}}
+    @media(hover:none){.cursor,.cursor-ring{display:none}body,*{cursor:auto!important}}
+
+    /* LEFT PANEL */
+    .left{
+      flex:1;display:flex;flex-direction:column;justify-content:space-between;
+      padding:48px;background:linear-gradient(145deg,rgba(2,179,106,.06) 0%,transparent 60%);
+      border-right:1px solid var(--border);position:relative;overflow:hidden;
+    }
+    .left-blob{
+      position:absolute;width:500px;height:500px;border-radius:50%;
+      background:radial-gradient(ellipse,rgba(2,179,106,.12),transparent 70%);
+      filter:blur(80px);top:-100px;left:-100px;pointer-events:none;
+      animation:blob 20s ease-in-out infinite;
+    }
+    @keyframes blob{0%,100%{transform:translate(0,0) scale(1)}50%{transform:translate(5%,8%) scale(1.1)}}
+
+    .left-logo{display:flex;align-items:center;gap:12px;position:relative}
+    .logo-mark{
+      width:44px;height:44px;border-radius:12px;
+      background:linear-gradient(135deg,var(--green-d),var(--green));
+      display:flex;align-items:center;justify-content:center;
+      font-family:'Syne',sans-serif;font-weight:800;font-size:18px;color:var(--bg);
+    }
+    .logo-name{font-family:'Syne',sans-serif;font-weight:700;font-size:20px}
+    .logo-name span{color:var(--green-l)}
+
+    .left-hero{position:relative}
+    .left-eyebrow{
+      display:inline-flex;align-items:center;gap:7px;
+      background:rgba(2,179,106,.08);border:1px solid rgba(2,179,106,.2);
+      border-radius:var(--r-f);padding:6px 14px;
+      font-size:12px;font-weight:600;color:var(--green-l);letter-spacing:.04em;
+      margin-bottom:24px;
+    }
+    .left-eyebrow span{width:7px;height:7px;border-radius:50%;background:var(--green);animation:pulse 2s infinite}
+    @keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+    .left-title{font-family:'Syne',sans-serif;font-size:40px;font-weight:800;line-height:1.15;margin-bottom:16px}
+    .left-title em{color:var(--green-l);font-style:normal}
+    /* rotating hero word (same animation as the homepage) */
+    .h1-rotate{position:relative;display:block;height:1.3em;overflow:hidden}
+    .h1-rotate .rot-word{position:absolute;inset:0;display:flex;align-items:center;justify-content:flex-start;white-space:nowrap;background:linear-gradient(90deg,var(--green-l),#a8ffda,var(--green),var(--green-l));background-size:250% 100%;-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;color:transparent;opacity:0;transform:translateY(150%);transition:transform .5s cubic-bezier(.34,1.56,.64,1),opacity .35s ease;will-change:transform,opacity}
+    .h1-rotate .rot-word.is-active{opacity:1;transform:translateY(0);animation:text-shimmer 4s linear infinite;filter:drop-shadow(0 0 14px rgba(94,207,160,.45))}
+    .h1-rotate .rot-word.is-prev{opacity:0;transform:translateY(-150%)}
+    .h1-rotate .rot-word.is-next{opacity:0;transform:translateY(150%)}
+    @keyframes text-shimmer{0%{background-position:0% 50%}100%{background-position:250% 50%}}
+    @media(prefers-reduced-motion:reduce){.h1-rotate .rot-word{transition:none}.h1-rotate .rot-word.is-active{animation:none}}
+    .left-sub{font-size:15px;color:var(--text-2);line-height:1.7;max-width:380px;margin-bottom:40px}
+
+    .features{display:flex;flex-direction:column;gap:16px}
+    .feature{display:flex;align-items:center;gap:14px}
+    .feature-icon{
+      width:40px;height:40px;border-radius:11px;flex-shrink:0;
+      background:linear-gradient(135deg,rgba(2,179,106,.22),rgba(2,179,106,.06));
+      border:1px solid rgba(94,207,160,.25);
+      display:flex;align-items:center;justify-content:center;
+      color:var(--green-l);font-size:18px;
+      box-shadow:0 0 16px rgba(2,179,106,.18);
+      transition:box-shadow .25s,border-color .25s,color .25s;
+    }
+    /* each icon floats on its own rhythm */
+    .feature:nth-child(1) .feature-icon{animation:feat-float 3.4s ease-in-out infinite}
+    .feature:nth-child(2) .feature-icon{animation:feat-float 4.2s ease-in-out infinite;animation-delay:-1.3s}
+    .feature:nth-child(3) .feature-icon{animation:feat-float 3.8s ease-in-out infinite;animation-delay:-2.5s}
+    @keyframes feat-float{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}
+    .feature:hover .feature-icon{border-color:rgba(94,207,160,.6);color:#EAFBF1;box-shadow:0 0 24px rgba(2,179,106,.45)}
+    .feature-text{font-size:14px;color:var(--text-2);transition:color .25s}
+    .feature-text strong{color:var(--text);display:block;font-size:13px;margin-bottom:1px;transition:color .25s,text-shadow .25s}
+    .feature:hover .feature-text strong{color:#EAFBF1;text-shadow:0 0 12px rgba(94,207,160,.4)}
+    @media(prefers-reduced-motion:reduce){.feature-icon{animation:none!important}}
+
+    .left-footer{font-size:12px;color:var(--text-3);position:relative}
+    .left-footer a{position:relative;color:var(--green-l);text-decoration:none;font-weight:600;text-shadow:0 0 9px rgba(94,207,160,.5),0 0 18px rgba(94,207,160,.22);transition:color .25s,text-shadow .25s}
+    .left-footer a::after{content:'';position:absolute;left:0;bottom:-2px;width:100%;height:1.5px;background:linear-gradient(90deg,var(--green),var(--green-l));box-shadow:0 0 8px rgba(94,207,160,.6);transform:scaleX(0);transform-origin:right;transition:transform .3s cubic-bezier(.22,1,.36,1)}
+    .left-footer a:hover{color:#EAFBF1;text-shadow:0 0 16px rgba(94,207,160,.85),0 0 30px rgba(94,207,160,.4)}
+    .left-footer a:hover::after{transform:scaleX(1);transform-origin:left}
+
+    /* RIGHT PANEL */
+    .right{
+      width:480px;flex-shrink:0;display:flex;align-items:center;justify-content:center;
+      padding:48px 56px;
+    }
+    .form-wrap{width:100%}
+
+    .form-title{font-family:'Syne',sans-serif;font-size:28px;font-weight:700;margin-bottom:6px}
+    .form-sub{font-size:14px;color:var(--text-2);margin-bottom:36px}
+
+    .field{margin-bottom:18px}
+    .field label{
+      display:block;font-size:11px;font-weight:600;color:var(--text-3);
+      letter-spacing:.07em;text-transform:uppercase;margin-bottom:8px;
+    }
+    .input-wrap{position:relative}
+    .input-icon{
+      position:absolute;left:14px;top:50%;transform:translateY(-50%);
+      color:var(--text-3);font-size:16px;pointer-events:none;
+    }
+    .field input{
+      width:100%;background:rgba(255,255,255,.04);
+      border:1px solid var(--border);border-radius:var(--r);
+      padding:13px 14px 13px 42px;color:var(--text);font-size:14px;
+      font-family:'Inter',sans-serif;outline:none;transition:border-color .2s,background .2s;
+    }
+    .field input::placeholder{color:var(--text-3)}
+    .field input:focus{border-color:rgba(2,179,106,.5);background:rgba(2,179,106,.03)}
+
+    .field-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
+    .field-row label{margin-bottom:0}
+    .forgot{position:relative;font-size:12px;color:var(--green-l);text-decoration:none;text-shadow:0 0 9px rgba(94,207,160,.5),0 0 18px rgba(94,207,160,.22);transition:color .25s,text-shadow .25s}
+    .forgot::after{content:'';position:absolute;left:0;bottom:-2px;width:100%;height:1.5px;background:linear-gradient(90deg,var(--green),var(--green-l));box-shadow:0 0 8px rgba(94,207,160,.6);transform:scaleX(0);transform-origin:right;transition:transform .3s cubic-bezier(.22,1,.36,1)}
+    .forgot:hover{color:#EAFBF1;text-shadow:0 0 16px rgba(94,207,160,.85),0 0 30px rgba(94,207,160,.4)}
+    .forgot:hover::after{transform:scaleX(1);transform-origin:left}
+
+    .error-box{
+      background:rgba(239,68,68,.08);border:1px solid rgba(239,68,68,.2);
+      border-radius:var(--r);padding:12px 16px;font-size:13px;color:#fca5a5;
+      margin-bottom:20px;display:none;align-items:center;gap:10px;
+    }
+
+    .btn-submit{
+      width:100%;padding:15px;border-radius:var(--r-f);
+      background:linear-gradient(135deg,var(--green-d),var(--green));
+      color:var(--bg);font-size:15px;font-weight:700;
+      font-family:'Syne',sans-serif;border:none;cursor:pointer;
+      transition:opacity .2s,transform .2s;
+      display:flex;align-items:center;justify-content:center;gap:9px;
+      box-shadow:0 8px 28px rgba(2,179,106,.3);
+    }
+    .btn-submit:hover{opacity:.9;transform:translateY(-1px)}
+    .btn-submit:disabled{opacity:.5;cursor:not-allowed;transform:none}
+    @keyframes spin{to{transform:rotate(360deg)}}
+    .spin{width:16px;height:16px;border-radius:50%;border:2px solid rgba(5,13,7,.3);
+      border-top-color:var(--bg);animation:spin .6s linear infinite;display:none}
+
+    .divider{display:flex;align-items:center;gap:12px;margin:24px 0;color:var(--text-3);font-size:12px}
+    .divider::before,.divider::after{content:'';flex:1;height:1px;background:var(--border)}
+
+    .back-link{text-align:center;font-size:13px;color:var(--text-3)}
+    .back-link a{position:relative;display:inline-flex;align-items:center;gap:6px;color:var(--green-l);text-decoration:none;font-weight:600;text-shadow:0 0 9px rgba(94,207,160,.5),0 0 18px rgba(94,207,160,.22);transition:color .25s,text-shadow .25s}
+    .back-link a::after{content:'';position:absolute;left:0;bottom:-3px;width:100%;height:1.5px;background:linear-gradient(90deg,var(--green),var(--green-l));box-shadow:0 0 8px rgba(94,207,160,.6);transform:scaleX(0);transform-origin:right;transition:transform .3s cubic-bezier(.22,1,.36,1)}
+    .back-link a:hover{color:#EAFBF1;text-shadow:0 0 16px rgba(94,207,160,.85),0 0 30px rgba(94,207,160,.4)}
+    .back-link a:hover::after{transform:scaleX(1);transform-origin:left}
+    .back-link a i{font-size:15px;transition:transform .3s cubic-bezier(.22,1,.36,1)}
+    .back-link a.back-arrow:hover i{transform:translateX(-4px)}
+
+    /* Mobile */
+    @media(max-width:900px){
+      .left{display:none}
+      .right{width:100%;padding:40px 24px}
+    }
+
+    /* MUSIC TOGGLE */
+    .bgm-btn{position:fixed;right:24px;bottom:24px;z-index:99996;width:48px;height:48px;border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;color:var(--bg);font-size:20px;background:linear-gradient(135deg,var(--green-d),var(--green));border:none;box-shadow:0 4px 22px rgba(2,179,106,.4);transition:box-shadow .25s;animation:bgm-float 7s ease-in-out infinite;will-change:transform}
+    .bgm-btn:hover{box-shadow:0 8px 30px rgba(2,179,106,.6)}
+    .bgm-btn.playing{animation:bgm-float 7s ease-in-out infinite,bgm-pulse 3s ease-in-out infinite}
+    @keyframes bgm-float{0%{transform:translate(0,0)}25%{transform:translate(3px,-7px)}50%{transform:translate(0,-13px)}75%{transform:translate(-3px,-6px)}100%{transform:translate(0,0)}}
+    @keyframes bgm-pulse{0%,100%{box-shadow:0 4px 22px rgba(2,179,106,.4)}50%{box-shadow:0 4px 32px rgba(2,179,106,.65),0 0 0 8px rgba(2,179,106,.07)}}
+    @media(max-width:900px){.bgm-btn{right:16px;bottom:16px;width:44px;height:44px;font-size:18px}}
+    @media(prefers-reduced-motion:reduce){.bgm-btn,.bgm-btn.playing{animation:none}}
+  </style>
+</head>
+<body>
+
+  <div class="cursor"></div>
+  <div class="cursor-ring"></div>
+
+  <canvas id="energyfx" style="position:fixed;inset:0;z-index:-1;pointer-events:none"></canvas>
+
+  <!-- background music (self-hosted) -->
+  <audio id="bgm" preload="auto">
+    <source src="../assets/audio/Hans_Zimmer_-_Aurora_(SkySound.cc).mp3" type="audio/mpeg">
+  </audio>
+  <button id="bgmBtn" class="bgm-btn" aria-label="Play background music" title="Music"><i class="ti ti-music-off"></i></button>
+  <script>
+  (function(){
+    const START=15, VOL=0.14;
+    const audio=document.getElementById('bgm'), btn=document.getElementById('bgmBtn');
+    if(!audio||!btn) return;
+    const icon=btn.querySelector('i');
+    let fadeId=null, started=false, isOn=false;
+    const wantMusic=()=>localStorage.getItem('ahca_bgm')!=='off'; // default ON
+    const setUI=on=>{ isOn=on; btn.classList.toggle('playing',on); icon.className='ti '+(on?'ti-music':'ti-music-off'); btn.setAttribute('aria-label',on?'Mute music':'Play music'); };
+
+    function fade(to,ms,done){ if(fadeId)clearInterval(fadeId); const from=audio.volume,steps=30,dt=Math.max(16,ms/steps); let i=0; fadeId=setInterval(()=>{ i++; audio.volume=Math.max(0,Math.min(1,from+(to-from)*(i/steps))); if(i>=steps){clearInterval(fadeId);fadeId=null; audio.volume=to; if(done)done();} },dt); }
+    function seekStart(){ if(!started){ try{audio.currentTime=START;}catch(e){} started=true; } }
+    // loop back to START (not 0)
+    audio.addEventListener('ended',()=>{ try{audio.currentTime=START;}catch(e){} audio.play().catch(()=>{}); });
+
+    function goAudible(){ audio.muted=false; audio.volume=0; const p=audio.play(); const done=()=>{ if(!isOn)return; seekStart(); fade(VOL,1400); }; (p&&p.then)?p.then(done).catch(()=>{}):done(); }
+    function turnOn(){ setUI(true); localStorage.setItem('ahca_bgm','on'); goAudible(); }
+    function turnOff(){ setUI(false); localStorage.setItem('ahca_bgm','off'); fade(0,400,()=>audio.pause()); }
+
+    // unmute on the first real interaction (gesture required by browsers)
+    function armUnmute(){
+      const un=e=>{ if(e&&e.target&&e.target.closest&&e.target.closest('#bgmBtn')){ drop(); return; } if(isOn) goAudible(); drop(); };
+      function drop(){ ['pointerdown','keydown','touchstart'].forEach(ev=>document.removeEventListener(ev,un,true)); }
+      ['pointerdown','keydown','touchstart'].forEach(ev=>document.addEventListener(ev,un,true));
+    }
+
+    // boot: music ON by default — try audible autoplay, else play muted now and unmute on first interaction
+    function boot(){
+      if(!wantMusic()){ setUI(false); return; }
+      setUI(true);
+      audio.muted=false; audio.volume=0;
+      const p=audio.play();
+      if(p&&p.then){ p.then(()=>{ seekStart(); fade(VOL,1400); }).catch(()=>{ audio.muted=true; audio.volume=VOL; audio.play().then(seekStart).catch(()=>{}); armUnmute(); }); }
+      else { seekStart(); fade(VOL,1400); }
+    }
+
+    btn.addEventListener('click',()=>{ isOn?turnOff():turnOn(); });
+    boot();
+  })();
+  </script>
+
+  <div class="left">
+    <div class="left-blob"></div>
+    <div class="left-logo">
+      <div class="logo-mark">A</div>
+      <div class="logo-name">AHCA <span>Portal</span></div>
+    </div>
+
+    <div class="left-hero">
+      <div class="left-eyebrow"><span></span> UAE FTA Approved Tax Agent</div>
+      <h1 class="left-title">Your taxes,<br><span class="h1-rotate" aria-label="organised">
+        <span class="rot-word is-active" aria-hidden="true">organised.</span>
+        <span class="rot-word is-next" aria-hidden="true">in control.</span>
+        <span class="rot-word is-next" aria-hidden="true">compliant.</span>
+        <span class="rot-word is-next" aria-hidden="true">stress-free.</span>
+      </span></h1>
+      <p class="left-sub">Access your tax documents, track your services, and stay on top of your UAE compliance — all in one secure place.</p>
+      <div class="features">
+        <div class="feature">
+          <div class="feature-icon"><i class="ti ti-files"></i></div>
+          <div class="feature-text"><strong>Secure Documents</strong>Access all your tax filings and reports</div>
+        </div>
+        <div class="feature">
+          <div class="feature-icon"><i class="ti ti-chart-bar"></i></div>
+          <div class="feature-text"><strong>Service Tracking</strong>See the status of your VAT & corporate tax</div>
+        </div>
+        <div class="feature">
+          <div class="feature-icon"><i class="ti ti-shield-check"></i></div>
+          <div class="feature-text"><strong>FTA Compliance</strong>Always compliant, always protected</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="left-footer">© 2026 AHCA · across the UAE · <a href="mailto:info@ahca.ae">info@ahca.ae</a></div>
+  </div>
+
+  <div class="right">
+    <div class="form-wrap">
+      <h2 class="form-title">Welcome back</h2>
+      <p class="form-sub">Sign in to your client portal</p>
+
+      <div class="error-box" id="errorBox">
+        <i class="ti ti-alert-circle"></i>
+        <span id="errorMsg">Invalid email or password.</span>
+      </div>
+
+      <form id="loginForm">
+        <div class="field">
+          <label>Email address</label>
+          <div class="input-wrap">
+            <i class="ti ti-mail input-icon"></i>
+            <input type="email" id="email" placeholder="you@company.com" required autocomplete="email">
+          </div>
+        </div>
+        <div class="field">
+          <div class="field-row">
+            <label>Password</label>
+            <a href="#" class="forgot">Forgot password?</a>
+          </div>
+          <div class="input-wrap">
+            <i class="ti ti-lock input-icon"></i>
+            <input type="password" id="password" placeholder="••••••••" required autocomplete="current-password">
+          </div>
+        </div>
+
+        <button type="submit" class="btn-submit" id="loginBtn">
+          <div class="spin" id="spin"></div>
+          <span id="btnText">Sign in to portal</span>
+          <i class="ti ti-arrow-right" id="btnArrow"></i>
+        </button>
+      </form>
+
+      <div class="divider">need access?</div>
+      <div class="back-link">Contact AHCA to get your account — <a href="https://wa.me/971545050689" target="_blank"><i class="ti ti-brand-whatsapp"></i> WhatsApp us</a></div>
+      <div class="back-link" style="margin-top:14px"><a href="../index.html" class="back-arrow"><i class="ti ti-arrow-left"></i> Back to website</a></div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script>
+    const sb = supabase.createClient(
+      'https://bhcadrznoyjpaozpweai.supabase.co',
+      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJoY2Fkcnpub3lqcGFvenB3ZWFpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODE2MzUzMjYsImV4cCI6MjA5NzIxMTMyNn0._hmQ-jRicwa3uhQc45ZKer9MVrN4NpJqk3t8FzXtkb4'
+    );
+    sb.auth.getSession().then(({data})=>{ if(data.session) window.location.href='dashboard.html'; });
+
+    document.getElementById('loginForm').addEventListener('submit', async e => {
+      e.preventDefault();
+      const email = document.getElementById('email').value.trim();
+      const pass  = document.getElementById('password').value;
+      const btn   = document.getElementById('loginBtn');
+      const spin  = document.getElementById('spin');
+      const arrow = document.getElementById('btnArrow');
+      const errBox= document.getElementById('errorBox');
+
+      btn.disabled=true; spin.style.display='block'; arrow.style.display='none';
+      document.getElementById('btnText').textContent='Signing in…';
+      errBox.style.display='none';
+
+      const {error} = await sb.auth.signInWithPassword({email, password:pass});
+      if(error){
+        errBox.style.display='flex';
+        btn.disabled=false; spin.style.display='none'; arrow.style.display='';
+        document.getElementById('btnText').textContent='Sign in to portal';
+      } else {
+        window.location.href='dashboard.html';
+      }
+    });
+  </script>
+
+  <!-- rotating hero word (same as homepage) -->
+  <script>
+    (function(){
+      const rotate=document.querySelector('.h1-rotate');
+      if(!rotate) return;
+      if(window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+      const words=Array.from(rotate.querySelectorAll('.rot-word'));
+      if(words.length<2) return;
+      let active=0;
+      const apply=()=>words.forEach((w,i)=>{ w.className='rot-word '+(i===active?'is-active':(active>i?'is-prev':'is-next')); });
+      apply();
+      setInterval(()=>{ active=(active+1)%words.length; apply(); }, 2000);
+    })();
+  </script>
+
+  <!-- cursor JS (same as pulse-beams-preview) -->
+  <script>
+    const cur=document.querySelector('.cursor'), ring=document.querySelector('.cursor-ring');
+    let mx=0,my=0,rx=0,ry=0,lastTrail=0;
+    document.addEventListener('mousemove',e=>{
+      mx=e.clientX; my=e.clientY;
+      cur.style.transform=`translate(${mx}px,${my}px) translate(-50%,-50%)`;
+      const now=Date.now();
+      if(now-lastTrail>30){lastTrail=now;
+        const dot=document.createElement('div');dot.className='cursor-trail';
+        const s=Math.random()*5+3;
+        dot.style.cssText=`width:${s}px;height:${s}px;left:${mx}px;top:${my}px;opacity:.45`;
+        document.body.appendChild(dot);setTimeout(()=>dot.remove(),550);}
+    },{passive:true});
+    (function ringLoop(){rx+=(mx-rx)*.18;ry+=(my-ry)*.18;
+      ring.style.transform=`translate(${rx}px,${ry}px) translate(-50%,-50%)`;
+      requestAnimationFrame(ringLoop);})();
+  </script>
+
+  <!-- ── SPIRAL GALAXY — calm, green, slowly rotating ── -->
+  <script>
+  (function(){
+    const cv=document.getElementById('energyfx'); if(!cv) return;
+    const ctx=cv.getContext('2d');
+    const reduce=window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches;
+    let W=0,H=0,DPR=1,R=0,stars=[],near=[],nebula=[];
+    const rand=(a,b)=>a+Math.random()*(b-a);
+    const gauss=()=>(Math.random()+Math.random()+Math.random()-1.5)/1.5;
+
+    function makeSprite(rgb){
+      const s=64,c=document.createElement('canvas');c.width=c.height=s;
+      const g=c.getContext('2d'),grd=g.createRadialGradient(s/2,s/2,0,s/2,s/2,s/2);
+      grd.addColorStop(0,'rgba('+rgb+',1)');grd.addColorStop(.25,'rgba('+rgb+',.5)');grd.addColorStop(1,'rgba('+rgb+',0)');
+      g.fillStyle=grd;g.fillRect(0,0,s,s);return c;
+    }
+    const SPR={green:makeSprite('94,207,160'),deep:makeSprite('2,179,106'),gold:makeSprite('229,201,122'),pale:makeSprite('215,245,228')};
+
+    function build(){
+      stars=[];near=[];nebula=[];
+      R=Math.hypot(W,H)*0.82;
+      const arms=Math.random()<.5?2:3, off=Math.PI*2/arms, twist=rand(2.1,3.0), spin=Math.random()<.5?1:-1;
+      // spiral-arm + bulge stars (spread out across the field)
+      for(let i=0;i<500;i++){
+        const rr=Math.pow(Math.random(),1.35), r=rr*R;
+        const ang=(Math.random()*arms|0)*off + spin*rr*twist*Math.PI + gauss()*((1-rr)*1.1+0.12);
+        const x=Math.cos(ang)*r,y=Math.sin(ang)*r, core=rr<0.13, t=Math.random();
+        const color=core?(t<.45?'pale':'green'):(t<.72?'green':t<.92?'deep':'gold');
+        stars.push({x,y,size:rand(.7,2.0)*(core?1.5:1),bright:rand(.3,.9)*(core?1.15:1),color,ph:rand(0,6.28),tw:rand(.3,1.0)});
+      }
+      // faint distant dust (wide, even scatter to fill the corners)
+      for(let i=0;i<300;i++){const a=rand(0,6.28),r=Math.sqrt(Math.random())*R*1.25;
+        stars.push({x:Math.cos(a)*r,y:Math.sin(a)*r,size:rand(.5,1.1),bright:rand(.14,.45),color:'green',ph:rand(0,6.28),tw:rand(.4,1.2)});}
+      // nebula haze
+      for(let i=0;i<6;i++){const a=rand(0,6.28),r=rand(.15,.85)*R;
+        nebula.push({x:Math.cos(a)*r,y:Math.sin(a)*r,rad:rand(R*.12,R*.26),gold:Math.random()<.28});}
+      // near foreground stars (parallax)
+      for(let i=0;i<5;i++){const a=rand(0,6.28),r=rand(.3,.95)*R;
+        near.push({x:Math.cos(a)*r,y:Math.sin(a)*r,size:rand(2.6,4.4),bright:rand(.7,1),color:Math.random()<.2?'gold':'green',ph:rand(0,6.28),tw:rand(.3,.8)});}
+    }
+    function resize(){
+      DPR=Math.min(window.devicePixelRatio||1,2);
+      W=window.innerWidth;H=window.innerHeight;
+      cv.width=W*DPR;cv.height=H*DPR;cv.style.width=W+'px';cv.style.height=H+'px';
+      ctx.setTransform(DPR,0,0,DPR,0,0);build();
+    }
+    function glow(spr,x,y,r,a){ ctx.globalAlpha=a; ctx.drawImage(spr,x-r,y-r,r*2,r*2); }
+    const start=performance.now();
+    function frame(now){
+      const t=(now-start)/1000;
+      ctx.clearRect(0,0,W,H); ctx.globalCompositeOperation='lighter'; ctx.lineCap='round';
+      const cx=W/2,cy=H/2, aG=reduce?0:t*0.015, aN=reduce?0:t*0.025;
+      const cG=Math.cos(aG),sG=Math.sin(aG),cN=Math.cos(aN),sN=Math.sin(aN);
+      // glowing galactic core
+      glow(SPR.deep,cx,cy,R*0.42,0.05); glow(SPR.green,cx,cy,R*0.16,0.10); glow(SPR.pale,cx,cy,R*0.05,0.16);
+      // nebula haze (rotates with galaxy)
+      for(const nb of nebula){ const x=cx+(nb.x*cG-nb.y*sG),y=cy+(nb.x*sG+nb.y*cG); glow(nb.gold?SPR.gold:SPR.green,x,y,nb.rad,0.05); }
+      // galaxy stars
+      for(const L of stars){
+        const x=cx+(L.x*cG-L.y*sG),y=cy+(L.x*sG+L.y*cG);
+        if(x<-30||x>W+30||y<-30||y>H+30) continue;
+        const tw=reduce?.8:.55+.45*Math.sin(t*L.tw+L.ph), a=L.bright*tw, spr=SPR[L.color], gz=L.size*3.0;
+        ctx.globalAlpha=a*.4; ctx.drawImage(spr,x-gz,y-gz,gz*2,gz*2);
+        ctx.globalAlpha=Math.min(1,a*1.1); ctx.drawImage(spr,x-L.size,y-L.size,L.size*2,L.size*2);
+      }
+      // near parallax stars
+      for(const L of near){
+        const x=cx+(L.x*cN-L.y*sN),y=cy+(L.x*sN+L.y*cN);
+        if(x<-30||x>W+30||y<-30||y>H+30) continue;
+        const tw=reduce?.85:.6+.4*Math.sin(t*L.tw+L.ph), a=L.bright*tw, spr=SPR[L.color], gz=L.size*3.2;
+        ctx.globalAlpha=a*.4; ctx.drawImage(spr,x-gz,y-gz,gz*2,gz*2);
+        ctx.globalAlpha=Math.min(1,a); ctx.drawImage(spr,x-L.size,y-L.size,L.size*2,L.size*2);
+      }
+      ctx.globalAlpha=1;
+      if(!reduce) requestAnimationFrame(frame);
+    }
+    window.addEventListener('resize',resize,{passive:true});
+    window.addEventListener('load',resize);
+    resize();
+    requestAnimationFrame(frame);
+  })();
+  </script>
+</body>
+</html>

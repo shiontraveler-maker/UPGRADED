@@ -1,0 +1,647 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="description" content="AHCA — UAE FTA-Approved Tax Agent. Corporate tax preparation, VAT services, bookkeeping and financial planning across UAE. AED 100M+ in VAT refunds approved.">
+  <meta name="keywords" content="UAE tax agent, FTA approved tax agent, corporate tax UAE, VAT services Dubai, bookkeeping Abu Dhabi, financial planning UAE, AHCA">
+  <meta name="author" content="AHCA">
+  <meta name="robots" content="index, follow">
+  <meta property="og:title" content="AHCA — Approved Tax Agent | UAE">
+  <meta property="og:description" content="UAE FTA-Approved Tax Agent. Corporate tax, VAT, bookkeeping &amp; financial planning across UAE.">
+  <meta property="og:type" content="website">
+  <meta property="og:locale" content="en_AE">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="AHCA — Approved Tax Agent | UAE">
+  <meta name="twitter:description" content="UAE FTA-Approved Tax Agent. AED 100M+ in VAT refunds approved.">
+
+  <title>AHCA — Approved Tax Agent | UAE</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800;900&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
+  <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+
+  <a href="#main" class="skip-link">Skip to main content</a>
+  <div class="scroll-progress" id="scrollProgress" aria-hidden="true"></div>
+  <div class="cursor" id="cur" aria-hidden="true"></div>
+  <div class="cursor-ring" id="curR" aria-hidden="true"></div>
+
+  <!-- Aurora background -->
+  <div id="aurora" aria-hidden="true">
+    <div class="aurora-blob aurora-blob--1"></div>
+    <div class="aurora-blob aurora-blob--2"></div>
+    <div class="aurora-blob aurora-blob--3"></div>
+    <div class="aurora-blob aurora-blob--4"></div>
+  </div>
+
+  <!-- Particle canvas -->
+  <canvas id="particleCanvas" aria-hidden="true"></canvas>
+
+  <!-- Full-page scroll aurora zones -->
+  <div id="aurora-scroll" aria-hidden="true">
+    <div class="as-blob as-blob--1"></div>
+    <div class="as-blob as-blob--2"></div>
+    <div class="as-blob as-blob--3"></div>
+    <div class="as-blob as-blob--4"></div>
+    <div class="as-blob as-blob--5"></div>
+    <div class="as-blob as-blob--6"></div>
+  </div>
+
+  <!-- HEADER: nav + ticker -->
+  <header>
+    <nav class="nav" id="nav" aria-label="Main navigation">
+      <a href="#" class="logo" aria-label="AHCA — Home">
+        AHCA<span class="logo-dot" aria-hidden="true"></span>
+      </a>
+
+      <ul class="nav-links" role="list">
+        <li><a href="#services">Services</a></li>
+        <li><a href="#why">Why AHCA</a></li>
+        <li><a href="#results">Results</a></li>
+        <li><a href="#contact">Contact</a></li>
+      </ul>
+
+      <div class="nav-actions">
+        <a href="https://wa.me/971545050689" class="nav-wa" target="_blank" rel="noopener noreferrer" aria-label="Call or WhatsApp us">
+          <i class="ti ti-brand-whatsapp" aria-hidden="true"></i>
+          <span>+971 54 505 0689</span>
+        </a>
+        <button class="nav-burger" id="navBurger" aria-label="Open navigation menu" aria-expanded="false" aria-controls="mobileMenu">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+    </nav>
+
+    <div class="ticker-wrap" aria-hidden="true">
+      <div class="ticker-track">
+        <span class="ti-item ti-hi">AHCA</span><span class="ti-sep">·</span>
+        <span class="ti-item">UAE FTA Approved Tax Agent</span><span class="ti-sep">·</span>
+        <span class="ti-item">Corporate Tax Preparation</span><span class="ti-sep">·</span>
+        <span class="ti-item">VAT Services</span><span class="ti-sep">·</span>
+        <span class="ti-item">Bookkeeping</span><span class="ti-sep">·</span>
+        <span class="ti-item">Financial Planning</span><span class="ti-sep">·</span>
+        <span class="ti-item">Dubai &amp; Abu Dhabi</span><span class="ti-sep">·</span>
+        <span class="ti-item ti-gold">AED 100M+ VAT Refund Approved</span><span class="ti-sep">·</span>
+        <span class="ti-item ti-hi">AHCA</span><span class="ti-sep">·</span>
+        <span class="ti-item">UAE FTA Approved Tax Agent</span><span class="ti-sep">·</span>
+        <span class="ti-item">Corporate Tax Preparation</span><span class="ti-sep">·</span>
+        <span class="ti-item">VAT Services</span><span class="ti-sep">·</span>
+        <span class="ti-item">Bookkeeping</span><span class="ti-sep">·</span>
+        <span class="ti-item">Financial Planning</span><span class="ti-sep">·</span>
+        <span class="ti-item">Dubai &amp; Abu Dhabi</span><span class="ti-sep">·</span>
+        <span class="ti-item ti-gold">AED 100M+ VAT Refund Approved</span><span class="ti-sep">·</span>
+      </div>
+    </div>
+  </header>
+
+  <!-- MOBILE MENU -->
+  <div class="mobile-menu" id="mobileMenu" role="dialog" aria-modal="true" aria-label="Navigation menu" aria-hidden="true">
+    <div class="mobile-menu-inner">
+      <ul role="list">
+        <li><a href="#services" class="mobile-link">Services</a></li>
+        <li><a href="#why" class="mobile-link">Why AHCA</a></li>
+        <li><a href="#results" class="mobile-link">Results</a></li>
+        <li><a href="#contact" class="mobile-link">Contact</a></li>
+      </ul>
+      <a href="https://wa.me/971545050689" class="mobile-wa" target="_blank" rel="noopener noreferrer">
+        <i class="ti ti-brand-whatsapp" aria-hidden="true"></i> WhatsApp Us
+      </a>
+    </div>
+  </div>
+
+  <main id="main">
+
+    <!-- HERO -->
+    <section class="hero" aria-label="Introduction">
+      <div class="hero-sun" aria-hidden="true"></div>
+      <div class="hero-mesh" aria-hidden="true">
+        <div class="mesh-orb mesh-orb--1"></div>
+        <div class="mesh-orb mesh-orb--2"></div>
+        <div class="mesh-orb mesh-orb--3"></div>
+      </div>
+      <div class="hero-grid-overlay" aria-hidden="true"></div>
+
+      <div class="hero-content">
+        <div class="hero-badge">
+          <span class="badge-dot" aria-hidden="true"></span>
+          <i class="ti ti-shield-check" aria-hidden="true"></i>
+          Approved Tax Agent — UAE FTA
+        </div>
+
+        <h1 class="hero-h1">
+          <span class="h1-line l1">Your money</span>
+          <span class="h1-line l2 h1-rotate" aria-label="works harder">
+            <span class="rot-word is-active" aria-hidden="true">works harder</span>
+            <span class="rot-word is-next" aria-hidden="true">stretches further</span>
+            <span class="rot-word is-next" aria-hidden="true">moves faster</span>
+          </span>
+          <span class="h1-line l3">when we do the <span class="num-scramble" data-text="numbers.">numbers.</span></span>
+        </h1>
+
+        <p class="hero-sub">
+          From corporate tax preparation to VAT services and bookkeeping — AHCA is your FTA-approved financial partner across UAE.
+        </p>
+
+        <div class="hero-btns">
+          <a href="#contact" class="btn btn--primary">
+            <i class="ti ti-calendar" aria-hidden="true"></i> Book free consult
+          </a>
+          <a href="#services" class="btn btn--ghost">
+            <i class="ti ti-layout-grid" aria-hidden="true"></i> Our services
+          </a>
+          <a href="#results" class="btn btn--ghost">
+            See results <i class="ti ti-arrow-down" aria-hidden="true"></i>
+          </a>
+        </div>
+      </div>
+
+    </section>
+
+    <!-- TRUST -->
+    <section class="trust-section" aria-label="Trust indicators">
+      <div class="container">
+        <div class="cert-card reveal-up">
+          <div class="cert-icon" aria-hidden="true"><i class="ti ti-shield-check"></i></div>
+          <div class="cert-text">
+            <div class="cert-title">Approved Tax Agent</div>
+            <div class="cert-sub">Registered with the UAE Federal Tax Authority (FTA)</div>
+          </div>
+          <div class="cert-verified" aria-label="Verified certification">
+            <i class="ti ti-circle-check" aria-hidden="true"></i> Verified
+          </div>
+        </div>
+
+        <div class="stats-grid" role="list" aria-label="Key statistics">
+          <div class="stat-card reveal-up" style="--d:.05s" role="listitem">
+            <div class="stat-row">
+              <span class="stat-num" data-val="200">0</span><span class="stat-sfx" aria-hidden="true">+</span>
+            </div>
+            <div class="stat-lbl">Happy Clients</div>
+          </div>
+          <div class="stat-card reveal-up" style="--d:.12s" role="listitem">
+            <div class="stat-row">
+              <span class="stat-num" data-val="10">0</span>
+            </div>
+            <div class="stat-lbl">Years in UAE</div>
+          </div>
+          <div class="stat-card reveal-up" style="--d:.19s" role="listitem">
+            <div class="stat-row">
+              <span class="stat-num" data-val="500">0</span><span class="stat-sfx" aria-hidden="true">+</span>
+            </div>
+            <div class="stat-lbl">Cases Handled</div>
+          </div>
+          <div class="stat-card reveal-up" style="--d:.26s" role="listitem">
+            <div class="stat-row">
+              <span class="stat-num" data-val="24">0</span><span class="stat-sfx" aria-hidden="true">h</span>
+            </div>
+            <div class="stat-lbl">Response Time</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SERVICES -->
+    <section class="section" id="services" aria-labelledby="svc-heading">
+      <div class="container">
+        <div class="section-hd">
+          <div class="sec-label reveal-up">What We Do</div>
+          <h2 class="sec-h reveal-up" id="svc-heading">Everything your business needs</h2>
+          <p class="sec-sub reveal-up">From corporate tax filing to VAT registration — AHCA covers it all across the UAE.</p>
+        </div>
+        <div class="svc-grid reveal-up" style="--d:.08s" role="list" aria-label="Our services">
+          <article class="svc-card svc-card--feat" role="listitem">
+            <div class="svc-glow" aria-hidden="true"></div>
+            <span class="svc-tag">Featured</span>
+            <i class="ti ti-building-skyscraper svc-ico" aria-hidden="true"></i>
+            <h3>Corporate Tax Preparation</h3>
+            <p>Full UAE corporate tax filing, compliance, and planning for businesses of all sizes.</p>
+            <div class="svc-arr" aria-hidden="true"><i class="ti ti-arrow-up-right"></i></div>
+          </article>
+          <article class="svc-card" role="listitem">
+            <div class="svc-glow" aria-hidden="true"></div>
+            <i class="ti ti-file-invoice svc-ico" aria-hidden="true"></i>
+            <h3>Tax Preparation</h3>
+            <p>Business tax filing that maximizes every dirham owed to you — accurate and on time.</p>
+            <div class="svc-arr" aria-hidden="true"><i class="ti ti-arrow-up-right"></i></div>
+          </article>
+          <article class="svc-card" role="listitem">
+            <div class="svc-glow" aria-hidden="true"></div>
+            <i class="ti ti-receipt-tax svc-ico" aria-hidden="true"></i>
+            <h3>UAE VAT Services</h3>
+            <p>Registration, filing, and full FTA compliance — penalty-free, every time.</p>
+            <div class="svc-arr" aria-hidden="true"><i class="ti ti-arrow-up-right"></i></div>
+          </article>
+          <article class="svc-card" role="listitem">
+            <div class="svc-glow" aria-hidden="true"></div>
+            <i class="ti ti-calculator svc-ico" aria-hidden="true"></i>
+            <h3>Bookkeeping</h3>
+            <p>Clean, audit-ready records every month — zero stress, total accuracy.</p>
+            <div class="svc-arr" aria-hidden="true"><i class="ti ti-arrow-up-right"></i></div>
+          </article>
+          <article class="svc-card" role="listitem">
+            <div class="svc-glow" aria-hidden="true"></div>
+            <i class="ti ti-chart-pie svc-ico" aria-hidden="true"></i>
+            <h3>Financial Planning</h3>
+            <p>Smart strategies to grow your wealth and legally reduce your tax bill.</p>
+            <div class="svc-arr" aria-hidden="true"><i class="ti ti-arrow-up-right"></i></div>
+          </article>
+          <article class="svc-card" role="listitem">
+            <div class="svc-glow" aria-hidden="true"></div>
+            <i class="ti ti-building svc-ico" aria-hidden="true"></i>
+            <h3>Business Advisory</h3>
+            <p>Real advice from real experts. Not a spreadsheet — a strategy for growth.</p>
+            <div class="svc-arr" aria-hidden="true"><i class="ti ti-arrow-up-right"></i></div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- WHY -->
+    <section class="section section--alt" id="why" aria-labelledby="why-heading">
+      <div class="container">
+        <div class="section-hd">
+          <div class="sec-label reveal-up">Why AHCA</div>
+          <h2 class="sec-h reveal-up" id="why-heading">We're not just accountants.</h2>
+          <p class="sec-sub reveal-up">FTA-approved co-pilots obsessed with finding you every legal advantage.</p>
+        </div>
+        <div class="why-grid">
+          <div class="why-card reveal-l" style="--d:.04s">
+            <div class="why-num" aria-hidden="true">01</div>
+            <i class="ti ti-eye why-ico" aria-hidden="true"></i>
+            <h3>We spot what others miss</h3>
+            <p>Most firms file and forget. We dig deeper to find deductions hiding in plain sight — every dirham counts.</p>
+          </div>
+          <div class="why-card reveal-r" style="--d:.08s">
+            <div class="why-num" aria-hidden="true">02</div>
+            <i class="ti ti-message-circle why-ico" aria-hidden="true"></i>
+            <h3>Clear Arabic &amp; English</h3>
+            <p>No jargon. No confusion. Just clear answers in the language you're most comfortable with, today.</p>
+          </div>
+          <div class="why-card reveal-l" style="--d:.12s">
+            <div class="why-num" aria-hidden="true">03</div>
+            <i class="ti ti-shield-check why-ico" aria-hidden="true"></i>
+            <h3>FTA Approved — Always Compliant</h3>
+            <p>Registered Approved Tax Agents — your business is always protected, never penalised.</p>
+          </div>
+          <div class="why-card reveal-r" style="--d:.16s">
+            <div class="why-num" aria-hidden="true">04</div>
+            <i class="ti ti-rocket why-ico" aria-hidden="true"></i>
+            <h3>Built for Growth</h3>
+            <p>Freelancer or 50-person company — AHCA scales with your ambition and grows alongside you.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- EXPERTISE -->
+    <section class="section" aria-labelledby="exp-heading">
+      <div class="container">
+        <div class="section-hd">
+          <div class="sec-label reveal-up">Expertise</div>
+          <h2 class="sec-h reveal-up" id="exp-heading">Our skill areas</h2>
+        </div>
+        <div class="bars-wrap reveal-up" style="--d:.05s">
+          <div class="bar-row">
+            <div class="bar-meta"><span>Corporate Tax Preparation</span><span class="bar-pct">97%</span></div>
+            <div class="bar-track" role="progressbar" aria-valuenow="97" aria-valuemin="0" aria-valuemax="100" aria-label="Corporate tax preparation: 97%">
+              <div class="bar-fill" data-w="97"></div>
+            </div>
+          </div>
+          <div class="bar-row">
+            <div class="bar-meta"><span>UAE VAT &amp; FTA Compliance</span><span class="bar-pct">96%</span></div>
+            <div class="bar-track" role="progressbar" aria-valuenow="96" aria-valuemin="0" aria-valuemax="100" aria-label="VAT and FTA compliance: 96%">
+              <div class="bar-fill" data-w="96"></div>
+            </div>
+          </div>
+          <div class="bar-row">
+            <div class="bar-meta"><span>Bookkeeping &amp; Payroll</span><span class="bar-pct">98%</span></div>
+            <div class="bar-track" role="progressbar" aria-valuenow="98" aria-valuemin="0" aria-valuemax="100" aria-label="Bookkeeping and payroll: 98%">
+              <div class="bar-fill" data-w="98"></div>
+            </div>
+          </div>
+          <div class="bar-row">
+            <div class="bar-meta"><span>Financial Reporting &amp; Audit</span><span class="bar-pct">93%</span></div>
+            <div class="bar-track" role="progressbar" aria-valuenow="93" aria-valuemin="0" aria-valuemax="100" aria-label="Financial reporting and audit: 93%">
+              <div class="bar-fill" data-w="93"></div>
+            </div>
+          </div>
+          <div class="bar-row" style="margin-bottom:0">
+            <div class="bar-meta"><span>Business Advisory</span><span class="bar-pct">90%</span></div>
+            <div class="bar-track" role="progressbar" aria-valuenow="90" aria-valuemin="0" aria-valuemax="100" aria-label="Business advisory: 90%">
+              <div class="bar-fill" data-w="90"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- RESULTS -->
+    <section class="section section--alt" id="results" aria-labelledby="res-heading">
+      <div class="container">
+        <div class="section-hd">
+          <div class="sec-label reveal-up">Real Results</div>
+          <h2 class="sec-h reveal-up" id="res-heading">Numbers don't lie.</h2>
+          <p class="sec-sub reveal-up">Wins delivered for UAE businesses just like yours.</p>
+        </div>
+        <div class="res-slider-wrap">
+          <button class="res-arrow res-prev" aria-label="Previous results"><i class="ti ti-chevron-left" aria-hidden="true"></i></button>
+          <div class="res-slider">
+          <div class="res-track">
+            <article class="res-card">
+              <span class="res-tag res-tag--g">Corporate</span>
+              <h3>Corporate Tax Filing</h3>
+              <p>End-to-end corporate tax preparation for a UAE trading company — on time, fully compliant.</p>
+              <div class="res-outcome">
+                <i class="ti ti-check" aria-hidden="true"></i> Zero penalties, 100% FTA compliant
+              </div>
+            </article>
+            <article class="res-card res-card--gold">
+              <span class="res-tag res-tag--gold"><i class="ti ti-star" aria-hidden="true"></i> Major Win</span>
+              <h3>VAT Refund Claim</h3>
+              <p>Large-scale VAT refund prepared and submitted — approved by the FTA without dispute.</p>
+              <div class="res-amount">
+                <span class="res-amount-lbl">Refund approved</span>
+                <span class="res-amount-val">AED 100,000,000+</span>
+              </div>
+              <div class="gold-badge"><i class="ti ti-shield-check" aria-hidden="true"></i> FTA Approved</div>
+            </article>
+            <article class="res-card">
+              <span class="res-tag res-tag--g">Tech Startup</span>
+              <h3>Launch-Ready Finances</h3>
+              <p>VAT registration, payroll setup, and investor-ready reports from day one of operations.</p>
+              <div class="res-outcome">
+                <i class="ti ti-rocket" aria-hidden="true"></i> Funded within 6 months
+              </div>
+            </article>
+            <article class="res-card">
+              <span class="res-tag res-tag--g">Real Estate</span>
+              <h3>Bookkeeping Overhaul</h3>
+              <p>Full financial restructuring for a Dubai property developer — 3 years of records cleaned and FTA-ready.</p>
+              <div class="res-amount">
+                <span class="res-amount-lbl">Deductions identified</span>
+                <span class="res-amount-val">AED 2,400,000+</span>
+              </div>
+              <div class="res-outcome">
+                <i class="ti ti-check" aria-hidden="true"></i> Audit-ready in 90 days
+              </div>
+            </article>
+            <article class="res-card">
+              <span class="res-tag res-tag--g">Hospitality</span>
+              <h3>Payroll Compliance</h3>
+              <p>Multi-branch F&amp;B group with 12 locations brought fully compliant with UAE payroll regulations.</p>
+              <div class="res-outcome">
+                <i class="ti ti-building-store" aria-hidden="true"></i> 12 branches, zero disputes
+              </div>
+            </article>
+            <article class="res-card">
+              <span class="res-tag res-tag--g">Freelancer</span>
+              <h3>Fast-Track Setup</h3>
+              <p>UAE freelance permit, VAT registration, and first tax return — all sorted in under a week.</p>
+              <div class="res-outcome">
+                <i class="ti ti-bolt" aria-hidden="true"></i> Fully compliant in 5 days
+              </div>
+            </article>
+            <article class="res-card res-card--gold">
+              <span class="res-tag res-tag--gold"><i class="ti ti-trending-up" aria-hidden="true"></i> Tax Saving</span>
+              <h3>E-Commerce Tax Plan</h3>
+              <p>Cross-border e-commerce restructured with an optimised corporate tax position — fully FTA compliant.</p>
+              <div class="res-amount">
+                <span class="res-amount-lbl">Annual tax saving</span>
+                <span class="res-amount-val">AED 380,000</span>
+              </div>
+              <div class="gold-badge"><i class="ti ti-shield-check" aria-hidden="true"></i> FTA Approved</div>
+            </article>
+          </div>
+          </div>
+          <button class="res-arrow res-next" aria-label="Next results"><i class="ti ti-chevron-right" aria-hidden="true"></i></button>
+        </div>
+      </div>
+    </section>
+
+    <!-- CTA BAND -->
+    <div class="cta-band reveal-up" style="--d:.05s">
+      <div class="cta-glow" aria-hidden="true"></div>
+      <div class="cta-content">
+        <div class="cta-label">UAE FTA Approved Tax Agent · Dubai &amp; Abu Dhabi</div>
+        <h2 class="cta-h">Let's take control<br>of your finances.</h2>
+        <p class="cta-sub">Corporate tax. VAT. Bookkeeping. Payroll. All handled by certified UAE tax professionals.</p>
+      </div>
+    </div>
+
+    <!-- CONTACT -->
+    <section class="section" id="contact" aria-labelledby="contact-heading">
+      <div class="galaxy" aria-hidden="true">
+        <span class="galaxy-core"></span>
+        <canvas class="galaxy-stars" id="galaxyStars"></canvas>
+      </div>
+      <div class="container">
+        <div class="section-hd">
+          <div class="sec-label reveal-up">Get in Touch</div>
+          <h2 class="sec-h reveal-up" id="contact-heading">Ready when you are.</h2>
+          <p class="sec-sub reveal-up">Free 30-min consultation with an FTA-approved tax agent — no obligation, no pressure.</p>
+        </div>
+
+        <div class="contact-layout">
+          <div class="contact-info reveal-l">
+            <a href="https://wa.me/971545050689" class="wa-cta" target="_blank" rel="noopener noreferrer" aria-label="Message us on WhatsApp">
+              <div class="wa-cta-ico" aria-hidden="true"><i class="ti ti-brand-whatsapp"></i></div>
+              <div>
+                <div class="wa-cta-title">Message us on WhatsApp</div>
+                <div class="wa-cta-sub">Usually replies within minutes</div>
+              </div>
+              <i class="ti ti-chevron-right wa-arr" aria-hidden="true"></i>
+            </a>
+
+            <div class="contact-details" role="list">
+              <div class="contact-row" role="listitem">
+                <div class="contact-ico" aria-hidden="true"><i class="ti ti-phone"></i></div>
+                <div>
+                  <div class="contact-lbl">Phone / WhatsApp</div>
+                  <a href="tel:+971545050689" class="contact-val">+971 54 505 0689</a>
+                </div>
+              </div>
+              <div class="contact-row" role="listitem">
+                <div class="contact-ico" aria-hidden="true"><i class="ti ti-mail"></i></div>
+                <div>
+                  <div class="contact-lbl">Email</div>
+                  <a href="mailto:abdelfattah@ahca.ae" class="contact-val">abdelfattah@ahca.ae</a>
+                </div>
+              </div>
+              <div class="contact-row" role="listitem">
+                <div class="contact-ico" aria-hidden="true"><i class="ti ti-map-pin"></i></div>
+                <div>
+                  <div class="contact-lbl">Location</div>
+                  <span class="contact-val">Dubai &amp; Abu Dhabi, UAE</span>
+                </div>
+              </div>
+              <div class="contact-row" role="listitem">
+                <div class="contact-ico" aria-hidden="true"><i class="ti ti-shield-check"></i></div>
+                <div>
+                  <div class="contact-lbl">Certification</div>
+                  <span class="contact-val">FTA Approved Tax Agent</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="contact-form-wrap reveal-r">
+            <form class="cform" id="contactForm" novalidate aria-label="Contact form">
+              <div class="form-row">
+                <div class="fg">
+                  <label for="fname">Your name <span class="req" aria-label="required">*</span></label>
+                  <input type="text" id="fname" name="name" placeholder="e.g. Ahmed Al Mansoori" required autocomplete="name">
+                  <span class="ferr" role="alert" id="fname-err"></span>
+                </div>
+                <div class="fg">
+                  <label for="femail">Email address <span class="req" aria-label="required">*</span></label>
+                  <input type="email" id="femail" name="email" placeholder="you@example.com" required autocomplete="email">
+                  <span class="ferr" role="alert" id="femail-err"></span>
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="fg">
+                  <label for="fphone">Phone number</label>
+                  <input type="tel" id="fphone" name="phone" placeholder="+971 54 505 0689" autocomplete="tel">
+                </div>
+                <div class="fg">
+                  <label for="fservice">Service needed <span class="req" aria-label="required">*</span></label>
+                  <div class="sel-wrap">
+                    <select id="fservice" name="service" required>
+                      <option value="" disabled selected>Select a service</option>
+                      <option>Corporate tax preparation</option>
+                      <option>Tax preparation</option>
+                      <option>UAE VAT registration &amp; filing</option>
+                      <option>Bookkeeping</option>
+                      <option>Financial planning</option>
+                      <option>Business advisory</option>
+                      <option>Payroll setup</option>
+                    </select>
+                    <i class="ti ti-chevron-down" aria-hidden="true"></i>
+                  </div>
+                  <span class="ferr" role="alert" id="fservice-err"></span>
+                </div>
+              </div>
+              <div class="fg">
+                <label for="fmsg">Tell us about your business</label>
+                <textarea id="fmsg" name="message" placeholder="What's your biggest financial challenge right now?" rows="4"></textarea>
+              </div>
+              <button type="submit" class="btn btn--primary btn--submit" id="submitBtn">
+                <span class="btn-txt">Send message — it's free</span>
+                <i class="ti ti-send btn-ico" aria-hidden="true"></i>
+                <span class="btn-spin" aria-hidden="true"></span>
+              </button>
+              <div class="form-ok" id="formOk" role="status" aria-live="polite" hidden>
+                <i class="ti ti-circle-check" aria-hidden="true"></i>
+                Thank you! We'll be in touch within 24 hours.
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="footer" role="contentinfo">
+    <div class="container">
+      <div class="footer-inner">
+        <div class="footer-brand">
+          <div class="footer-logo">AHCA<span>.</span></div>
+          <p class="footer-tag">Your money. Our mission.</p>
+          <div class="footer-cert">
+            <i class="ti ti-shield-check" aria-hidden="true"></i> FTA Approved Tax Agent
+          </div>
+        </div>
+        <div class="footer-cols">
+          <div class="footer-col">
+            <div class="fcol-title">Services</div>
+            <ul role="list">
+              <li><a href="#services">Corporate Tax</a></li>
+              <li><a href="#services">VAT Services</a></li>
+              <li><a href="#services">Bookkeeping</a></li>
+              <li><a href="#services">Financial Planning</a></li>
+              <li><a href="#services">Business Advisory</a></li>
+            </ul>
+          </div>
+          <div class="footer-col">
+            <div class="fcol-title">Contact</div>
+            <ul role="list">
+              <li><a href="tel:+971545050689">+971 54 505 0689</a></li>
+              <li><a href="mailto:abdelfattah@ahca.ae">abdelfattah@ahca.ae</a></li>
+              <li><span>Dubai, UAE</span></li>
+              <li><span>Abu Dhabi, UAE</span></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <span>&copy; 2026 AHCA. All rights reserved.</span>
+        <span>Dubai &amp; Abu Dhabi, UAE</span>
+      </div>
+    </div>
+  </footer>
+
+  <!-- SCROLL TO TOP -->
+  <button class="scroll-top" id="scrollTop" aria-label="Back to top">
+    <i class="ti ti-arrow-up" aria-hidden="true"></i>
+  </button>
+
+  <!-- WA FLOAT -->
+  <div class="wa-float" aria-label="Quick WhatsApp contact">
+    <span class="wa-float-lbl">Chat with us!</span>
+    <a href="https://wa.me/971545050689" class="wa-float-btn" target="_blank" rel="noopener noreferrer" aria-label="Open WhatsApp chat">
+      <i class="ti ti-brand-whatsapp" aria-hidden="true"></i>
+    </a>
+  </div>
+
+  <!-- AI TAX ASSISTANT TRIGGER -->
+  <button class="ai-chat-btn" id="aiChatBtn" aria-label="Open Tax AI assistant" aria-expanded="false">
+    <i class="ti ti-robot" aria-hidden="true"></i>
+    <span class="ai-chat-btn-lbl">Tax AI</span>
+  </button>
+
+  <!-- AI TAX ASSISTANT WIDGET -->
+  <div class="ai-chat" id="aiChat" role="dialog" aria-label="AHCA Tax Assistant" aria-hidden="true">
+    <div class="ai-chat-header">
+      <div class="ai-chat-avatar"><i class="ti ti-robot" aria-hidden="true"></i></div>
+      <div class="ai-chat-header-info">
+        <div class="ai-chat-name">AHCA Tax Assistant</div>
+        <div class="ai-chat-status"><span class="ai-status-dot"></span>Online · UAE Tax Expert</div>
+      </div>
+      <button class="ai-chat-close" id="aiChatClose" aria-label="Close chat"><i class="ti ti-x"></i></button>
+    </div>
+    <div class="ai-chat-messages" id="aiChatMessages">
+      <div class="ai-msg ai-msg--bot">
+        <p>Hello! I'm AHCA's AI Tax Assistant. Ask me anything about UAE Corporate Tax, VAT, or FTA compliance.</p>
+        <p class="ai-msg-ar">مرحباً! أنا مساعد الضرائب الذكي. اسألني عن ضريبة الشركات أو ضريبة القيمة المضافة.</p>
+      </div>
+      <div class="ai-quick-btns">
+        <button class="ai-quick-btn" data-q="What is the UAE corporate tax rate?">Corporate tax rate?</button>
+        <button class="ai-quick-btn" data-q="Do I need to register for VAT in UAE?">VAT registration?</button>
+        <button class="ai-quick-btn" data-q="What are the VAT filing deadlines in UAE?">VAT deadlines?</button>
+        <button class="ai-quick-btn" data-q="What is the small business relief for corporate tax?">Small business relief?</button>
+      </div>
+      <div class="ai-chat-typing" id="aiChatTyping" hidden>
+        <span></span><span></span><span></span>
+      </div>
+    </div>
+    <div class="ai-chat-input-wrap">
+      <input type="text" class="ai-chat-input" id="aiChatInput" placeholder="Ask a UAE tax question…" autocomplete="off">
+      <button class="ai-chat-send" id="aiChatSend" aria-label="Send message">
+        <i class="ti ti-send" aria-hidden="true"></i>
+      </button>
+    </div>
+    <div class="ai-chat-footer">
+      Powered by AHCA · <a href="#contact">Book a free call</a>
+    </div>
+  </div>
+
+  <script src="assets/js/main.js"></script>
+  <script src="assets/js/taxbot.js"></script>
+</body>
+</html>

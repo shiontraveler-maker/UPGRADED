@@ -1,0 +1,2741 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Panel — AHCA Portal</title>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
+  <style>
+    :root{
+      --bg:#020A04;--green:#02B36A;--green-l:#5ECFA0;--green-d:#018F54;
+      --gold:#C9A84C;--gold-l:#E5C97A;--gold-d:#A0732A;
+      --red:#ef4444;--text:#E8F5EC;--text-2:#9DB8A4;--text-3:#4A6852;
+      --border:rgba(94,207,160,.12);--surface:rgba(4,14,7,.75);
+      --r:16px;--r-sm:11px;--r-f:100px;
+    }
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-height:100svh;display:flex;overflow-x:hidden;cursor:none;animation:bg-breathe 20s ease-in-out infinite}
+    *{cursor:none!important}
+
+    /* ── AURORA ── */
+    #aurora{position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:0;overflow:hidden;filter:saturate(1.38) contrast(1.06) brightness(1.05);isolation:isolate}
+    /* slow-drifting color mesh for depth behind the blobs */
+    #aurora::before{content:'';position:absolute;inset:-25%;pointer-events:none;background:
+      radial-gradient(38% 44% at 22% 26%,rgba(2,179,106,.11),transparent 60%),
+      radial-gradient(42% 42% at 82% 24%,rgba(229,201,122,.10),transparent 60%),
+      radial-gradient(48% 50% at 62% 84%,rgba(94,207,160,.09),transparent 62%);
+      animation:meshDrift 46s ease-in-out infinite;will-change:transform}
+    .aurora-blob{position:absolute;border-radius:50%;filter:blur(128px);will-change:transform;mix-blend-mode:screen}
+    /* blob 1 — large green sweep top-left */
+    .aurora-blob--1{width:120vw;height:90vw;max-width:1200px;max-height:900px;opacity:1;background:radial-gradient(ellipse,rgba(2,179,106,.58) 0%,rgba(1,143,84,.28) 38%,transparent 66%);top:-20%;left:-10%;animation:aurora1 20s ease-in-out infinite}
+    /* blob 2 — gold glow bottom-right */
+    .aurora-blob--2{width:85vw;height:85vw;max-width:860px;max-height:860px;opacity:1;background:radial-gradient(ellipse,rgba(201,168,76,.42) 0%,rgba(160,115,42,.18) 38%,transparent 65%);bottom:-20%;right:-10%;animation:aurora2 25s ease-in-out infinite}
+    /* blob 3 — mid green shimmer */
+    .aurora-blob--3{width:60vw;height:60vw;max-width:600px;max-height:600px;opacity:1;background:radial-gradient(ellipse,rgba(94,207,160,.4) 0%,rgba(2,179,106,.16) 40%,transparent 70%);top:30%;left:45%;animation:aurora3 17s ease-in-out infinite}
+    /* blob 4 — gold accent top-right */
+    .aurora-blob--4{width:50vw;height:70vw;max-width:500px;max-height:700px;opacity:1;background:radial-gradient(ellipse,rgba(229,201,122,.28) 0%,rgba(201,168,76,.1) 45%,transparent 68%);top:5%;right:5%;animation:aurora4 28s ease-in-out infinite}
+    /* blob 5 — deep gold pulse center-bottom (admin-specific) */
+    .aurora-blob--5{width:70vw;height:50vw;max-width:700px;max-height:500px;opacity:.85;background:radial-gradient(ellipse,rgba(201,168,76,.2) 0%,rgba(160,115,42,.07) 50%,transparent 70%);bottom:10%;left:20%;animation:aurora5 22s ease-in-out infinite}
+    @keyframes aurora1{0%,100%{transform:translate(0,0) scale(1) rotate(0deg)}25%{transform:translate(8%,12%) scale(1.1) rotate(3deg)}50%{transform:translate(14%,4%) scale(.95) rotate(-2deg)}75%{transform:translate(4%,16%) scale(1.05) rotate(4deg)}}
+    @keyframes aurora2{0%,100%{transform:translate(0,0) scale(1)}33%{transform:translate(-10%,-8%) scale(1.12)}66%{transform:translate(-4%,-14%) scale(.93)}}
+    @keyframes aurora3{0%,100%{transform:translate(0,0) scale(1) rotate(0deg)}50%{transform:translate(-14%,12%) scale(1.22) rotate(-5deg)}}
+    @keyframes aurora4{0%,100%{transform:translate(0,0) scale(1);opacity:.85}40%{transform:translate(-6%,12%) scale(1.18);opacity:.55}70%{transform:translate(8%,6%) scale(.88);opacity:.95}}
+    @keyframes aurora5{0%,100%{transform:translate(0,0) scale(1)}50%{transform:translate(8%,-10%) scale(1.15)}}
+    @keyframes meshDrift{0%,100%{transform:translate(0,0) rotate(0deg) scale(1)}50%{transform:translate(-4%,3%) rotate(7deg) scale(1.08)}}
+    /* ── CURSOR (exact copy from website) ── */
+    .cursor{position:fixed;pointer-events:none;z-index:99998;left:0;top:0;width:10px;height:10px;background:var(--green-l);border-radius:50%;transform:translate(-200px,-200px);transition:width .15s,height .15s,background .15s,box-shadow .15s;will-change:transform;box-shadow:0 0 8px rgba(94,207,160,.9),0 0 20px rgba(94,207,160,.45)}
+    .cursor-ring{position:fixed;pointer-events:none;z-index:99997;left:0;top:0;width:36px;height:36px;border:1.5px solid rgba(94,207,160,.5);border-radius:50%;transform:translate(-200px,-200px);transition:width .25s,height .25s,border-color .25s;will-change:transform;box-shadow:0 0 12px rgba(94,207,160,.15) inset,0 0 8px rgba(94,207,160,.08)}
+    body:has(a:hover) .cursor,body:has(button:hover) .cursor{width:22px;height:22px;background:var(--green);box-shadow:0 0 14px rgba(2,179,106,1),0 0 32px rgba(2,179,106,.5)}
+    body:has(a:hover) .cursor-ring,body:has(button:hover) .cursor-ring{width:48px;height:48px;border-color:rgba(94,207,160,.7);box-shadow:0 0 18px rgba(94,207,160,.2) inset,0 0 12px rgba(94,207,160,.15)}
+    .cursor-trail{position:fixed;border-radius:50%;pointer-events:none;z-index:99990;transform:translate(-50%,-50%);background:var(--green-l);box-shadow:0 0 6px rgba(94,207,160,.6);animation:trail-fade .55s ease forwards}
+    @keyframes trail-fade{from{opacity:.45;transform:translate(-50%,-50%) scale(1)}to{opacity:0;transform:translate(-50%,-50%) scale(0)}}
+    @media(hover:none){.cursor,.cursor-ring{display:none}}
+    /* ── PARTICLES CANVAS ── */
+    #particleCanvas{position:fixed;inset:0;z-index:-1;pointer-events:none;opacity:.75}
+    /* ── VIGNETTE ── */
+    body::after{content:'';position:fixed;inset:0;z-index:-1;pointer-events:none;background:radial-gradient(120% 70% at 50% -10%,rgba(94,207,160,.06),transparent 55%),radial-gradient(ellipse 88% 88% at 50% 45%,transparent 38%,rgba(3,8,4,.18) 72%,rgba(1,4,2,.5) 100%)}
+    /* ── NOISE GRAIN ── */
+    body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;opacity:.028;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='1'/%3E%3C/svg%3E");background-size:200px 200px;background-repeat:repeat}
+    /* ── BG BREATHE ── */
+    @keyframes bg-breathe{0%,100%{background-color:#050F07}33%{background-color:#071208}66%{background-color:#06100A}}
+    @keyframes fadeUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
+    @keyframes spin{to{transform:rotate(360deg)}}
+
+    /* SIDEBAR */
+    .sidebar{width:230px;flex-shrink:0;position:fixed;top:0;left:0;bottom:0;background:linear-gradient(180deg,rgba(201,168,76,.04),transparent 30%),rgba(3,9,5,.35);border-right:1px solid rgba(201,168,76,.18);display:flex;flex-direction:column;padding:22px 12px;z-index:300;backdrop-filter:blur(30px) saturate(1.5);box-shadow:1px 0 0 rgba(255,255,255,.03) inset,24px 0 60px -30px rgba(0,0,0,.7)}
+    .logo{display:flex;align-items:center;gap:10px;padding:4px 8px;margin-bottom:10px}
+    .logo-mark{width:38px;height:38px;border-radius:11px;background:linear-gradient(135deg,var(--gold-d),var(--gold-l));display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-weight:800;font-size:15px;color:var(--bg);box-shadow:0 4px 14px rgba(201,168,76,.3)}
+    .logo-name{font-family:'Syne',sans-serif;font-weight:700;font-size:16px}
+    .logo-name span{color:var(--gold-l)}
+    .admin-badge{margin:0 8px 22px;background:rgba(201,168,76,.06);border:1px solid rgba(201,168,76,.15);border-radius:9px;padding:8px 12px;display:flex;align-items:center;gap:7px;font-size:11px;color:var(--gold-l);font-weight:600;letter-spacing:.03em}
+    .nav-lbl{font-size:9px;font-weight:700;color:var(--text-3);letter-spacing:.12em;text-transform:uppercase;padding:0 10px;margin:10px 0 5px}
+    .nav-a{display:flex;align-items:center;gap:9px;padding:10px 12px;border-radius:var(--r-sm);margin-bottom:2px;color:var(--text-2);font-size:13px;font-weight:500;text-decoration:none;cursor:pointer;border:none;background:none;width:100%;text-align:left;transition:all .2s}
+    .nav-a i{font-size:16px;flex-shrink:0}
+    .nav-a:hover{background:rgba(201,168,76,.06);color:var(--text);transform:translateX(2px)}
+    .nav-a.active{background:rgba(201,168,76,.1);color:var(--gold-l);font-weight:600;border-left:2px solid var(--gold)}
+    .nav-sep{height:1px;background:var(--border);margin:14px 8px}
+
+    /* MAIN */
+    .main{flex:1;margin-left:230px;min-height:100svh;display:flex;flex-direction:column;}
+    .topbar{display:flex;align-items:center;justify-content:space-between;padding:18px 32px;border-bottom:1px solid var(--border);background:linear-gradient(180deg,rgba(255,255,255,.025),transparent),rgba(3,9,5,.28);backdrop-filter:blur(30px) saturate(1.5);position:sticky;top:0;z-index:100;box-shadow:0 1px 0 rgba(255,255,255,.04) inset,0 14px 30px -22px rgba(0,0,0,.6)}
+    .tb-h1{font-family:'Syne',sans-serif;font-size:20px;font-weight:800;display:flex;align-items:center;gap:9px}
+    .tb-h1 i{color:var(--gold-l);font-size:18px}
+    .tb-sub{font-size:12px;color:var(--text-3);margin-top:3px}
+    .content{padding:28px 32px;flex:1}
+
+    /* TABS */
+    .tabs{display:flex;gap:4px;background:rgba(255,255,255,.07);border:1px solid rgba(94,207,160,.22);border-radius:var(--r-sm);padding:4px;margin-bottom:28px;width:fit-content;backdrop-filter:blur(12px)}
+    .tab{padding:9px 18px;border-radius:9px;font-size:13px;font-weight:600;cursor:pointer;border:none;background:none;color:var(--text-2);transition:all .22s;display:flex;align-items:center;gap:7px;pointer-events:all}
+    .tab:hover{color:var(--text);background:rgba(255,255,255,.06)}
+    .tab.active{background:linear-gradient(135deg,rgba(201,168,76,.15),rgba(201,168,76,.08));color:var(--gold-l);border:1px solid rgba(201,168,76,.22);box-shadow:0 2px 12px rgba(201,168,76,.1)}
+    .tab-panel{display:none;animation:fadeUp .35s ease both}
+    .tab-panel.active{display:block}
+
+    /* STATS ROW */
+    .stats-row{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:24px}
+    .stat-mini{background:linear-gradient(180deg,rgba(255,255,255,.025),rgba(255,255,255,0) 45%),var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:16px 18px;position:relative;overflow:hidden;animation:fadeUp .4s ease both;backdrop-filter:blur(16px) saturate(1.3);box-shadow:0 1px 0 rgba(255,255,255,.05) inset,0 18px 40px -22px rgba(0,0,0,.65)}
+    .stat-mini::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;border-radius:2px 2px 0 0}
+    .stat-mini.gold::before{background:linear-gradient(90deg,var(--gold-d),var(--gold-l))}
+    .stat-mini.green::before{background:linear-gradient(90deg,var(--green-d),var(--green-l))}
+    .stat-mini-ico{width:32px;height:32px;border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:15px;margin-bottom:10px}
+    .stat-mini-val{font-family:'Syne',sans-serif;font-size:22px;font-weight:800;margin-bottom:2px}
+    .stat-mini-lbl{font-size:10px;color:var(--text-3);font-weight:600;text-transform:uppercase;letter-spacing:.05em}
+
+    /* CARD */
+    .card{background:linear-gradient(180deg,rgba(255,255,255,.022),rgba(255,255,255,0) 42%),var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:24px;margin-bottom:20px;animation:fadeUp .4s ease both;backdrop-filter:blur(20px) saturate(1.35);box-shadow:0 1px 0 rgba(255,255,255,.05) inset,0 24px 50px -24px rgba(0,0,0,.7),0 6px 18px -10px rgba(0,0,0,.45)}
+    .card-title{font-family:'Syne',sans-serif;font-size:15px;font-weight:700;margin-bottom:18px;display:flex;align-items:center;gap:8px;color:var(--text)}
+    .card-title i{color:var(--gold-l);font-size:17px}
+
+    /* TABLE */
+    .tbl-wrap{overflow-x:auto;border-radius:var(--r-sm);overflow:hidden}
+    .cd-tbl-wrap::-webkit-scrollbar{display:none}
+    table{width:100%;border-collapse:collapse}
+    th{text-align:left;font-size:10px;font-weight:700;color:var(--text-3);text-transform:uppercase;letter-spacing:.09em;padding:10px 14px;border-bottom:1px solid var(--border);background:rgba(255,255,255,.02)}
+    td{padding:14px;border-bottom:1px solid rgba(94,207,160,.04);font-size:13px;vertical-align:middle;transition:background .15s}
+    tr:last-child td{border-bottom:none}
+    tr:hover td{background:rgba(201,168,76,.03)}
+    .av{width:34px;height:34px;border-radius:50%;background:linear-gradient(135deg,var(--green-d),var(--green));display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-weight:800;font-size:12px;color:var(--bg);flex-shrink:0;box-shadow:0 0 0 2px rgba(2,179,106,.2)}
+    .ci{display:flex;align-items:center;gap:10px}
+    .cn{font-weight:600;font-size:13px}
+    .cc{font-size:11px;color:var(--text-3);margin-top:1px}
+    .chips{display:flex;flex-wrap:wrap;gap:4px}
+    .chip{background:rgba(2,179,106,.07);border:1px solid rgba(2,179,106,.15);border-radius:5px;font-size:10px;font-weight:600;color:var(--green-l);padding:3px 8px;white-space:nowrap}
+    .chip-sub{background:rgba(201,168,76,.07);border-color:rgba(201,168,76,.16);color:var(--gold)}
+    .chip-done{background:rgba(94,207,160,.04);border-color:var(--border);color:var(--text-3)}
+    .abts{display:flex;gap:5px;flex-wrap:wrap}
+    .abt{display:flex;align-items:center;gap:5px;padding:7px 13px;border-radius:8px;font-size:11px;font-weight:600;border:1px solid;cursor:pointer;background:none;transition:all .18s;white-space:nowrap}
+    .abt:active{transform:scale(.96)}
+    .abt-gold{color:var(--gold-l);border-color:rgba(201,168,76,.25)}
+    .abt-gold:hover{background:rgba(201,168,76,.1);border-color:rgba(201,168,76,.35)}
+    .abt-green{color:var(--green-l);border-color:rgba(2,179,106,.25)}
+    .abt-green:hover{background:rgba(2,179,106,.1);border-color:rgba(2,179,106,.35)}
+
+    /* FORMS */
+    .fg{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+    .fg3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px}
+    .fg4{display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:12px}
+    .f{display:flex;flex-direction:column;gap:6px}
+    .f.full{grid-column:1/-1}
+    .f label{font-size:10px;font-weight:700;color:var(--text-3);text-transform:uppercase;letter-spacing:.09em}
+    input,select,textarea{background:rgba(255,255,255,.04);border:1px solid rgba(94,207,160,.12);border-radius:var(--r-sm);padding:11px 13px;color:var(--text);font-size:13px;font-family:'Inter',sans-serif;outline:none;transition:border-color .2s,box-shadow .2s;width:100%}
+    input:focus,select:focus,textarea:focus{border-color:rgba(201,168,76,.5);box-shadow:0 0 0 3px rgba(201,168,76,.07)}
+    input[type=date]{color-scheme:dark}
+    select option{background:#050f07}
+    textarea{resize:vertical;min-height:76px}
+    .input-hint{font-size:10px;color:var(--text-3);margin-top:2px}
+
+    /* BUTTONS */
+    .btn{display:inline-flex;align-items:center;justify-content:center;gap:7px;padding:11px 22px;border-radius:var(--r-f);font-size:13px;font-weight:700;font-family:'Syne',sans-serif;border:none;cursor:pointer;transition:all .2s;position:relative;overflow:hidden}
+    .btn::after{content:'';position:absolute;inset:0;background:rgba(255,255,255,0);transition:background .15s}
+    .btn:hover:not(:disabled)::after{background:rgba(255,255,255,.07)}
+    .btn:active:not(:disabled){transform:scale(.97)}
+    .btn:disabled{opacity:.45;cursor:not-allowed;pointer-events:none}
+    .btn-gold{background:linear-gradient(135deg,var(--gold-d),var(--gold-l));color:#020A04;box-shadow:0 4px 20px rgba(201,168,76,.28)}
+    .btn-gold:hover:not(:disabled){box-shadow:0 6px 26px rgba(201,168,76,.38);transform:translateY(-1px)}
+    .btn-green{background:linear-gradient(135deg,var(--green-d),var(--green-l));color:#020A04;box-shadow:0 4px 20px rgba(2,179,106,.25)}
+    .btn-green:hover:not(:disabled){box-shadow:0 6px 26px rgba(2,179,106,.35);transform:translateY(-1px)}
+    .btn-ghost{background:rgba(255,255,255,.04);border:1px solid var(--border);color:var(--text-2)}
+    .btn-ghost:hover:not(:disabled){background:rgba(255,255,255,.07);border-color:rgba(94,207,160,.25)}
+    .btn-danger{background:rgba(239,68,68,.07);border:1px solid rgba(239,68,68,.2);color:#fca5a5}
+    .btn-danger:hover:not(:disabled){background:rgba(239,68,68,.14)}
+
+    /* SLIDE PANEL */
+    .overlay{position:fixed;inset:0;background:rgba(0,0,0,.65);backdrop-filter:blur(6px);z-index:400;opacity:0;pointer-events:none;transition:opacity .3s}
+    .overlay.open{opacity:1;pointer-events:all}
+    .panel{position:fixed;top:0;right:0;bottom:0;width:620px;max-width:100vw;background:rgba(3,9,5,.98);border-left:1px solid rgba(201,168,76,.15);z-index:500;transform:translateX(100%);transition:transform .38s cubic-bezier(.22,.68,0,1.2);display:flex;flex-direction:column;backdrop-filter:blur(20px)}
+    .panel.open{transform:translateX(0)}
+    .ph{display:flex;align-items:flex-start;justify-content:space-between;padding:20px 24px;border-bottom:1px solid var(--border);flex-shrink:0;background:rgba(201,168,76,.03)}
+    .ph-title{font-family:'Syne',sans-serif;font-size:17px;font-weight:800}
+    .ph-sub{font-size:11px;color:var(--text-3);margin-top:4px}
+    .ph-close{width:34px;height:34px;border-radius:9px;background:rgba(255,255,255,.04);border:1px solid var(--border);color:var(--text-3);font-size:17px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .18s;flex-shrink:0}
+    .ph-close:hover{background:rgba(239,68,68,.1);border-color:rgba(239,68,68,.2);color:#fca5a5}
+    .pb{flex:1;overflow-y:auto;padding:22px 24px;scrollbar-width:thin;scrollbar-color:rgba(201,168,76,.15) transparent}
+
+    /* PANEL INNER TABS */
+    .ptabs{display:flex;gap:3px;background:rgba(255,255,255,.03);border:1px solid var(--border);border-radius:9px;padding:4px;margin-bottom:20px}
+    .ptab{flex:1;padding:8px;border-radius:7px;font-size:11px;font-weight:700;cursor:pointer;border:none;background:none;color:var(--text-3);transition:all .2s;text-align:center;letter-spacing:.03em;text-transform:uppercase}
+    .ptab.active{background:linear-gradient(135deg,rgba(201,168,76,.15),rgba(201,168,76,.07));color:var(--gold-l);border:1px solid rgba(201,168,76,.2)}
+    .ptab-panel{display:none}
+    .ptab-panel.active{display:block;animation:fadeUp .3s ease both}
+
+    /* SERVICE ITEMS */
+    .svc-item{background:rgba(255,255,255,.03);border:1px solid var(--border);border-radius:var(--r-sm);margin-bottom:9px;overflow:hidden;transition:border-color .2s}
+    .svc-item:hover{border-color:rgba(201,168,76,.2)}
+    .svc-item-head{display:flex;align-items:center;justify-content:space-between;padding:13px 15px;cursor:pointer;user-select:none;transition:background .15s}
+    .svc-item-head:hover{background:rgba(255,255,255,.03)}
+    .svc-item-info{flex:1;min-width:0}
+    .svc-main{font-size:13px;font-weight:700}
+    .svc-sub{font-size:11px;color:var(--text-3);margin-top:2px}
+    .svc-status{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;padding:4px 9px;border-radius:5px}
+    .st-active{color:var(--green-l);background:rgba(2,179,106,.1);border:1px solid rgba(2,179,106,.18)}
+    .st-pending{color:var(--gold);background:rgba(201,168,76,.1);border:1px solid rgba(201,168,76,.18)}
+    .st-completed{color:var(--text-3);background:rgba(94,207,160,.04);border:1px solid var(--border)}
+    .svc-item-body{display:none;padding:0 15px 15px;border-top:1px solid var(--border)}
+    .svc-item-body.open{display:block;animation:fadeUp .3s ease both}
+    .svc-meta-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:14px;margin-top:14px}
+    .sm{background:rgba(255,255,255,.03);border-radius:9px;padding:11px;text-align:center;border:1px solid var(--border)}
+    .sm-lbl{font-size:9px;font-weight:700;color:var(--text-3);text-transform:uppercase;letter-spacing:.07em;margin-bottom:5px}
+    .sm-val{font-size:13px;font-weight:700}
+
+    /* PAYMENT LIST */
+    .pay-list{display:flex;flex-direction:column;gap:7px;margin-bottom:14px}
+    .pay-row{display:flex;align-items:center;gap:10px;background:rgba(255,255,255,.03);border:1px solid var(--border);border-radius:10px;padding:11px 13px;transition:border-color .18s}
+    .pay-row:hover{border-color:rgba(94,207,160,.2)}
+    .pay-ico{width:32px;height:32px;border-radius:8px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:14px}
+    .pi-advance{background:rgba(201,168,76,.1);color:var(--gold)}
+    .pi-second{background:rgba(2,179,106,.1);color:var(--green-l)}
+    .pi-final{background:rgba(94,207,160,.1);color:var(--green-l)}
+    .pi-other{background:rgba(59,130,246,.1);color:#93c5fd}
+    .pay-info{flex:1}
+    .pay-type{font-size:12px;font-weight:700;text-transform:capitalize;color:var(--text)}
+    .pay-date{font-size:10px;color:var(--text-3);margin-top:1px}
+    .pay-note{font-size:10px;color:var(--text-2);font-style:italic;margin-top:1px}
+    .pay-amt{font-family:'Syne',sans-serif;font-size:15px;font-weight:800;color:var(--green-l);flex-shrink:0}
+    .pay-del{background:none;border:none;color:var(--text-3);cursor:pointer;padding:4px;font-size:14px;border-radius:6px;transition:all .15s}
+    .pay-del:hover{color:#fca5a5;background:rgba(239,68,68,.08)}
+
+    /* FEE BAR */
+    .fee-bar{background:rgba(2,179,106,.04);border:1px solid rgba(2,179,106,.12);border-radius:var(--r-sm);padding:15px;margin-bottom:15px}
+    .fee-bar-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:9px}
+    .fee-bar-lbl{font-size:11px;color:var(--text-2)}
+    .fee-bar-val{font-family:'Syne',sans-serif;font-size:14px;font-weight:700}
+    .fee-track{height:6px;background:rgba(255,255,255,.06);border-radius:3px;overflow:hidden}
+    .fee-fill{height:100%;border-radius:3px;background:linear-gradient(90deg,var(--green-d),var(--green-l));transition:width .6s cubic-bezier(.22,.68,0,1.2)}
+    .fee-nums{display:flex;justify-content:space-between;margin-top:7px;font-size:10px;color:var(--text-3)}
+
+    /* MISC */
+    .divider{border:none;border-top:1px solid var(--border);margin:18px 0}
+    .sec-label{font-family:'Syne',sans-serif;font-size:13px;font-weight:700;margin-bottom:13px;color:var(--text);display:flex;align-items:center;gap:7px}
+    .sec-label i{color:var(--gold-l)}
+    .empty{text-align:center;padding:28px;background:rgba(255,255,255,.02);border:1px dashed rgba(94,207,160,.1);border-radius:var(--r-sm)}
+    .empty i{font-size:26px;color:var(--text-3);display:block;margin-bottom:8px}
+    .empty p{font-size:12px;color:var(--text-3);line-height:1.6}
+    .loading{text-align:center;padding:32px;color:var(--text-3);font-size:13px}
+    .loading i{font-size:28px;animation:spin .8s linear infinite;display:block;margin-bottom:10px}
+    .spin{width:13px;height:13px;border-radius:50%;border:2px solid rgba(5,13,7,.3);border-top-color:var(--bg);animation:spin .6s linear infinite}
+    .toast{position:fixed;bottom:28px;right:28px;z-index:9999;padding:14px 20px;border-radius:var(--r-sm);font-size:13px;font-weight:600;display:flex;align-items:center;gap:10px;transform:translateY(90px);opacity:0;transition:transform .35s cubic-bezier(.22,.68,0,1.2),opacity .35s;pointer-events:none;box-shadow:0 10px 36px rgba(0,0,0,.45);backdrop-filter:blur(12px)}
+    .toast.show{transform:translateY(0);opacity:1}
+    .toast-ok{background:rgba(2,179,106,.12);border:1px solid rgba(2,179,106,.28);color:var(--green-l)}
+    .toast-err{background:rgba(239,68,68,.1);border:1px solid rgba(239,68,68,.28);color:#fca5a5}
+    /* CUSTOM DROPDOWN */
+    .cdd{position:relative;width:100%}
+    .cdd-sm{width:auto;min-width:160px}
+    .cdd-trigger{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:11px 14px;background:rgba(255,255,255,.04);border:1px solid rgba(94,207,160,.12);border-radius:var(--r-sm);cursor:pointer;user-select:none;transition:border-color .2s,box-shadow .2s;min-height:44px}
+    .cdd-trigger:hover{border-color:rgba(201,168,76,.3);background:rgba(255,255,255,.06)}
+    .cdd.open .cdd-trigger{border-color:rgba(201,168,76,.5);box-shadow:0 0 0 3px rgba(201,168,76,.07)}
+    .cdd-val{font-size:13px;color:var(--text);flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    .cdd-val.placeholder{color:var(--text-3)}
+    .cdd-arrow{font-size:14px;color:var(--text-3);flex-shrink:0;transition:transform .2s}
+    .cdd.open .cdd-arrow{transform:rotate(180deg)}
+    .cdd-menu{position:absolute;top:calc(100% + 6px);left:0;right:0;background:rgba(4,12,6,.98);border:1px solid rgba(201,168,76,.2);border-radius:12px;padding:6px;z-index:999;opacity:0;transform:translateY(-8px) scale(.98);pointer-events:none;transition:opacity .18s,transform .18s;box-shadow:0 16px 48px rgba(0,0,0,.5);backdrop-filter:blur(16px);max-height:260px;overflow-y:auto}
+    .cdd-menu-left{left:auto;right:0}
+    .cdd.open .cdd-menu{opacity:1;transform:translateY(0) scale(1);pointer-events:all}
+    .cdd-opt{padding:10px 13px;border-radius:8px;font-size:13px;color:var(--text-2);cursor:pointer;transition:all .14s;display:flex;align-items:center;gap:9px;white-space:nowrap}
+    .cdd-opt:hover{background:rgba(201,168,76,.08);color:var(--text)}
+    .cdd-opt.selected{background:rgba(201,168,76,.1);color:var(--gold-l);font-weight:600}
+    .cdd-opt .cdd-opt-sub{font-size:10px;color:var(--text-3);margin-left:auto}
+    @media(max-width:900px){.sidebar{display:none}.main{margin-left:0}.fg{grid-template-columns:1fr}.fg3,.fg4{grid-template-columns:1fr 1fr}.panel{width:100vw}.svc-meta-grid{grid-template-columns:1fr 1fr}.stats-row{grid-template-columns:1fr 1fr}.topbar{padding:14px 16px}.content{padding:20px 16px}}
+
+    /* ── CUSTOM DATE PICKER ── */
+    .cdp-wrap{position:relative;display:inline-block}
+    .cdp-trigger{display:flex;align-items:center;gap:8px;height:38px;padding:0 14px;background:rgba(255,255,255,.04);border:1px solid var(--border);border-radius:10px;cursor:pointer;transition:border-color .2s,box-shadow .2s;user-select:none;min-width:140px}
+    .cdp-trigger:hover{border-color:rgba(201,168,76,.3)}
+    .cdp-trigger.has-val{border-color:rgba(2,179,106,.35);background:rgba(2,179,106,.06)}
+    .cdp-trigger .cdp-icon{color:var(--green-l);font-size:14px;flex-shrink:0}
+    .cdp-trigger .cdp-display{flex:1;font-size:12px;font-weight:500;color:var(--text-1)}
+    .cdp-trigger .cdp-clear{font-size:12px;color:var(--text-3);flex-shrink:0;padding:2px 4px;border-radius:4px;transition:color .15s}
+    .cdp-trigger .cdp-clear:hover{color:var(--red)}
+    .cdp-popup{position:absolute;top:calc(100% + 8px);left:0;background:rgba(4,12,6,.98);border:1px solid rgba(201,168,76,.2);border-radius:16px;padding:16px;z-index:9500;box-shadow:0 20px 60px rgba(0,0,0,.6);backdrop-filter:blur(20px);width:280px;animation:fadeUp .18s ease both;display:none}
+    .cdp-popup.open{display:block}
+    .cdp-nav{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
+    .cdp-nav-btn{width:30px;height:30px;border-radius:8px;background:rgba(255,255,255,.05);border:1px solid var(--border);color:var(--text-2);display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all .15s;font-size:13px}
+    .cdp-nav-btn:hover{background:rgba(201,168,76,.12);border-color:rgba(201,168,76,.3);color:var(--gold-l)}
+    .cdp-month-label{font-family:'Syne',sans-serif;font-size:14px;font-weight:700;color:var(--text-1)}
+    .cdp-days-header{display:grid;grid-template-columns:repeat(7,1fr);gap:2px;margin-bottom:6px}
+    .cdp-day-name{text-align:center;font-size:10px;font-weight:700;color:var(--text-3);padding:4px 0;letter-spacing:.04em}
+    .cdp-days{display:grid;grid-template-columns:repeat(7,1fr);gap:2px}
+    .cdp-day{text-align:center;padding:7px 4px;border-radius:8px;font-size:12px;cursor:pointer;color:var(--text-2);transition:all .14s;line-height:1}
+    .cdp-day:hover:not(.empty):not(.selected){background:rgba(255,255,255,.07);color:var(--text-1)}
+    .cdp-day.today{color:var(--green-l);font-weight:700}
+    .cdp-day.selected{background:var(--green);color:#fff;font-weight:700}
+    .cdp-day.in-range{background:rgba(2,179,106,.12);color:var(--green-l)}
+    .cdp-day.range-start{background:var(--green);color:#fff;font-weight:700;border-radius:8px 2px 2px 8px}
+    .cdp-day.range-end{background:var(--green);color:#fff;font-weight:700;border-radius:2px 8px 8px 2px}
+    .cdp-day.empty{pointer-events:none;opacity:0}
+    .cdp-day.other-month{opacity:.3}
+  </style>
+</head>
+<body>
+
+<div class="cursor" id="cur"></div>
+<div class="cursor-ring" id="curR"></div>
+<canvas id="particleCanvas"></canvas>
+
+<div id="aurora" aria-hidden="true">
+  <div class="aurora-blob aurora-blob--1"></div>
+  <div class="aurora-blob aurora-blob--2"></div>
+  <div class="aurora-blob aurora-blob--3"></div>
+  <div class="aurora-blob aurora-blob--4"></div>
+  <div class="aurora-blob aurora-blob--5"></div>
+</div>
+
+<aside class="sidebar">
+  <div class="logo"><div class="logo-mark">A</div><div class="logo-name">AHCA <span>Admin</span></div></div>
+  <div class="admin-badge"><i class="ti ti-shield-check"></i> Admin Access</div>
+  <div class="nav-lbl">Clients</div>
+  <a class="nav-a active" data-tab="clients" onclick="showTab('clients')"><i class="ti ti-users"></i> All Clients</a>
+  <a class="nav-a" data-tab="addClient" onclick="showTab('addClient')"><i class="ti ti-user-plus"></i> Add Client</a>
+  <a class="nav-a" data-tab="uploadDoc" onclick="showTab('uploadDoc')"><i class="ti ti-upload"></i> Upload Document</a>
+  <div class="nav-lbl" style="margin-top:14px">Finance</div>
+  <a class="nav-a" data-tab="soa" onclick="showTab('soa')"><i class="ti ti-file-invoice"></i> Statement of Account</a>
+  <div class="nav-sep"></div>
+  <a class="nav-a" href="../index.html" target="_blank"><i class="ti ti-world"></i> Website</a>
+  <a class="nav-a" onclick="openClientPicker()" style="cursor:pointer"><i class="ti ti-eye"></i> Preview Client</a>
+  <div style="margin-top:auto">
+    <button class="nav-a" id="logoutBtn" style="color:#fca5a5"><i class="ti ti-logout"></i> Sign out</button>
+  </div>
+</aside>
+
+<div class="main">
+  <div class="topbar">
+    <div><div class="tb-h1"><i class="ti ti-shield-check"></i> Admin Panel</div><div class="tb-sub" id="adminEmail">—</div></div>
+    <button class="btn btn-gold" onclick="showTab('addClient')"><i class="ti ti-user-plus"></i> New Client</button>
+  </div>
+
+  <div class="content">
+    <div class="tabs">
+      <button class="tab active" onclick="showTab('clients')" id="tab-clients"><i class="ti ti-users"></i> Clients</button>
+      <button class="tab" onclick="showTab('addClient')" id="tab-addClient"><i class="ti ti-user-plus"></i> Add Client</button>
+      <button class="tab" onclick="showTab('uploadDoc')" id="tab-uploadDoc"><i class="ti ti-upload"></i> Documents</button>
+      <button class="tab" onclick="showTab('soa')" id="tab-soa"><i class="ti ti-file-invoice"></i> SOA</button>
+    </div>
+
+    <!-- ── CLIENTS ── -->
+    <div class="tab-panel active" id="panel-clients">
+    <!-- CLIENT DETAIL VIEW (hidden by default) -->
+    <div id="clientDetailView" style="display:none;animation:fadeUp .3s ease both">
+      <div style="display:flex;align-items:center;gap:12px;margin-bottom:22px">
+        <button onclick="closeClientDetail()" class="btn btn-ghost" style="padding:8px 14px;font-size:12px"><i class="ti ti-arrow-left"></i> All Clients</button>
+        <div id="cdClientName" style="font-family:'Syne',sans-serif;font-size:18px;font-weight:800"></div>
+        <div id="cdClientSub" style="font-size:12px;color:var(--text-3);margin-top:2px"></div>
+      </div>
+      <div id="cdBody"></div>
+    </div>
+    <!-- CLIENTS LIST VIEW -->
+    <div id="clientsListView">
+      <div class="stats-row" id="adminStats">
+        <div class="stat-mini gold" style="animation-delay:.05s">
+          <div class="stat-mini-ico" style="background:rgba(201,168,76,.1);color:var(--gold-l)"><i class="ti ti-users"></i></div>
+          <div class="stat-mini-val" id="statClients">—</div>
+          <div class="stat-mini-lbl">Total Clients</div>
+        </div>
+        <div class="stat-mini green" style="animation-delay:.1s">
+          <div class="stat-mini-ico" style="background:rgba(2,179,106,.1);color:var(--green-l)"><i class="ti ti-briefcase"></i></div>
+          <div class="stat-mini-val" id="statServices">—</div>
+          <div class="stat-mini-lbl">Total Services</div>
+        </div>
+        <div class="stat-mini green" style="animation-delay:.15s">
+          <div class="stat-mini-ico" style="background:rgba(94,207,160,.1);color:var(--green-l)"><i class="ti ti-activity"></i></div>
+          <div class="stat-mini-val" id="statActive">—</div>
+          <div class="stat-mini-lbl">Active Services</div>
+        </div>
+        <div class="stat-mini gold" style="animation-delay:.2s">
+          <div class="stat-mini-ico" style="background:rgba(201,168,76,.08);color:var(--gold)"><i class="ti ti-files"></i></div>
+          <div class="stat-mini-val" id="statDocs">—</div>
+          <div class="stat-mini-lbl">Documents</div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-title"><i class="ti ti-users"></i> All Clients <span id="clientCount" style="font-size:12px;font-weight:400;color:var(--text-3)"></span></div>
+        <div class="tbl-wrap">
+          <table>
+            <thead><tr><th>Client</th><th>Services</th><th></th></tr></thead>
+            <tbody id="clientsTbody"><tr><td colspan="3"><div class="loading"><i class="ti ti-loader"></i>Loading…</div></td></tr></tbody>
+          </table>
+        </div>
+      </div>
+    </div><!-- end clientsListView -->
+    </div><!-- end panel-clients -->
+
+    <!-- ── ADD CLIENT ── -->
+    <div class="tab-panel" id="panel-addClient">
+      <div class="card">
+        <div class="card-title"><i class="ti ti-user-plus"></i> Create Client Account</div>
+        <div class="fg" style="margin-bottom:14px">
+          <div class="f"><label>Full Name *</label><input type="text" id="ac_name" placeholder="Ahmed Al Mansouri"></div>
+          <div class="f"><label>Company Name</label><input type="text" id="ac_company" placeholder="Al Mansouri Trading LLC"></div>
+          <div class="f"><label>Email Address *</label><input type="email" id="ac_email" placeholder="ahmed@company.ae"></div>
+          <div class="f"><label>Phone / WhatsApp</label><input type="text" id="ac_phone" placeholder="+971 50 000 0000"></div>
+          <div class="f"><label>Password *</label><input type="password" id="ac_pass" placeholder="Min 8 characters"></div>
+          <div class="f"><label>Notes (internal)</label><input type="text" id="ac_notes" placeholder="Any internal notes…"></div>
+        </div>
+        <div style="display:flex;align-items:center;gap:8px;background:rgba(2,179,106,.04);border:1px solid rgba(2,179,106,.1);border-radius:var(--r-sm);padding:12px 14px;margin-bottom:18px">
+          <i class="ti ti-info-circle" style="color:var(--green-l);font-size:15px;flex-shrink:0"></i>
+          <span style="font-size:12px;color:var(--text-2)">After creating the client, go to <strong>Clients</strong> → click <strong>Services</strong> to assign services with dates and fees.</span>
+        </div>
+        <button class="btn btn-gold" id="addClientBtn" onclick="addClient()"><i class="ti ti-user-plus"></i> Create Client Account</button>
+      </div>
+    </div>
+
+    <!-- ── UPLOAD DOC ── -->
+    <div class="tab-panel" id="panel-uploadDoc">
+      <div class="card">
+        <div class="card-title"><i class="ti ti-upload"></i> Upload Document for Client</div>
+        <div class="fg" style="margin-bottom:14px">
+          <div class="f full"><label>Client *</label>
+            <div class="cdd" id="cdd_client">
+              <div class="cdd-trigger" onclick="toggleCdd('cdd_client')">
+                <span class="cdd-val" id="cdd_client_val">— Select client —</span>
+                <i class="ti ti-chevron-down cdd-arrow"></i>
+              </div>
+              <div class="cdd-menu" id="cdd_client_menu"></div>
+            </div>
+            <input type="hidden" id="ud_client">
+          </div>
+          <div class="f full" id="ud_svc_wrap" style="display:none"><label>Link to Service</label>
+            <div class="cdd" id="cdd_svc">
+              <div class="cdd-trigger" onclick="toggleCdd('cdd_svc')">
+                <span class="cdd-val" id="cdd_svc_val">— No specific service —</span>
+                <i class="ti ti-chevron-down cdd-arrow"></i>
+              </div>
+              <div class="cdd-menu" id="cdd_svc_menu"></div>
+            </div>
+            <input type="hidden" id="ud_service">
+          </div>
+          <div class="f full"><label>Notes for client</label><textarea id="ud_notes" placeholder="e.g. VAT Return Q1 2025 — please review and sign…"></textarea></div>
+        </div>
+        <div id="ud_dropzone" style="border:2px dashed rgba(2,179,106,.2);border-radius:12px;padding:28px;text-align:center;cursor:pointer;transition:border-color .2s;margin-bottom:14px"
+          onclick="document.getElementById('ud_file').click()"
+          ondragover="event.preventDefault();this.style.borderColor='rgba(2,179,106,.5)'"
+          ondragleave="this.style.borderColor='rgba(2,179,106,.2)'"
+          ondrop="handleAdminDrop(event)">
+          <i class="ti ti-cloud-upload" style="font-size:28px;color:var(--green-l);display:block;margin-bottom:8px"></i>
+          <div style="font-size:13px;color:var(--text-2)" id="ud_fname">Click or drag a file here</div>
+          <div style="font-size:11px;color:var(--text-3);margin-top:4px">PDF, Excel, Word, Images — max 50 MB</div>
+        </div>
+        <input type="file" id="ud_file" accept=".pdf,.xls,.xlsx,.doc,.docx,.csv,.jpg,.jpeg,.png,.webp,.gif" style="display:none" onchange="setAdminFile(this.files[0])">
+
+        <!-- PREVIEW + RENAME (shown after file selected) -->
+        <div id="ud_preview_wrap" style="display:none;margin-bottom:16px;background:rgba(255,255,255,.03);border:1px solid var(--border);border-radius:12px;overflow:hidden">
+          <div id="ud_img_preview" style="display:none;text-align:center;padding:12px;border-bottom:1px solid var(--border)">
+            <img id="ud_img_el" src="" alt="preview" style="max-height:220px;max-width:100%;border-radius:8px;object-fit:contain">
+          </div>
+          <div id="ud_pdf_preview" style="display:none;border-bottom:1px solid var(--border)">
+            <iframe id="ud_pdf_el" src="" style="width:100%;height:520px;border:none"></iframe>
+          </div>
+          <div style="padding:13px 15px;display:flex;align-items:center;gap:10px">
+            <i class="ti ti-pencil" style="color:var(--green-l);font-size:16px;flex-shrink:0"></i>
+            <div style="flex:1">
+              <div style="font-size:9px;font-weight:700;color:var(--text-3);text-transform:uppercase;letter-spacing:.08em;margin-bottom:5px">File name on portal</div>
+              <input type="text" id="ud_rename" placeholder="Enter a name for this file…" style="width:100%;background:rgba(255,255,255,.04);border:1px solid rgba(2,179,106,.2);border-radius:8px;padding:8px 11px;font-size:13px;color:var(--text);outline:none">
+            </div>
+            <button onclick="document.getElementById('ud_preview_wrap').style.display='none';adminFile=null;document.getElementById('ud_fname').textContent='Click or drag a file here';document.getElementById('ud_dropzone').style.borderColor='rgba(2,179,106,.2)'" style="width:32px;height:32px;border-radius:8px;background:rgba(239,68,68,.07);border:1px solid rgba(239,68,68,.15);color:#fca5a5;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0" title="Remove file"><i class="ti ti-x"></i></button>
+          </div>
+        </div>
+
+        <div id="ud_prog" style="height:4px;background:rgba(255,255,255,.06);border-radius:2px;overflow:hidden;display:none;margin-bottom:10px"><div id="ud_fill" style="height:100%;width:0%;background:linear-gradient(90deg,var(--green-d),var(--green-l));transition:width .3s;border-radius:2px"></div></div>
+        <div id="ud_msg" style="font-size:12px;color:var(--text-2);margin-bottom:10px;display:none"></div>
+        <button class="btn btn-gold" onclick="uploadDoc(this)"><i class="ti ti-cloud-upload"></i> Upload to Client Portal</button>
+      </div>
+
+      <!-- DOCS LIST -->
+      <div class="card" style="margin-top:18px">
+        <div class="card-title" style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px">
+          <span><i class="ti ti-files"></i> Uploaded Documents</span>
+          <div class="cdd cdd-sm" id="cdd_filter">
+            <div class="cdd-trigger" onclick="toggleCdd('cdd_filter')">
+              <span class="cdd-val" id="cdd_filter_val">All Clients</span>
+              <i class="ti ti-chevron-down cdd-arrow"></i>
+            </div>
+            <div class="cdd-menu cdd-menu-left" id="cdd_filter_menu"></div>
+          </div>
+          <input type="hidden" id="docs_filter">
+        </div>
+        <div id="docsAdminList"><div class="empty"><i class="ti ti-loader" style="animation:spin .8s linear infinite"></i><p>Loading…</p></div></div>
+      </div>
+    </div>
+
+    <!-- ── ALL SERVICES ── -->
+    <div class="tab-panel" id="panel-services">
+      <div class="stats-row" id="allSvcsStats">
+        <div class="stat-mini green" style="animation-delay:.05s">
+          <div class="stat-mini-ico" style="background:rgba(2,179,106,.1);color:var(--green-l)"><i class="ti ti-briefcase"></i></div>
+          <div class="stat-mini-val" id="asvTot">—</div>
+          <div class="stat-mini-lbl">Total Services</div>
+        </div>
+        <div class="stat-mini green" style="animation-delay:.1s">
+          <div class="stat-mini-ico" style="background:rgba(2,179,106,.1);color:var(--green-l)"><i class="ti ti-activity"></i></div>
+          <div class="stat-mini-val" id="asvAct">—</div>
+          <div class="stat-mini-lbl">Active</div>
+        </div>
+        <div class="stat-mini gold" style="animation-delay:.15s">
+          <div class="stat-mini-ico" style="background:rgba(201,168,76,.1);color:var(--gold)"><i class="ti ti-clock"></i></div>
+          <div class="stat-mini-val" id="asvPen">—</div>
+          <div class="stat-mini-lbl">In Progress</div>
+        </div>
+        <div class="stat-mini" style="animation-delay:.2s">
+          <div class="stat-mini-ico" style="background:rgba(94,207,160,.06);color:var(--text-3)"><i class="ti ti-circle-check"></i></div>
+          <div class="stat-mini-val" id="asvDon">—</div>
+          <div class="stat-mini-lbl">Completed</div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-title" style="justify-content:space-between;flex-wrap:wrap;gap:10px">
+          <span><i class="ti ti-briefcase"></i> All Services</span>
+          <div id="svcFilterBtns" style="display:flex;gap:6px;flex-wrap:wrap">
+            <button class="abt abt-green" style="background:rgba(2,179,106,.12);border-color:rgba(2,179,106,.4)" onclick="filterSvcs(this,'all')">All</button>
+            <button class="abt abt-green" onclick="filterSvcs(this,'active')">Active</button>
+            <button class="abt abt-gold" onclick="filterSvcs(this,'pending')">In Progress</button>
+            <button class="abt" style="color:var(--text-2);border-color:var(--border)" onclick="filterSvcs(this,'completed')">Completed</button>
+          </div>
+        </div>
+        <div id="allSvcsTbody"><div class="loading"><i class="ti ti-loader"></i>Loading…</div></div>
+      </div>
+    </div>
+
+    <!-- ── SOA ── -->
+    <div class="tab-panel" id="panel-soa">
+
+      <!-- SOA Client List -->
+      <div id="soaListView">
+        <div class="stats-row" style="grid-template-columns:repeat(3,1fr);margin-bottom:24px">
+          <div class="stat-mini gold" style="animation-delay:.05s">
+            <div class="stat-mini-ico" style="background:rgba(201,168,76,.1);color:var(--gold-l)"><i class="ti ti-users"></i></div>
+            <div class="stat-mini-val" id="soaTotClients">—</div>
+            <div class="stat-mini-lbl">Total Clients</div>
+          </div>
+          <div class="stat-mini green" style="animation-delay:.1s">
+            <div class="stat-mini-ico" style="background:rgba(2,179,106,.08);color:var(--green-l)"><i class="ti ti-cash"></i></div>
+            <div class="stat-mini-val" id="soaTotPaid">—</div>
+            <div class="stat-mini-lbl">Total Paid</div>
+          </div>
+          <div class="stat-mini gold" style="animation-delay:.15s">
+            <div class="stat-mini-ico" style="background:rgba(201,168,76,.08);color:var(--gold-l)"><i class="ti ti-clock"></i></div>
+            <div class="stat-mini-val" id="soaTotBalance">—</div>
+            <div class="stat-mini-lbl">Outstanding</div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-title"><i class="ti ti-file-invoice"></i> Statement of Account — All Clients</div>
+          <div id="soaClientList"><div class="loading"><i class="ti ti-loader"></i>Loading…</div></div>
+        </div>
+      </div>
+
+      <!-- SOA Detail View (hidden by default) -->
+      <div id="soaDetailView" style="display:none;animation:fadeUp .35s ease both">
+        <div style="display:flex;align-items:center;gap:12px;margin-bottom:22px;flex-wrap:wrap">
+          <button onclick="closeSoaDetail()" class="btn btn-ghost" style="padding:8px 14px;font-size:12px"><i class="ti ti-arrow-left"></i> All SOAs</button>
+          <div style="flex:1">
+            <div id="soaClientName" style="font-family:'Syne',sans-serif;font-size:18px;font-weight:800"></div>
+            <div id="soaClientSub" style="font-size:12px;color:var(--text-3)"></div>
+          </div>
+          <button onclick="printSOA()" class="btn btn-gold" style="gap:7px"><i class="ti ti-printer"></i> Print / Export</button>
+        </div>
+
+        <!-- Printable SOA Document -->
+        <div id="soaDocument" class="card" style="max-width:860px;margin:0 auto">
+          <!-- Header -->
+          <div style="display:flex;align-items:flex-start;justify-content:space-between;padding-bottom:20px;border-bottom:2px solid rgba(201,168,76,.25);margin-bottom:24px;flex-wrap:wrap;gap:14px">
+            <div>
+              <div style="font-family:'Syne',sans-serif;font-size:26px;font-weight:800;letter-spacing:-.02em;color:var(--text)">AHCA<span style="color:var(--gold-l)">.</span></div>
+              <div style="font-size:11px;color:var(--text-3);margin-top:3px">AL HASIB CERTIFIED ACCOUNTANTS</div>
+              <div style="font-size:11px;color:var(--text-3)">Dubai, UAE · +971 54 XXX XXXX · info@ahca.ae</div>
+            </div>
+            <div style="text-align:right">
+              <div style="font-family:'Syne',sans-serif;font-size:18px;font-weight:800;color:var(--gold-l);letter-spacing:.04em">STATEMENT OF ACCOUNT</div>
+              <div style="font-size:11px;color:var(--text-3);margin-top:4px">Issued: <span id="soaIssueDate"></span></div>
+              <div style="font-size:11px;color:var(--text-3)">Ref: <span id="soaRef" style="color:var(--green-l)"></span></div>
+            </div>
+          </div>
+
+          <!-- Client Info -->
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-bottom:24px;padding:16px;background:rgba(201,168,76,.04);border:1px solid rgba(201,168,76,.1);border-radius:var(--r-sm)">
+            <div>
+              <div style="font-size:10px;font-weight:700;color:var(--text-3);text-transform:uppercase;letter-spacing:.08em;margin-bottom:6px">Billed To</div>
+              <div id="soaBillName" style="font-weight:700;font-size:15px"></div>
+              <div id="soaBillCompany" style="font-size:12px;color:var(--text-2);margin-top:2px"></div>
+              <div id="soaBillEmail" style="font-size:12px;color:var(--text-3);margin-top:2px"></div>
+            </div>
+            <div style="text-align:right">
+              <div style="font-size:10px;font-weight:700;color:var(--text-3);text-transform:uppercase;letter-spacing:.08em;margin-bottom:6px">Account Summary</div>
+              <div style="font-size:12px;color:var(--text-2)">Services: <strong id="soaSvcCount" style="color:var(--text)"></strong></div>
+              <div style="font-size:12px;color:var(--text-2);margin-top:3px">Total Charged: <strong id="soaTotalCharged" style="color:var(--text)"></strong></div>
+              <div style="font-size:12px;color:var(--text-2);margin-top:3px">Total Paid: <strong id="soaTotalPaidAmt" style="color:var(--green-l)"></strong></div>
+              <div style="font-size:13px;font-weight:700;margin-top:6px">Balance Due: <span id="soaBalanceDue" style="color:var(--gold-l)"></span></div>
+            </div>
+          </div>
+
+          <!-- Services Table -->
+          <div style="margin-bottom:24px">
+            <div style="font-size:11px;font-weight:700;color:var(--text-3);text-transform:uppercase;letter-spacing:.09em;margin-bottom:10px;display:flex;align-items:center;gap:8px"><i class="ti ti-briefcase" style="color:var(--gold-l)"></i> Services</div>
+            <div class="tbl-wrap">
+              <table>
+                <thead><tr>
+                  <th>Invoice Ref</th><th>Service</th><th>Sub-Service</th><th>Due Date</th><th>Amount (AED)</th><th>Status</th>
+                </tr></thead>
+                <tbody id="soaSvcRows"></tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- Payments Table -->
+          <div style="margin-bottom:24px">
+            <div style="font-size:11px;font-weight:700;color:var(--text-3);text-transform:uppercase;letter-spacing:.09em;margin-bottom:10px;display:flex;align-items:center;gap:8px"><i class="ti ti-cash" style="color:var(--green-l)"></i> Payment History</div>
+            <div class="tbl-wrap">
+              <table>
+                <thead><tr><th>Date</th><th>Description</th><th>Method</th><th>Amount (AED)</th><th>Status</th></tr></thead>
+                <tbody id="soaPayRows"></tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- Balance Summary -->
+          <div id="soaBalanceBox" style="border-top:2px solid rgba(201,168,76,.2);padding-top:20px;display:flex;justify-content:flex-end">
+            <div style="min-width:280px">
+              <div style="display:flex;justify-content:space-between;padding:6px 0;font-size:13px;border-bottom:1px solid var(--border)">
+                <span style="color:var(--text-2)">Subtotal</span><span id="soaSubtotal" style="font-weight:600"></span>
+              </div>
+              <div style="display:flex;justify-content:space-between;padding:6px 0;font-size:13px;border-bottom:1px solid var(--border)">
+                <span style="color:var(--green-l)">Total Paid</span><span id="soaPaidRow" style="color:var(--green-l);font-weight:600"></span>
+              </div>
+              <div style="display:flex;justify-content:space-between;padding:10px 0;font-size:15px;font-family:'Syne',sans-serif;font-weight:800">
+                <span>Balance Due</span><span id="soaBalRow" style="color:var(--gold-l)"></span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Footer note -->
+          <div style="margin-top:20px;padding:14px;background:rgba(2,179,106,.04);border:1px solid rgba(2,179,106,.1);border-radius:var(--r-sm);font-size:11px;color:var(--text-3);line-height:1.6">
+            <strong style="color:var(--text-2)">Note:</strong> This statement is generated automatically from your AHCA client portal. For queries, please contact your assigned accountant or email info@ahca.ae.
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ── SERVICE MANAGEMENT PANEL ── -->
+<div class="overlay" id="overlay" onclick="closePanel()"></div>
+<div class="panel" id="svcPanel">
+  <div class="ph">
+    <div>
+      <div class="ph-title" id="phTitle">Services</div>
+      <div class="ph-sub" id="phSub"></div>
+    </div>
+    <button class="ph-close" onclick="closePanel()"><i class="ti ti-x"></i></button>
+  </div>
+  <div class="pb" id="panelBody"><div class="loading"><i class="ti ti-loader"></i>Loading…</div></div>
+</div>
+
+<!-- ── SOA SERVICE DETAIL PANEL ── -->
+<div class="overlay" id="soaSvcOverlay" onclick="closeSoaSvcPanel()" style="z-index:498"></div>
+<div class="panel" id="soaSvcPanel" style="z-index:499;width:480px">
+  <div class="ph">
+    <div>
+      <div class="ph-title" id="sspTitle">Service Detail</div>
+      <div class="ph-sub" id="sspSub"></div>
+    </div>
+    <button class="ph-close" onclick="closeSoaSvcPanel()"><i class="ti ti-x"></i></button>
+  </div>
+  <div class="pb" id="sspBody"></div>
+</div>
+
+<!-- ── DOCUMENTS SIDE PANEL ── -->
+<div id="docOverlay" onclick="closeDocPanel()" style="position:fixed;inset:0;z-index:1199;background:rgba(0,0,0,.45);opacity:0;pointer-events:none;transition:opacity .25s"></div>
+<div id="docPanel" style="position:fixed;top:0;right:0;height:100%;width:420px;max-width:94vw;background:rgba(4,14,7,.97);backdrop-filter:blur(28px);border-left:1px solid var(--border);z-index:1200;transform:translateX(100%);transition:transform .32s cubic-bezier(.4,0,.2,1);display:flex;flex-direction:column">
+  <div style="padding:22px 22px 16px;display:flex;align-items:flex-start;justify-content:space-between;border-bottom:1px solid var(--border);flex-shrink:0">
+    <div>
+      <div id="dpSvcName" style="font-family:'Syne',sans-serif;font-size:16px;font-weight:800;color:var(--text-1)"></div>
+      <div id="dpSvcSub" style="font-size:11px;color:var(--text-3);margin-top:3px"></div>
+    </div>
+    <button onclick="closeDocPanel()" style="width:32px;height:32px;border-radius:8px;background:rgba(255,255,255,.05);border:1px solid var(--border);color:var(--text-2);display:flex;align-items:center;justify-content:center;font-size:16px;cursor:pointer"><i class="ti ti-x"></i></button>
+  </div>
+  <div style="padding:14px 22px;border-bottom:1px solid var(--border);flex-shrink:0">
+    <button id="dpUploadBtn" onclick="" style="width:100%;padding:10px;border-radius:10px;background:rgba(201,168,76,.08);border:1px solid rgba(201,168,76,.2);color:var(--gold-l);font-size:12px;font-weight:600;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px"><i class="ti ti-upload"></i> Upload Document for this Service</button>
+  </div>
+  <div id="dpBody" style="flex:1;overflow-y:auto;padding:16px 22px"></div>
+</div>
+
+<!-- ── UPLOAD SIDE PANEL ── -->
+<div id="upOverlay" onclick="closeUploadPanel()" style="position:fixed;inset:0;z-index:1299;background:rgba(0,0,0,.45);opacity:0;pointer-events:none;transition:opacity .25s"></div>
+<div id="upPanel" style="position:fixed;top:0;right:0;height:100%;width:400px;max-width:94vw;background:rgba(4,14,7,.98);backdrop-filter:blur(28px);border-left:1px solid var(--border);z-index:1300;transform:translateX(100%);transition:transform .32s cubic-bezier(.4,0,.2,1);display:flex;flex-direction:column">
+  <div style="padding:22px 22px 16px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--border);flex-shrink:0">
+    <div>
+      <div style="font-family:'Syne',sans-serif;font-size:16px;font-weight:800;color:var(--text-1)"><i class="ti ti-cloud-upload" style="color:var(--green-l);margin-right:8px"></i>Upload Document</div>
+      <div id="upSvcLabel" style="font-size:11px;color:var(--text-3);margin-top:3px"></div>
+    </div>
+    <button onclick="closeUploadPanel()" style="width:32px;height:32px;border-radius:8px;background:rgba(255,255,255,.05);border:1px solid var(--border);color:var(--text-2);display:flex;align-items:center;justify-content:center;font-size:16px;cursor:pointer"><i class="ti ti-x"></i></button>
+  </div>
+  <div style="flex:1;overflow-y:auto;padding:22px">
+    <div class="f" style="margin-bottom:14px">
+      <label style="font-size:11px;font-weight:700;letter-spacing:.06em;color:var(--text-3);text-transform:uppercase">File</label>
+      <div id="upDropZone" onclick="document.getElementById('upFileInput').click()" ondragover="event.preventDefault();this.style.borderColor='var(--green)'" ondragleave="this.style.borderColor=''" ondrop="upHandleDrop(event)" style="border:2px dashed var(--border);border-radius:12px;padding:32px 16px;text-align:center;cursor:pointer;transition:border-color .2s;margin-top:6px">
+        <i class="ti ti-file-upload" style="font-size:28px;color:var(--text-3);display:block;margin-bottom:8px"></i>
+        <div id="upFileName" style="font-size:13px;color:var(--text-2)">Click or drag a file here</div>
+        <div style="font-size:11px;color:var(--text-3);margin-top:4px">PDF, Word, Excel, images…</div>
+      </div>
+      <input type="file" id="upFileInput" style="display:none" onchange="upFileChosen(this)">
+    </div>
+    <div class="f" id="upRenameRow" style="margin-bottom:14px;display:none">
+      <label style="font-size:11px;font-weight:700;letter-spacing:.06em;color:var(--text-3);text-transform:uppercase">File Name</label>
+      <div style="display:flex;align-items:center;gap:8px;margin-top:6px">
+        <input type="text" id="upRename" placeholder="Document name…" style="flex:1;padding:10px 14px;border-radius:10px;background:rgba(255,255,255,.04);border:1px solid var(--green);color:var(--text-1);font-size:13px;outline:none;box-sizing:border-box">
+        <span id="upRenameExt" style="font-size:12px;color:var(--text-3);white-space:nowrap"></span>
+      </div>
+      <span style="font-size:11px;color:var(--text-3);margin-top:4px;display:block">Extension is kept automatically</span>
+    </div>
+    <div class="f" style="margin-bottom:14px">
+      <label style="font-size:11px;font-weight:700;letter-spacing:.06em;color:var(--text-3);text-transform:uppercase">Notes (optional)</label>
+      <input type="text" id="upNotes" placeholder="e.g. Signed copy, Q1 return…" style="margin-top:6px;padding:10px 14px;border-radius:10px;background:rgba(255,255,255,.04);border:1px solid var(--border);color:var(--text-1);font-size:13px;outline:none;width:100%;box-sizing:border-box">
+    </div>
+    <input type="hidden" id="upSvcId">
+    <button id="upSubmitBtn" onclick="upSubmit(this)" style="width:100%;padding:12px;border-radius:12px;background:linear-gradient(135deg,var(--green),var(--green-d));border:none;color:#fff;font-family:'Syne',sans-serif;font-size:14px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;transition:opacity .2s"><i class="ti ti-upload"></i> Upload</button>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<!-- CLIENT PICKER MODAL -->
+<div id="cpOverlay" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.7);backdrop-filter:blur(8px);z-index:9000;align-items:center;justify-content:center">
+  <div style="background:rgba(4,12,6,.97);border:1px solid rgba(201,168,76,.2);border-radius:20px;padding:28px;width:400px;max-width:90vw;box-shadow:0 20px 60px rgba(0,0,0,.6)">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px">
+      <div>
+        <div style="font-family:'Syne',sans-serif;font-size:16px;font-weight:800;color:var(--text)"><i class="ti ti-eye" style="color:var(--gold-l);margin-right:7px"></i>Preview as Client</div>
+        <div style="font-size:11px;color:var(--text-3);margin-top:3px">See the portal exactly as a client sees it</div>
+      </div>
+      <button onclick="closeClientPicker()" style="width:32px;height:32px;border-radius:9px;background:rgba(255,255,255,.04);border:1px solid var(--border);color:var(--text-3);cursor:pointer;display:flex;align-items:center;justify-content:center"><i class="ti ti-x"></i></button>
+    </div>
+    <div id="cpList" style="display:flex;flex-direction:column;gap:8px;max-height:320px;overflow-y:auto"></div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+const sb = supabase.createClient(
+  'https://bhcadrznoyjpaozpweai.supabase.co',
+  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJoY2Fkcnpub3lqcGFvenB3ZWFpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODE2MzUzMjYsImV4cCI6MjA5NzIxMTMyNn0._hmQ-jRicwa3uhQc45ZKer9MVrN4NpJqk3t8FzXtkb4'
+);
+const ADMIN = 'abedalfattah.91p@gmail.com';
+
+let clients=[], currentClientId=null, currentSvcId=null, toastT;
+
+const fmtAED = n => 'AED '+Number(n||0).toLocaleString('en-AE',{minimumFractionDigits:0});
+const fmtDate = d => d ? new Date(d).toLocaleDateString('en-AE',{day:'numeric',month:'short',year:'numeric'}) : '—';
+const initials = n => (n||'?').split(' ').map(w=>w[0]).join('').toUpperCase().slice(0,2);
+
+function toast(msg, type='ok'){
+  const el=document.getElementById('toast');
+  el.className=`toast toast-${type} show`;
+  el.innerHTML=`<i class="ti ti-${type==='ok'?'circle-check':'alert-circle'}"></i>${msg}`;
+  clearTimeout(toastT); toastT=setTimeout(()=>el.classList.remove('show'),3500);
+}
+
+function showTab(name){
+  document.querySelectorAll('.tab-panel').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  document.getElementById('panel-'+name).classList.add('active');
+  document.getElementById('tab-'+name).classList.add('active');
+  document.querySelectorAll('.nav-a[data-tab]').forEach(a=>{
+    a.classList.toggle('active', a.dataset.tab===name);
+  });
+  localStorage.setItem('ahca_admin_tab', name);
+  if(name==='services') loadAllServices();
+  if(name==='soa') loadSOA();
+}
+
+// ── ALL SERVICES VIEW ──
+let allServicesData=[], svcFilter='all', svcCat='';
+
+async function loadAllServices(){
+  const el=document.getElementById('allSvcsTbody');
+  if(!el) return;
+  el.innerHTML=`<div class="loading"><i class="ti ti-loader"></i>Loading…</div>`;
+  const {data}=await sb.from('client_services').select('*').order('created_at',{ascending:false});
+  allServicesData=data||[];
+  // stats
+  document.getElementById('asvTot').textContent=allServicesData.length;
+  document.getElementById('asvAct').textContent=allServicesData.filter(s=>s.status==='active').length;
+  document.getElementById('asvPen').textContent=allServicesData.filter(s=>s.status==='pending').length;
+  document.getElementById('asvDon').textContent=allServicesData.filter(s=>s.status==='completed').length;
+  renderAllSvcsList();
+}
+
+function filterSvcs(btn,filter){
+  svcFilter=filter;
+  document.querySelectorAll('#svcFilterBtns .abt').forEach(b=>{b.style.background='';b.style.borderColor='';});
+  btn.style.background='rgba(2,179,106,.12)'; btn.style.borderColor='rgba(2,179,106,.4)';
+  renderAllSvcsList();
+}
+
+function setSvcCat(val,label){
+  svcCat=val;
+  const lbl=document.getElementById('cdd_svcCat_lbl');
+  if(lbl) lbl.textContent=label||'All Categories';
+  document.querySelectorAll('#cdd_svcCat_menu .cdd-opt').forEach(o=>o.classList.toggle('selected',o.dataset.value===val));
+  document.getElementById('cdd_svcCat').classList.remove('open');
+  renderAllSvcsList();
+}
+
+const SVC_META={
+  'VAT Filing & Compliance':    {icon:'ti-receipt-tax',   color:'#5ECFA0',bg:'rgba(2,179,106,.13)'},
+  'Corporate Tax Filing':       {icon:'ti-building-bank', color:'#C9A84C',bg:'rgba(201,168,76,.13)'},
+  'Bookkeeping & Payroll':      {icon:'ti-book',          color:'#93c5fd',bg:'rgba(59,130,246,.13)'},
+  'Financial Reporting & Audit':{icon:'ti-chart-bar',     color:'#fca5a5',bg:'rgba(239,68,68,.13)'},
+  'Business Advisory':          {icon:'ti-bulb',          color:'#fde68a',bg:'rgba(234,179,8,.13)'},
+  'FTA Registration':           {icon:'ti-shield-check',  color:'#86efac',bg:'rgba(34,197,94,.13)'},
+  'Zakat Filing':               {icon:'ti-star',          color:'#C9A84C',bg:'rgba(201,168,76,.13)'},
+  'Feasibility Study':          {icon:'ti-chart-dots',    color:'#c4b5fd',bg:'rgba(139,92,246,.13)'},
+};
+const DEF_SVC={icon:'ti-briefcase',color:'#5ECFA0',bg:'rgba(2,179,106,.13)'};
+
+function renderAllSvcsList(){
+  const el=document.getElementById('allSvcsTbody');
+  let list=svcFilter==='all'?allServicesData:allServicesData.filter(s=>s.status===svcFilter);
+  if(!list.length){
+    el.innerHTML=`<div class="empty" style="margin-top:8px"><i class="ti ti-inbox"></i><p>No services found.</p></div>`;
+    return;
+  }
+  // group by service_name (main category)
+  const groups={};
+  list.forEach(s=>{
+    const cat=s.service_name||'Other';
+    if(!groups[cat]) groups[cat]=[];
+    groups[cat].push(s);
+  });
+  el.innerHTML=Object.entries(groups).map(([cat,svcs])=>{
+    const m=SVC_META[cat]||DEF_SVC;
+    const rows=svcs.map(s=>{
+      const c=clients.find(cl=>cl.id===s.client_id);
+      const cName=c?.full_name||'Unknown';
+      const cSub=c?.company||c?.email||'';
+      const ini=cName.split(' ').map(w=>w[0]).join('').toUpperCase().slice(0,2);
+      const stCls=s.status==='active'?'st-active':s.status==='pending'?'st-pending':'st-completed';
+      const stLbl=s.status==='active'?'Active':s.status==='pending'?'In Progress':'Completed';
+      const overdue=s.submission_date&&new Date(s.submission_date)<new Date()&&s.status!=='completed';
+      const label=s.custom_name||s.service_name||'—';
+      return `<div onclick="openClientDetail('${s.client_id}')" style="display:grid;grid-template-columns:1fr auto auto auto auto;align-items:center;gap:12px;padding:12px 18px;border-bottom:1px solid rgba(94,207,160,.05);cursor:pointer;transition:background .15s" onmouseover="this.style.background='rgba(2,179,106,.04)'" onmouseout="this.style.background=''">
+        <div class="ci">
+          <div class="av" style="width:30px;height:30px;font-size:11px">${ini}</div>
+          <div><div class="cn" style="font-size:13px">${cName}</div><div class="cc">${cSub}</div></div>
+        </div>
+        <div style="font-size:12px;font-weight:600;color:var(--text-2);min-width:120px">${label!==cat?label:'—'}</div>
+        <span class="svc-status ${stCls}" style="white-space:nowrap">${stLbl}</span>
+        <div style="font-size:11px;color:var(--text-2);white-space:nowrap">${fmtDate(s.start_date)}</div>
+        <i class="ti ti-chevron-right" style="color:var(--text-3);font-size:14px"></i>
+      </div>`;
+    }).join('');
+    return `<div style="margin-bottom:16px;background:var(--surface);border:1px solid var(--border);border-radius:var(--r);overflow:hidden;animation:fadeUp .4s ease both">
+      <div style="display:flex;align-items:center;gap:12px;padding:14px 18px;border-bottom:1px solid var(--border);background:rgba(255,255,255,.02)">
+        <div style="width:36px;height:36px;border-radius:10px;background:${m.bg};color:${m.color};display:flex;align-items:center;justify-content:center;font-size:17px;flex-shrink:0"><i class="ti ${m.icon}"></i></div>
+        <div style="flex:1">
+          <div style="font-family:'Syne',sans-serif;font-size:14px;font-weight:700;color:${m.color}">${cat}</div>
+          <div style="font-size:11px;color:var(--text-3);margin-top:2px">${svcs.length} service${svcs.length!==1?'s':''}</div>
+        </div>
+        <div style="display:flex;gap:6px">
+          ${svcs.filter(s=>s.status==='active').length?`<span style="font-size:10px;font-weight:700;padding:3px 9px;border-radius:4px;background:rgba(2,179,106,.1);color:var(--green-l);border:1px solid rgba(2,179,106,.2)">${svcs.filter(s=>s.status==='active').length} Active</span>`:''}
+          ${svcs.filter(s=>s.status==='pending').length?`<span style="font-size:10px;font-weight:700;padding:3px 9px;border-radius:4px;background:rgba(201,168,76,.08);color:var(--gold);border:1px solid rgba(201,168,76,.18)">${svcs.filter(s=>s.status==='pending').length} In Progress</span>`:''}
+        </div>
+      </div>
+      <div style="font-size:10px;font-weight:700;color:var(--text-3);text-transform:uppercase;letter-spacing:.08em;padding:8px 18px 4px;display:grid;grid-template-columns:1fr auto auto auto auto;gap:12px">
+        <span>Client</span><span style="min-width:120px">Sub-Service</span><span>Status</span><span>Start</span><span></span>
+      </div>
+      ${rows}
+    </div>`;
+  }).join('');
+}
+
+function closePanel(){
+  document.getElementById('overlay').classList.remove('open');
+  document.getElementById('svcPanel').classList.remove('open');
+  currentClientId=null; currentSvcId=null;
+}
+
+// ── INIT ──
+async function init(){
+  const {data:{session}}=await sb.auth.getSession();
+  if(!session){ window.location.href='login.html'; return; }
+  if(session.user.email!==ADMIN){
+    document.body.innerHTML=`<div style="display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:100svh;font-family:'Inter',sans-serif;gap:10px">
+      <div style="font-size:18px;color:#ef4444">⛔ Access denied</div>
+      <div style="font-size:13px;color:var(--text-2)">Logged in as: <strong>${session.user.email}</strong></div>
+      <a href="login.html" style="color:var(--green-l);font-size:13px;margin-top:6px">← Back to login</a>
+    </div>`;
+    return;
+  }
+  document.getElementById('adminEmail').textContent=session.user.email;
+  await loadClients();
+  await loadAllDocs();
+  const savedTab=localStorage.getItem('ahca_admin_tab');
+  if(savedTab&&document.getElementById('panel-'+savedTab)) showTab(savedTab);
+}
+
+async function loadClients(){
+  const {data,error}=await sb.from('clients').select('*').order('full_name');
+  if(error){
+    document.querySelector('#panel-clients .tbl-wrap')||document.getElementById('panel-clients');
+    const tb=document.querySelector('#panel-clients table tbody');
+    if(tb) tb.innerHTML=`<tr><td colspan="3" style="color:#fca5a5;padding:20px;text-align:center"><i class="ti ti-alert-circle"></i> RLS Error: ${error.message}</td></tr>`;
+    console.error('loadClients error:',error);
+    return;
+  }
+  clients=data||[];
+  document.getElementById('clientCount').textContent=`(${clients.length})`;
+  renderTable();
+  populateDropdown();
+}
+
+async function renderTable(){
+  const tb=document.getElementById('clientsTbody');
+  if(!clients.length){ tb.innerHTML=`<tr><td colspan="3"><div class="empty"><i class="ti ti-users"></i><p>No clients yet</p></div></td></tr>`; return; }
+  tb.innerHTML='';
+  for(const c of clients){
+    const {data:svcs}=await sb.from('client_services').select('service_name,custom_name,status').eq('client_id',c.id);
+    const tr=document.createElement('tr');
+    const chips=(svcs||[]).map(s=>{
+      const label=(s.custom_name||s.service_name||'').slice(0,20);
+      const cls=s.status==='completed'?'chip-done':'';
+      return `<span class="chip ${cls}">${label}</span>`;
+    }).join('');
+    const nm=(c.full_name||'').replace(/'/g,'&#39;');
+    tr.style.cursor='pointer';
+    tr.onclick=()=>openClientDetail(c.id);
+    tr.innerHTML=`
+      <td><div class="ci"><div class="av">${initials(c.full_name)}</div>
+        <div><div class="cn">${c.full_name}</div><div class="cc">${c.company||c.email}</div></div></div></td>
+      <td><div class="chips">${chips||'<span style="font-size:11px;color:var(--text-3)">None</span>'}</div></td>
+      <td style="text-align:right"><i class="ti ti-chevron-right" style="color:var(--text-3);font-size:16px"></i></td>`;
+    tb.appendChild(tr);
+  }
+}
+
+function populateDropdown(){
+  const cm=document.getElementById('cdd_client_menu');
+  const fm=document.getElementById('cdd_filter_menu');
+  cm.innerHTML=`<div class="cdd-opt placeholder" data-value="" onclick="setCdd('cdd_client','','— Select client —')"><i class="ti ti-user-off" style="font-size:14px;color:var(--text-3)"></i>— Select client —</div>`;
+  fm.innerHTML=`<div class="cdd-opt selected" data-value="" onclick="setCdd('cdd_filter','','All Clients')"><i class="ti ti-users" style="font-size:14px;color:var(--gold-l)"></i>All Clients</div>`;
+  clients.forEach(c=>{
+    const label=c.full_name;
+    const sub=c.company||c.email||'';
+    const ini=(c.full_name||'?').split(' ').map(w=>w[0]).join('').toUpperCase().slice(0,2);
+    cm.innerHTML+=`<div class="cdd-opt" data-value="${c.id}" onclick="setCdd('cdd_client','${c.id}','${label.replace(/'/g,"\\'")}')">
+      <div style="width:26px;height:26px;border-radius:50%;background:linear-gradient(135deg,var(--green-d),var(--green));display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:800;color:var(--bg);flex-shrink:0">${ini}</div>
+      <span style="flex:1">${label}</span>
+      ${sub?`<span class="cdd-opt-sub">${sub}</span>`:''}
+    </div>`;
+    fm.innerHTML+=`<div class="cdd-opt" data-value="${c.id}" onclick="setCdd('cdd_filter','${c.id}','${label.replace(/'/g,"\\'")}')">
+      <div style="width:22px;height:22px;border-radius:50%;background:linear-gradient(135deg,var(--green-d),var(--green));display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:800;color:var(--bg);flex-shrink:0">${ini}</div>
+      ${label}
+    </div>`;
+  });
+}
+
+let allDocs=[];
+let allSvcsCache=[];
+async function loadAllDocs(){
+  const {data}=await sb.from('documents').select('*').order('uploaded_at',{ascending:false});
+  const {data:svcs}=await sb.from('client_services').select('id,service_name,custom_name,status');
+  allSvcsCache=svcs||[];
+  allDocs=data||[];
+  renderDocsList();
+  updateStats();
+}
+
+function updateStats(){
+  const sc=document.getElementById('statClients');
+  const ss=document.getElementById('statServices');
+  const sa=document.getElementById('statActive');
+  const sd=document.getElementById('statDocs');
+  if(sc) sc.textContent=clients.length;
+  if(ss) ss.textContent=allSvcsCache.length;
+  if(sa) sa.textContent=allSvcsCache.filter(s=>s.status==='active'||s.status==='in_progress').length;
+  if(sd) sd.textContent=allDocs.length;
+}
+
+function renderDocsList(){
+  const filter=document.getElementById('docs_filter').value;
+  const docs=filter?allDocs.filter(d=>d.client_id===filter):allDocs;
+  const el=document.getElementById('docsAdminList');
+  const extIco=name=>{const e=(name||'').split('.').pop().toLowerCase();return e==='pdf'?'ti-file-type-pdf':['xlsx','xls','csv'].includes(e)?'ti-file-type-xls':['doc','docx'].includes(e)?'ti-file-type-doc':['jpg','jpeg','png','webp','gif'].includes(e)?'ti-photo':'ti-file';};
+  const fmtD=d=>d?new Date(d).toLocaleDateString('en-AE',{day:'numeric',month:'short',year:'numeric'}):'—';
+  const clientName=id=>{const c=clients.find(c=>c.id===id);return c?(c.full_name+(c.company?' — '+c.company:'')):'Unknown';};
+  if(!docs.length){el.innerHTML=`<div class="empty"><i class="ti ti-inbox"></i><p>No documents uploaded yet</p></div>`;return;}
+  el.innerHTML=`<div style="display:flex;flex-direction:column;gap:6px">${docs.map(d=>`
+    <div style="display:flex;align-items:center;gap:12px;background:rgba(255,255,255,.03);border:1px solid var(--border);border-radius:10px;padding:11px 14px">
+      <div style="width:36px;height:36px;border-radius:9px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:15px;background:rgba(2,179,106,.08);color:var(--green-l)"><i class="ti ${extIco(d.file_name)}"></i></div>
+      <div style="flex:1;min-width:0">
+        <div style="font-size:13px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${d.file_name}</div>
+        <div style="font-size:11px;color:var(--text-3);margin-top:2px;display:flex;align-items:center;gap:8px">
+          <span><i class="ti ti-user" style="font-size:10px"></i> ${clientName(d.client_id)}</span>
+          <span><i class="ti ti-calendar" style="font-size:10px"></i> ${fmtD(d.uploaded_at||d.created_at)}</span>
+          ${(()=>{const sv=allSvcsCache.find(s=>s.id===d.service_id);return sv?`<span style="background:rgba(2,179,106,.08);border:1px solid rgba(2,179,106,.18);color:var(--green-l);border-radius:4px;padding:1px 6px;font-size:9px;font-weight:700">${sv.custom_name||sv.service_name}</span>`:'';})()}
+          ${d.notes?`<span style="color:var(--text-2);font-style:italic">${d.notes}</span>`:''}
+        </div>
+      </div>
+      <div style="display:flex;gap:6px;flex-shrink:0">
+        <button onclick="openDoc('${d.file_url}')" style="width:32px;height:32px;border-radius:8px;background:rgba(2,179,106,.07);border:1px solid rgba(2,179,106,.15);color:var(--green-l);display:flex;align-items:center;justify-content:center;font-size:14px;cursor:pointer" title="Download"><i class="ti ti-download"></i></button>
+        <button onclick="deleteDoc('${d.id}','${d.file_url}')" style="width:32px;height:32px;border-radius:8px;background:rgba(239,68,68,.07);border:1px solid rgba(239,68,68,.15);color:#fca5a5;display:flex;align-items:center;justify-content:center;font-size:14px;cursor:pointer" title="Delete"><i class="ti ti-trash"></i></button>
+      </div>
+    </div>`).join('')}</div>`;
+}
+
+async function openDoc(fileUrl){
+  const path=decodeURIComponent(fileUrl.split('/client-files/')[1]);
+  const {data,error}=await sb.storage.from('client-files').createSignedUrl(path,3600);
+  if(error||!data?.signedUrl){ toast('Could not open file: '+( error?.message||'unknown error'),'err'); return; }
+  window.open(data.signedUrl,'_blank');
+}
+
+async function deleteDoc(id, fileUrl){
+  if(!confirm('Delete this document? The client will no longer see it.')) return;
+  await sb.from('documents').delete().eq('id',id);
+  const path=fileUrl.split('/client-files/')[1];
+  if(path) await sb.storage.from('client-files').remove([decodeURIComponent(path)]);
+  await loadAllDocs();
+  toast('Document deleted');
+}
+
+function quickDoc(id){ showTab('uploadDoc'); document.getElementById('ud_client').value=id; }
+
+// ── ADD CLIENT ──
+async function addClient(){
+  const name=document.getElementById('ac_name').value.trim();
+  const email=document.getElementById('ac_email').value.trim();
+  const pass=document.getElementById('ac_pass').value;
+  const company=document.getElementById('ac_company').value.trim();
+  const phone=document.getElementById('ac_phone').value.trim();
+  if(!name||!email||!pass){ toast('Name, email & password required','err'); return; }
+  if(pass.length<8){ toast('Password min 8 characters','err'); return; }
+  const btn=document.getElementById('addClientBtn');
+  btn.disabled=true; btn.innerHTML='<div class="spin"></div> Creating…';
+  const {data,error}=await sb.auth.signUp({email,password:pass,options:{data:{full_name:name}}});
+  if(error){ toast(error.message,'err'); btn.disabled=false; btn.innerHTML='<i class="ti ti-user-plus"></i> Create Client Account'; return; }
+  await sb.from('clients').upsert({id:data.user.id,full_name:name,email,company:company||null,phone:phone||null});
+  toast(`"${name}" created! Now assign services from the Clients tab.`);
+  ['ac_name','ac_email','ac_pass','ac_company','ac_phone','ac_notes'].forEach(id=>document.getElementById(id).value='');
+  btn.disabled=false; btn.innerHTML='<i class="ti ti-user-plus"></i> Create Client Account';
+  await loadClients();
+  showTab('clients');
+}
+
+// ── UPLOAD DOC ──
+async function loadClientServices(){
+  const cid=document.getElementById('ud_client').value;
+  const wrap=document.getElementById('ud_svc_wrap');
+  if(!cid){wrap.style.display='none';return;}
+  const {data}=await sb.from('client_services').select('id,service_name,custom_name').eq('client_id',cid).order('service_name');
+  if(data&&data.length){
+    const menu=document.getElementById('cdd_svc_menu');
+    menu.innerHTML=`<div class="cdd-opt selected" data-value="" onclick="setCdd('cdd_svc','','— No specific service —')"><i class="ti ti-minus" style="font-size:13px;color:var(--text-3)"></i>No specific service</div>`;
+    data.forEach(s=>{
+      const label=(s.custom_name||s.service_name);
+      menu.innerHTML+=`<div class="cdd-opt" data-value="${s.id}" onclick="setCdd('cdd_svc','${s.id}','${label.replace(/'/g,"\\'")}')"><i class="ti ti-briefcase" style="font-size:13px;color:var(--gold-l)"></i>${label}</div>`;
+    });
+    // reset selection
+    document.getElementById('ud_service').value='';
+    document.getElementById('cdd_svc_val').textContent='— No specific service —';
+    wrap.style.display='block';
+  } else {
+    wrap.style.display='none';
+  }
+}
+
+let adminFile=null;
+function setAdminFile(f){
+  if(!f) return;
+  adminFile=f;
+  document.getElementById('ud_fname').textContent=f.name+' ('+Math.round(f.size/1024)+' KB)';
+  document.getElementById('ud_dropzone').style.borderColor='rgba(2,179,106,.5)';
+  document.getElementById('ud_rename').value=f.name;
+  const wrap=document.getElementById('ud_preview_wrap');
+  const imgWrap=document.getElementById('ud_img_preview');
+  const pdfWrap=document.getElementById('ud_pdf_preview');
+  imgWrap.style.display='none';
+  pdfWrap.style.display='none';
+  const ext=f.name.split('.').pop().toLowerCase();
+  const isImg=['jpg','jpeg','png','webp','gif'].includes(ext);
+  const isPdf=ext==='pdf';
+  if(isImg){
+    const reader=new FileReader();
+    reader.onload=e=>{document.getElementById('ud_img_el').src=e.target.result;imgWrap.style.display='block';};
+    reader.readAsDataURL(f);
+  } else if(isPdf){
+    const url=URL.createObjectURL(f);
+    document.getElementById('ud_pdf_el').src=url;
+    pdfWrap.style.display='block';
+  }
+  wrap.style.display='block';
+}
+function handleAdminDrop(e){
+  e.preventDefault();
+  document.getElementById('ud_dropzone').style.borderColor='rgba(2,179,106,.2)';
+  setAdminFile(e.dataTransfer.files[0]);
+}
+async function uploadDoc(btn){
+  const cid=document.getElementById('ud_client').value;
+  const notes=document.getElementById('ud_notes').value.trim();
+  if(!cid){ toast('Select a client first','err'); return; }
+  if(!adminFile){ toast('Choose a file to upload','err'); return; }
+  const allowed=['pdf','xls','xlsx','doc','docx','csv','jpg','jpeg','png','webp','gif'];
+  const ext=adminFile.name.split('.').pop().toLowerCase();
+  if(!allowed.includes(ext)){ toast('File type not allowed','err'); return; }
+  if(adminFile.size>50*1024*1024){ toast('File too large (max 50 MB)','err'); return; }
+  btn.disabled=true; btn.innerHTML='<i class="ti ti-loader"></i> Uploading…';
+  document.getElementById('ud_prog').style.display='block';
+  document.getElementById('ud_fill').style.width='15%';
+  document.getElementById('ud_msg').style.display='block';
+  document.getElementById('ud_msg').textContent='Uploading to storage…';
+  const rename=document.getElementById('ud_rename').value.trim()||adminFile.name;
+  const finalName=rename.includes('.')?rename:rename+'.'+ext;
+  const safePath=finalName.replace(/[^a-zA-Z0-9._-]/g,'_');
+  const path=`${cid}/${Date.now()}_${safePath}`;
+  const {error:upErr}=await sb.storage.from('client-files').upload(path,adminFile,{upsert:false});
+  if(upErr){ toast(upErr.message,'err'); btn.disabled=false; btn.innerHTML='<i class="ti ti-cloud-upload"></i> Upload to Client Portal'; document.getElementById('ud_prog').style.display='none'; document.getElementById('ud_msg').style.display='none'; return; }
+  document.getElementById('ud_fill').style.width='80%';
+  const {data:urlData}=sb.storage.from('client-files').getPublicUrl(path);
+  const svcId=document.getElementById('ud_service').value||null;
+  const {error:dbErr}=await sb.from('documents').insert({client_id:cid,file_name:finalName,file_url:urlData.publicUrl,notes:notes||null,service_id:svcId,uploaded_at:new Date().toISOString()});
+  if(dbErr){ toast(dbErr.message,'err'); btn.disabled=false; btn.innerHTML='<i class="ti ti-cloud-upload"></i> Upload to Client Portal'; return; }
+  document.getElementById('ud_fill').style.width='100%';
+  document.getElementById('ud_msg').textContent='✓ Uploaded — client can now see this file.';
+  document.getElementById('ud_msg').style.color='var(--green-l)';
+  toast('Document uploaded to client portal!');
+  await loadAllDocs();
+  setTimeout(()=>{ document.getElementById('ud_prog').style.display='none'; document.getElementById('ud_fill').style.width='0%'; document.getElementById('ud_msg').style.display='none'; },3000);
+  adminFile=null;
+  document.getElementById('ud_fname').textContent='Click or drag a file here';
+  document.getElementById('ud_dropzone').style.borderColor='rgba(2,179,106,.2)';
+  document.getElementById('ud_preview_wrap').style.display='none';
+  document.getElementById('ud_rename').value='';
+  document.getElementById('ud_service').value='';
+  document.getElementById('ud_client').value='';
+  document.getElementById('cdd_svc_val').textContent='— No specific service —';
+  document.getElementById('cdd_client_val').textContent='— Select client —';
+  document.getElementById('cdd_client_val').classList.add('placeholder');
+  document.getElementById('ud_svc_wrap').style.display='none';
+  document.getElementById('ud_notes').value='';
+  btn.disabled=false; btn.innerHTML='<i class="ti ti-cloud-upload"></i> Upload to Client Portal';
+}
+
+// ── CLIENT DETAIL VIEW ──
+async function openClientDetail(clientId){
+  currentClientId=clientId;
+  const c=clients.find(x=>x.id===clientId)||{};
+  document.getElementById('cdClientName').textContent=c.full_name||'Client';
+  document.getElementById('cdClientSub').textContent=c.company?`${c.company} · ${c.email||''}`:c.email||'';
+  document.getElementById('clientsListView').style.display='none';
+  document.getElementById('clientDetailView').style.display='block';
+  const body=document.getElementById('cdBody');
+  body.innerHTML=`<div class="loading"><i class="ti ti-loader"></i>Loading…</div>`;
+
+  const [{data:svcs},{data:docs},{data:allPays}]=await Promise.all([
+    sb.from('client_services').select('*').eq('client_id',clientId).order('created_at'),
+    sb.from('documents').select('*').eq('client_id',clientId).order('uploaded_at',{ascending:false}),
+    sb.from('payments').select('service_id,amount').eq('client_id',clientId)
+  ]);
+
+  // pre-aggregate paid per service
+  const paidMap={};
+  (allPays||[]).forEach(p=>{paidMap[p.service_id]=(paidMap[p.service_id]||0)+Number(p.amount||0);});
+  // doc counts per service
+  const docCount={};
+  (docs||[]).forEach(d=>{docCount[d.service_id]=(docCount[d.service_id]||0)+1;});
+
+  const fmtD=d=>d?new Date(d).toLocaleDateString('en-AE',{day:'numeric',month:'short',year:'numeric'}):'—';
+  const statusBadge=s=>{
+    if(s==='completed') return `<span class="svc-status st-completed">Closed</span>`;
+    if(s==='pending')   return `<span class="svc-status st-pending">In Progress</span>`;
+    return `<span class="svc-status st-active">Active</span>`;
+  };
+
+  // build unique MAIN service names for dropdown
+  const svcNames=[...new Set((svcs||[]).map(s=>s.service_name).filter(Boolean))];
+
+  body.innerHTML=`
+    <!-- FILTER BAR -->
+    <div style="display:flex;align-items:flex-end;gap:10px;margin-bottom:18px;flex-wrap:wrap">
+
+      <!-- service cdd -->
+      <div style="display:flex;flex-direction:column;gap:5px;min-width:180px">
+        <span style="font-size:10px;font-weight:700;letter-spacing:.07em;color:var(--text-3);text-transform:uppercase;padding-left:2px"><i class="ti ti-briefcase" style="margin-right:4px"></i>Service</span>
+        <div class="cdd" id="cdd_cdFilter" style="width:180px">
+          <div class="cdd-trigger" onclick="toggleCdd('cdd_cdFilter')" style="height:38px;min-height:38px" tabindex="0">
+            <span id="cdd_cdFilter_lbl" style="font-size:12px">All Services</span>
+            <i class="ti ti-chevron-down" style="margin-left:auto;font-size:11px;opacity:.5;transition:transform .2s"></i>
+          </div>
+          <div class="cdd-menu">
+            <div class="cdd-opt ${!svcNames.length?'':'selected'}" data-value="" onclick="cdSetFilter('')">All Services</div>
+            ${svcNames.map(n=>`<div class="cdd-opt" data-value="${n.toLowerCase()}" onclick="cdSetFilter('${n.toLowerCase()}','${n}')">${n}</div>`).join('')}
+          </div>
+          <input type="hidden" id="cdFilterName" value="">
+        </div>
+      </div>
+
+      <!-- period cdd -->
+      <div style="display:flex;flex-direction:column;gap:5px;min-width:170px">
+        <span style="font-size:10px;font-weight:700;letter-spacing:.07em;color:var(--text-3);text-transform:uppercase;padding-left:2px"><i class="ti ti-calendar" style="margin-right:4px"></i>Period</span>
+        <div class="cdd" id="cdd_cdPeriod" style="width:170px">
+          <div class="cdd-trigger" onclick="toggleCdd('cdd_cdPeriod')" style="height:38px;min-height:38px" tabindex="0">
+            <span id="cdd_cdPeriod_lbl" style="font-size:12px">All Time</span>
+            <i class="ti ti-chevron-down" style="margin-left:auto;font-size:11px;opacity:.5;transition:transform .2s"></i>
+          </div>
+          <div class="cdd-menu">
+            <div class="cdd-opt selected" data-value="0" onclick="cdSetDateRange(0)">All Time</div>
+            <div class="cdd-opt" data-value="1" onclick="cdSetDateRange(1)">This Month</div>
+            <div class="cdd-opt" data-value="2" onclick="cdSetDateRange(2)">Last Month</div>
+            <div class="cdd-opt" data-value="3" onclick="cdSetDateRange(3)">This Quarter</div>
+            <div class="cdd-opt" data-value="4" onclick="cdSetDateRange(4)">This Year</div>
+            <div class="cdd-opt" data-value="5" onclick="cdSetDateRange(5)" style="border-top:1px solid var(--border);margin-top:4px;padding-top:10px"><i class="ti ti-adjustments-horizontal" style="margin-right:6px;opacity:.6"></i>Custom Range…</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- custom date range pickers -->
+      <div id="cdCustomRange" style="display:none;flex-direction:column;gap:5px">
+        <span style="font-size:10px;font-weight:700;letter-spacing:.07em;color:var(--text-3);text-transform:uppercase;padding-left:2px">Date Range</span>
+        <div style="display:flex;align-items:center;gap:8px">
+          <!-- FROM picker -->
+          <div class="cdp-wrap">
+            <div class="cdp-trigger" id="cdp_trigger_cdp_from" onclick="cdpOpen('cdp_from')">
+              <i class="ti ti-calendar cdp-icon"></i>
+              <span class="cdp-display" id="cdp_display_cdp_from">From</span>
+              <i class="ti ti-x cdp-clear" onclick="cdpClear('cdp_from',event)" title="Clear"></i>
+            </div>
+            <div class="cdp-popup" id="cdp_popup_cdp_from"></div>
+          </div>
+          <span style="color:var(--text-3);font-size:14px">→</span>
+          <!-- TO picker -->
+          <div class="cdp-wrap">
+            <div class="cdp-trigger" id="cdp_trigger_cdp_to" onclick="cdpOpen('cdp_to')">
+              <i class="ti ti-calendar cdp-icon"></i>
+              <span class="cdp-display" id="cdp_display_cdp_to">To</span>
+              <i class="ti ti-x cdp-clear" onclick="cdpClear('cdp_to',event)" title="Clear"></i>
+            </div>
+            <div class="cdp-popup" id="cdp_popup_cdp_to"></div>
+          </div>
+        </div>
+      </div>
+      <input type="hidden" id="cdFilterFromH">
+      <input type="hidden" id="cdFilterToH">
+
+      <div style="flex:1"></div>
+      <div style="align-self:flex-end">
+        <button class="btn btn-gold" style="padding:0 18px;height:38px;font-size:12px;white-space:nowrap" onclick="openAddSvcForm()"><i class="ti ti-plus"></i> Add Service</button>
+      </div>
+    </div>
+
+    <!-- SERVICES TABLE -->
+    <div class="card" style="margin-bottom:18px;padding:0;overflow:hidden">
+      ${!(svcs||[]).length?`<div class="empty" style="padding:32px"><i class="ti ti-briefcase"></i><p>No services yet</p></div>`:`
+      <div style="overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none" class="cd-tbl-wrap">
+        <table id="cdSvcTable" style="width:100%;table-layout:auto">
+          <thead><tr>
+            <th>Service</th>
+            <th>Sub-Service</th>
+            <th>Status</th>
+            <th>Start</th>
+            <th>Deadline</th>
+            <th style="text-align:right">Fee</th>
+            <th style="text-align:right">Paid</th>
+            <th style="text-align:right">Balance</th>
+            <th style="text-align:center;width:44px">Docs</th>
+            <th style="width:110px"></th>
+          </tr></thead>
+          <tbody>${(svcs||[]).map(s=>{
+            const fees=Number(s.fees||0);
+            const paid=paidMap[s.id]||0;
+            const bal=fees-paid;
+            const cnt=docCount[s.id]||0;
+            const overdue=s.submission_date&&new Date(s.submission_date)<new Date()&&s.status!=='completed';
+            const svcLabel=(s.custom_name||s.service_name||'').replace(/'/g,"\\'");
+            return `<tr data-name="${(s.service_name||'').toLowerCase()}" data-start="${s.start_date||''}">
+              <td><div style="font-weight:700;font-size:13px;white-space:nowrap">${s.service_name||'—'}</div></td>
+              <td style="font-size:12px;color:var(--text-2)">${s.custom_name||'—'}</td>
+              <td>${statusBadge(s.status)}</td>
+              <td style="font-size:12px;color:var(--text-2);white-space:nowrap">${fmtD(s.start_date)}</td>
+              <td style="font-size:12px;color:${overdue?'var(--gold)':'var(--text-2)'};white-space:nowrap">${fmtD(s.submission_date)}</td>
+              <td style="text-align:right;font-family:'Syne',sans-serif;font-weight:700;color:var(--text-1);font-size:12px;white-space:nowrap">${fees?fmtAED(fees):'—'}</td>
+              <td style="text-align:right;font-size:12px;color:var(--green-l);font-weight:600;white-space:nowrap">${paid?fmtAED(paid):'—'}</td>
+              <td style="text-align:right;font-size:12px;font-weight:700;white-space:nowrap;color:${bal>0?'var(--gold)':bal===0&&fees>0?'var(--green-l)':'var(--text-3)'}">${fees?(bal>0?fmtAED(bal):'<span style="color:var(--green-l)">Paid ✓</span>'):'—'}</td>
+              <td style="text-align:center">
+                <button onclick="openDocPanel('${s.id}','${svcLabel}','${s.service_name||''}')" style="position:relative;width:34px;height:34px;border-radius:9px;background:${cnt?'rgba(2,179,106,.12)':'rgba(255,255,255,.04)'};border:1px solid ${cnt?'rgba(2,179,106,.25)':'var(--border)'};color:${cnt?'var(--green-l)':'var(--text-3)'};cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:15px;transition:all .2s" title="View Documents">
+                  <i class="ti ti-files"></i>
+                  ${cnt?`<span style="position:absolute;top:-5px;right:-5px;width:16px;height:16px;border-radius:50%;background:var(--green);color:#fff;font-size:9px;font-weight:800;display:flex;align-items:center;justify-content:center">${cnt}</span>`:''}
+                </button>
+              </td>
+              <td><div style="display:flex;gap:5px;justify-content:flex-end">
+                <button onclick="quickUploadForSvc('${s.id}','${svcLabel}')" style="width:30px;height:30px;border-radius:7px;background:rgba(94,207,160,.07);border:1px solid rgba(94,207,160,.15);color:var(--green-l);cursor:pointer;display:flex;align-items:center;justify-content:center" title="Upload Document"><i class="ti ti-cloud-upload"></i></button>
+                <button onclick="openEditInline('${s.id}')" style="width:30px;height:30px;border-radius:7px;background:rgba(201,168,76,.07);border:1px solid rgba(201,168,76,.15);color:var(--gold-l);cursor:pointer;display:flex;align-items:center;justify-content:center" title="Edit"><i class="ti ti-edit"></i></button>
+                <button onclick="deleteSvc('${s.id}')" style="width:30px;height:30px;border-radius:7px;background:rgba(239,68,68,.07);border:1px solid rgba(239,68,68,.15);color:#fca5a5;cursor:pointer;display:flex;align-items:center;justify-content:center" title="Delete"><i class="ti ti-trash"></i></button>
+              </div></td>
+            </tr>`;
+          }).join('')}
+          </tbody>
+        </table>
+      </div>`}
+    </div>
+
+    <!-- ADD SERVICE FORM (hidden) -->
+    <div class="card" id="addSvcFormCard" style="display:none;margin-bottom:18px">
+      <div class="card-title"><i class="ti ti-plus"></i> Add Service</div>
+      ${addSvcFormHtml()}
+    </div>`;
+
+  // store docs for the panel
+  window._cdDocs=docs||[];
+  window._cdSvcs=svcs||[];
+}
+
+function openAddSvcForm(){
+  const card=document.getElementById('addSvcFormCard');
+  if(card.style.display==='none'||!card.style.display){
+    card.style.display='block';
+    card.style.opacity='0';card.style.transform='translateY(10px)';card.style.transition='opacity .25s ease,transform .25s ease';
+    requestAnimationFrame(()=>{card.style.opacity='1';card.style.transform='translateY(0)';});
+    card.scrollIntoView({behavior:'smooth',block:'nearest'});
+  } else {
+    closeAddSvcForm();
+  }
+}
+function closeAddSvcForm(){
+  const card=document.getElementById('addSvcFormCard');
+  if(!card||card.style.display==='none') return;
+  card.style.transition='opacity .22s ease,transform .22s ease';
+  card.style.opacity='0';card.style.transform='translateY(8px)';
+  setTimeout(()=>{card.style.display='none';card.style.opacity='';card.style.transform='';},230);
+}
+
+function closeClientDetail(){
+  closeAddSvcForm();
+  closeDocPanel();
+  document.getElementById('clientDetailView').style.display='none';
+  document.getElementById('clientsListView').style.display='block';
+  currentClientId=null;
+}
+
+function cdSetDateRange(idx){
+  const labels=['All Time','This Month','Last Month','This Quarter','This Year','Custom Range'];
+  const now=new Date();
+  const pad=n=>String(n).padStart(2,'0');
+  const ymd=d=>`${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`;
+  let from='',to='';
+  if(idx===1){from=ymd(new Date(now.getFullYear(),now.getMonth(),1));to=ymd(new Date(now.getFullYear(),now.getMonth()+1,0));}
+  else if(idx===2){from=ymd(new Date(now.getFullYear(),now.getMonth()-1,1));to=ymd(new Date(now.getFullYear(),now.getMonth(),0));}
+  else if(idx===3){const q=Math.floor(now.getMonth()/3);from=ymd(new Date(now.getFullYear(),q*3,1));to=ymd(new Date(now.getFullYear(),q*3+3,0));}
+  else if(idx===4){from=`${now.getFullYear()}-01-01`;to=`${now.getFullYear()}-12-31`;}
+  // update cdd label + selected state
+  const lbl=document.getElementById('cdd_cdPeriod_lbl');
+  if(lbl) lbl.textContent=labels[idx]||'All Time';
+  const cdd=document.getElementById('cdd_cdPeriod');
+  if(cdd){cdd.querySelectorAll('.cdd-opt').forEach(o=>o.classList.toggle('selected',o.dataset.value===String(idx)));cdd.classList.remove('open');}
+  // show/hide custom range inputs
+  const cr=document.getElementById('cdCustomRange');
+  if(cr) cr.style.display=idx===5?'flex':'none';
+  if(idx===5){
+    if(!_cdp['cdp_from']) cdpInit('cdp_from','From');
+    if(!_cdp['cdp_to'])   cdpInit('cdp_to','To');
+  }
+  if(idx!==5){
+    const fh=document.getElementById('cdFilterFromH');
+    const th=document.getElementById('cdFilterToH');
+    if(fh) fh.value=from; if(th) th.value=to;
+    cdFilterTable();
+  }
+}
+
+/* ── CUSTOM DATE PICKER ── */
+const _cdp={};
+function cdpInit(id,placeholder,onChange){
+  _cdp[id]={value:null,year:new Date().getFullYear(),month:new Date().getMonth(),placeholder,onChange:onChange||null};
+}
+function cdpOpen(id){
+  Object.keys(_cdp).forEach(k=>{ if(k!==id){ const p=document.getElementById('cdp_popup_'+k); if(p) p.classList.remove('open'); } });
+  const p=document.getElementById('cdp_popup_'+id);
+  if(!p) return;
+  p.classList.toggle('open');
+  if(p.classList.contains('open')) cdpRender(id);
+}
+function cdpRender(id){
+  const s=_cdp[id]; if(!s) return;
+  const popup=document.getElementById('cdp_popup_'+id); if(!popup) return;
+  const months=['January','February','March','April','May','June','July','August','September','October','November','December'];
+  const today=new Date(); const ty=today.getFullYear(),tm=today.getMonth(),td=today.getDate();
+  const first=new Date(s.year,s.month,1).getDay(); // 0=Sun
+  const startOffset=(first===0?6:first-1); // Mon-start
+  const daysInMonth=new Date(s.year,s.month+1,0).getDate();
+  const selY=s.value?parseInt(s.value.slice(0,4)):null;
+  const selM=s.value?parseInt(s.value.slice(5,7))-1:null;
+  const selD=s.value?parseInt(s.value.slice(8,10)):null;
+  // range highlight for from/to pair
+  const fromVal=_cdp['cdp_from']?.value||null;
+  const toVal=_cdp['cdp_to']?.value||null;
+  let days='';
+  for(let i=0;i<startOffset;i++) days+=`<div class="cdp-day empty"></div>`;
+  for(let d=1;d<=daysInMonth;d++){
+    const dateStr=`${s.year}-${String(s.month+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
+    const isToday=s.year===ty&&s.month===tm&&d===td;
+    const isSel=selY===s.year&&selM===s.month&&selD===d;
+    const inRange=fromVal&&toVal&&dateStr>fromVal&&dateStr<toVal;
+    const isStart=fromVal&&dateStr===fromVal;
+    const isEnd=toVal&&dateStr===toVal;
+    const isDisabled=s.maxDate&&dateStr>s.maxDate;
+    let cls='cdp-day';
+    if(isDisabled) cls+=' cdp-disabled';
+    else if(isToday) cls+=' today';
+    if(isSel||isStart) cls+=' range-start';
+    else if(isEnd) cls+=' range-end';
+    else if(inRange) cls+=' in-range';
+    days+=isDisabled
+      ?`<div class="${cls}" style="opacity:.22;cursor:not-allowed;pointer-events:none">${d}</div>`
+      :`<div class="${cls}" onclick="cdpSelect('${id}','${dateStr}')">${d}</div>`;
+  }
+  popup.innerHTML=`
+    <div class="cdp-nav">
+      <button class="cdp-nav-btn" onclick="cdpPrev('${id}')"><i class="ti ti-chevron-left"></i></button>
+      <span class="cdp-month-label">${months[s.month]} ${s.year}</span>
+      <button class="cdp-nav-btn" onclick="cdpNext('${id}')"><i class="ti ti-chevron-right"></i></button>
+    </div>
+    <div class="cdp-days-header">
+      ${['Mo','Tu','We','Th','Fr','Sa','Su'].map(d=>`<div class="cdp-day-name">${d}</div>`).join('')}
+    </div>
+    <div class="cdp-days">${days}</div>`;
+}
+function cdpPrev(id){const s=_cdp[id];if(!s)return;s.month--;if(s.month<0){s.month=11;s.year--;}cdpRender(id);}
+function cdpNext(id){const s=_cdp[id];if(!s)return;const t=new Date();if(s.maxDate&&s.year===t.getFullYear()&&s.month===t.getMonth())return;s.month++;if(s.month>11){s.month=0;s.year++;}cdpRender(id);}
+function cdpSelect(id,dateStr){
+  const s=_cdp[id];if(!s)return;
+  if(s.maxDate&&dateStr>s.maxDate)return;
+  s.value=dateStr;
+  s.year=parseInt(dateStr.slice(0,4));
+  s.month=parseInt(dateStr.slice(5,7))-1;
+  // update trigger display
+  const disp=document.getElementById('cdp_display_'+id);
+  const trigger=document.getElementById('cdp_trigger_'+id);
+  if(disp){const dt=new Date(dateStr);disp.textContent=dt.toLocaleDateString('en-AE',{day:'numeric',month:'short',year:'numeric'});}
+  if(trigger) trigger.classList.add('has-val');
+  // close popup
+  const p=document.getElementById('cdp_popup_'+id); if(p) p.classList.remove('open');
+  // also re-render the other to show range
+  const otherId=id==='cdp_from'?'cdp_to':'cdp_from';
+  const otherP=document.getElementById('cdp_popup_'+otherId);
+  if(otherP&&otherP.classList.contains('open')) cdpRender(otherId);
+  // update hidden inputs and filter
+  const fh=document.getElementById('cdFilterFromH'),th=document.getElementById('cdFilterToH');
+  if(fh) fh.value=_cdp['cdp_from']?.value||'';
+  if(th) th.value=_cdp['cdp_to']?.value||'';
+  if(s.onChange) s.onChange(dateStr);
+  cdFilterTable();
+}
+function cdpClear(id,e){
+  e.stopPropagation();
+  const s=_cdp[id];if(!s)return;
+  s.value=null;
+  const disp=document.getElementById('cdp_display_'+id);
+  const trigger=document.getElementById('cdp_trigger_'+id);
+  if(disp) disp.textContent=s.placeholder||'Select date';
+  if(trigger) trigger.classList.remove('has-val');
+  const fh=document.getElementById('cdFilterFromH'),th=document.getElementById('cdFilterToH');
+  if(fh) fh.value=_cdp['cdp_from']?.value||'';
+  if(th) th.value=_cdp['cdp_to']?.value||'';
+  cdFilterTable();
+}
+document.addEventListener('click',e=>{
+  if(!e.target.closest('.cdp-wrap')) document.querySelectorAll('.cdp-popup.open').forEach(p=>p.classList.remove('open'));
+},{capture:true});
+
+function cdSetFilter(value, label){
+  const lbl=document.getElementById('cdd_cdFilter_lbl');
+  const inp=document.getElementById('cdFilterName');
+  const cdd=document.getElementById('cdd_cdFilter');
+  if(lbl) lbl.textContent=label||'All Services';
+  if(inp) inp.value=value||'';
+  if(cdd){ cdd.querySelectorAll('.cdd-opt').forEach(o=>o.classList.toggle('selected',o.dataset.value===(value||''))); cdd.classList.remove('open'); }
+  cdFilterTable();
+}
+
+function cdFilterTable(){
+  const q=(document.getElementById('cdFilterName')||{}).value?.toLowerCase()||'';
+  // use visible custom inputs if shown, otherwise use hidden preset values
+  const customShown=document.getElementById('cdCustomRange')?.style.display==='flex';
+  const from=customShown?(document.getElementById('cdFilterFrom')||{}).value||'':(document.getElementById('cdFilterFromH')||{}).value||'';
+  const to=customShown?(document.getElementById('cdFilterTo')||{}).value||'':(document.getElementById('cdFilterToH')||{}).value||'';
+  const rows=document.querySelectorAll('#cdSvcTable tbody tr');
+  rows.forEach(r=>{
+    const name=r.dataset.name||'';
+    const start=r.dataset.start||'';
+    const matchQ=!q||name.includes(q);
+    const matchFrom=!from||start>=from;
+    const matchTo=!to||start<=to;
+    r.style.display=(matchQ&&matchFrom&&matchTo)?'':'none';
+  });
+}
+let _upFile=null;
+
+function quickUploadForSvc(svcId, svcName){
+  _upFile=null;
+  document.getElementById('upSvcId').value=svcId||'';
+  document.getElementById('upSvcLabel').textContent=svcName?`For: ${svcName}`:'';
+  document.getElementById('upFileName').textContent='Click or drag a file here';
+  document.getElementById('upNotes').value='';
+  document.getElementById('upDropZone').style.borderColor='';
+  const ov=document.getElementById('upOverlay');
+  ov.style.opacity='1'; ov.style.pointerEvents='all';
+  document.getElementById('upPanel').style.transform='translateX(0)';
+}
+
+function closeUploadPanel(){
+  const ov=document.getElementById('upOverlay');
+  ov.style.opacity='0'; ov.style.pointerEvents='none';
+  document.getElementById('upPanel').style.transform='translateX(100%)';
+}
+
+function _upSetFile(f){
+  _upFile=f;
+  document.getElementById('upFileName').textContent=f.name;
+  document.getElementById('upDropZone').style.borderColor='var(--green)';
+  // show rename field, pre-fill with name without extension
+  const lastDot=f.name.lastIndexOf('.');
+  const base=lastDot>0?f.name.slice(0,lastDot):f.name;
+  const ext=lastDot>0?f.name.slice(lastDot):'';
+  document.getElementById('upRename').value=base;
+  document.getElementById('upRenameExt').textContent=ext;
+  document.getElementById('upRenameRow').style.display='block';
+}
+
+function upFileChosen(input){
+  if(input.files[0]) _upSetFile(input.files[0]);
+}
+
+function upHandleDrop(e){
+  e.preventDefault();
+  const f=e.dataTransfer.files[0];
+  if(f) _upSetFile(f);
+}
+
+async function upSubmit(btn){
+  if(!_upFile){ toast('Please select a file','err'); return; }
+  if(!currentClientId){ toast('No client selected','err'); return; }
+  btn.disabled=true; btn.innerHTML='<i class="ti ti-loader"></i> Uploading…';
+  const svcId=document.getElementById('upSvcId').value||null;
+  const notes=document.getElementById('upNotes').value.trim()||null;
+  // build final filename from rename field + original extension
+  const lastDot=_upFile.name.lastIndexOf('.');
+  const ext=lastDot>0?_upFile.name.slice(lastDot):'';
+  const renamed=(document.getElementById('upRename').value.trim()||_upFile.name.replace(/\.[^.]+$/,''))+ext;
+  const path=`${currentClientId}/${Date.now()}_${renamed}`;
+  const {error:upErr}=await sb.storage.from('client-files').upload(path,_upFile,{upsert:false});
+  if(upErr){ toast(upErr.message,'err'); btn.disabled=false; btn.innerHTML='<i class="ti ti-upload"></i> Upload'; return; }
+  const {data:{publicUrl}}=sb.storage.from('client-files').getPublicUrl(path);
+  const {error:dbErr}=await sb.from('documents').insert({client_id:currentClientId,service_id:svcId||null,file_name:renamed,file_url:publicUrl,notes});
+  if(dbErr){ toast(dbErr.message,'err'); btn.disabled=false; btn.innerHTML='<i class="ti ti-upload"></i> Upload'; return; }
+  toast('Document uploaded!');
+  btn.disabled=false; btn.innerHTML='<i class="ti ti-upload"></i> Upload';
+  closeUploadPanel();
+  await openClientDetail(currentClientId);
+}
+
+async function openEditInline(svcId){
+  // open the existing svcPanel and populate it
+  const c=clients.find(x=>x.id===currentClientId)||{};
+  document.getElementById('phTitle').textContent=c.full_name||'Client';
+  document.getElementById('overlay').classList.add('open');
+  document.getElementById('svcPanel').classList.add('open');
+  await openEdit(svcId);
+}
+
+function cdResetFilter(){
+  cdSetDateRange(0);
+  cdSetFilter('','All Services');
+  if(_cdp['cdp_from']){_cdp['cdp_from'].value=null;const d=document.getElementById('cdp_display_cdp_from');const tr=document.getElementById('cdp_trigger_cdp_from');if(d)d.textContent='From';if(tr)tr.classList.remove('has-val');}
+  if(_cdp['cdp_to'])  {_cdp['cdp_to'].value=null;  const d=document.getElementById('cdp_display_cdp_to');  const tr=document.getElementById('cdp_trigger_cdp_to');  if(d)d.textContent='To';  if(tr)tr.classList.remove('has-val');}
+}
+
+function openDocPanel(svcId, svcName, subName){
+  const extIco=name=>{const e=(name||'').split('.').pop().toLowerCase();return e==='pdf'?'ti-file-type-pdf':['xlsx','xls','csv'].includes(e)?'ti-file-type-xls':['doc','docx'].includes(e)?'ti-file-type-doc':['jpg','jpeg','png','webp','gif'].includes(e)?'ti-photo':'ti-file';};
+  const fmtD=d=>d?new Date(d).toLocaleDateString('en-AE',{day:'numeric',month:'short',year:'numeric'}):'—';
+  document.getElementById('dpSvcName').textContent=svcName||'Documents';
+  document.getElementById('dpSvcSub').textContent=subName||'';
+  const uploadBtn=document.getElementById('dpUploadBtn');
+  uploadBtn.onclick=()=>{ closeDocPanel(); quickUploadForSvc(svcId, svcName); };
+  const docs=(window._cdDocs||[]).filter(d=>d.service_id===svcId);
+  const fmtDateTime=d=>{
+    if(!d) return '—';
+    const dt=new Date(d);
+    return dt.toLocaleDateString('en-AE',{day:'numeric',month:'short',year:'numeric'})
+      +' · '+dt.toLocaleTimeString('en-AE',{hour:'2-digit',minute:'2-digit',second:'2-digit',hour12:false});
+  };
+  const body=document.getElementById('dpBody');
+  if(!docs.length){
+    body.innerHTML=`<div class="empty" style="padding:40px 0"><i class="ti ti-inbox" style="font-size:28px;color:var(--text-3)"></i><p style="color:var(--text-3);margin-top:8px;font-size:13px">No documents for this service</p></div>`;
+  } else {
+    body.innerHTML=`<div style="display:flex;flex-direction:column;gap:10px">${docs.map(d=>`
+      <div style="display:flex;align-items:center;gap:12px;padding:12px 14px;background:rgba(255,255,255,.03);border:1px solid var(--border);border-radius:11px">
+        <div style="width:38px;height:38px;border-radius:10px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:16px;background:rgba(2,179,106,.08);color:var(--green-l)"><i class="ti ${extIco(d.file_name)}"></i></div>
+        <div style="flex:1;min-width:0">
+          <div style="font-size:13px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${d.file_name}</div>
+          <div style="font-size:11px;color:var(--text-3);margin-top:3px;display:flex;align-items:center;gap:6px;flex-wrap:wrap">
+            <i class="ti ti-clock" style="font-size:10px"></i>
+            <span>${fmtDateTime(d.uploaded_at||d.created_at)}</span>
+            ${d.notes?`<span style="color:var(--border)">·</span><em style="color:var(--text-2)">${d.notes}</em>`:''}
+          </div>
+        </div>
+        <div style="display:flex;gap:6px;flex-shrink:0">
+          <button onclick="openDoc('${d.file_url}')" style="width:32px;height:32px;border-radius:8px;background:rgba(2,179,106,.07);border:1px solid rgba(2,179,106,.15);color:var(--green-l);display:flex;align-items:center;justify-content:center;font-size:14px;cursor:pointer" title="Download"><i class="ti ti-download"></i></button>
+          <button onclick="deleteDoc('${d.id}','${d.file_url}')" style="width:32px;height:32px;border-radius:8px;background:rgba(239,68,68,.07);border:1px solid rgba(239,68,68,.15);color:#fca5a5;display:flex;align-items:center;justify-content:center;font-size:14px;cursor:pointer" title="Delete"><i class="ti ti-trash"></i></button>
+        </div>
+      </div>`).join('')}</div>`;
+  }
+  const ov=document.getElementById('docOverlay');
+  ov.style.opacity='1';
+  ov.style.pointerEvents='all';
+  document.getElementById('docPanel').style.transform='translateX(0)';
+}
+
+function closeDocPanel(){
+  const ov=document.getElementById('docOverlay');
+  ov.style.opacity='0';
+  ov.style.pointerEvents='none';
+  document.getElementById('docPanel').style.transform='translateX(100%)';
+}
+
+// ── LEGACY PANEL (kept for edit/add service flow) ──
+async function openPanel(clientId, clientName){
+  currentClientId=clientId;
+  document.getElementById('phTitle').textContent=clientName;
+  document.getElementById('phSub').textContent='Service Management';
+  document.getElementById('overlay').classList.add('open');
+  document.getElementById('svcPanel').classList.add('open');
+  await renderSvcList();
+}
+
+async function renderSvcList(){
+  currentSvcId=null;
+  document.getElementById('phSub').textContent='Service Management';
+  const body=document.getElementById('panelBody');
+  body.innerHTML=`<div class="loading"><i class="ti ti-loader"></i>Loading…</div>`;
+  const {data:svcs}=await sb.from('client_services').select('*').eq('client_id',currentClientId).order('created_at');
+
+  const svcHtml=(svcs||[]).map(s=>{
+    const fees=Number(s.fees||0);
+    return `<div class="svc-item" id="si-${s.id}">
+      <div class="svc-item-head" onclick="toggleSvc('${s.id}')">
+        <div class="svc-item-info">
+          <div class="svc-main">${s.custom_name||s.service_name||'Service'}</div>
+          <div class="svc-sub">${fees>0?fmtAED(fees):'No fee set'}</div>
+        </div>
+        <div style="display:flex;align-items:center;gap:8px">
+          <span class="svc-status st-${s.status||'active'}">${s.status==='completed'?'Closed':s.status==='pending'?'In Progress':'Active'}</span>
+          <i class="ti ti-chevron-down" style="color:var(--text-3);font-size:14px" id="chev-${s.id}"></i>
+        </div>
+      </div>
+      <div class="svc-item-body" id="sib-${s.id}">
+        <div class="svc-meta-grid">
+          <div class="sm"><div class="sm-lbl">Category</div><div class="sm-val" style="font-size:11px">${s.service_name||'—'}</div></div>
+          <div class="sm"><div class="sm-lbl">Accepted</div><div class="sm-val" style="font-size:11px">${fmtDate(s.start_date)}</div></div>
+          <div class="sm"><div class="sm-lbl">Ends</div><div class="sm-val" style="font-size:11px;${s.submission_date&&new Date(s.submission_date)<new Date()&&s.status!=='completed'?'color:var(--gold)':''}">${fmtDate(s.submission_date)}</div></div>
+          <div class="sm"><div class="sm-lbl">Fees</div><div class="sm-val" style="font-size:12px;color:var(--gold-l)">${fmtAED(fees)}</div></div>
+        </div>
+        ${s.notes?`<div style="font-size:12px;color:var(--text-2);background:rgba(255,255,255,.02);border:1px solid var(--border);border-radius:8px;padding:10px;margin-bottom:12px;font-style:italic">${s.notes}</div>`:''}
+        <div id="payarea-${s.id}"><div class="loading" style="padding:14px"><i class="ti ti-loader"></i>Loading payments…</div></div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:12px">
+          <button class="btn btn-gold" style="font-size:12px;padding:8px 14px" onclick="openEdit('${s.id}')"><i class="ti ti-edit"></i> Edit Service</button>
+          <button class="btn btn-danger" style="font-size:12px;padding:8px 14px" onclick="deleteSvc('${s.id}')"><i class="ti ti-trash"></i> Delete</button>
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+
+  body.innerHTML=`
+    <div class="ptabs">
+      <button class="ptab active" id="ptab-list" onclick="switchPtab('list')"><i class="ti ti-list"></i> Services</button>
+      <button class="ptab" id="ptab-add" onclick="switchPtab('add')"><i class="ti ti-plus"></i> Add Service</button>
+    </div>
+
+    <!-- LIST -->
+    <div class="ptab-panel active" id="ptab-panel-list">
+      ${(svcs||[]).length?svcHtml:`<div class="empty"><i class="ti ti-briefcase"></i><p>No services yet — click "Add Service"</p></div>`}
+    </div>
+
+    <!-- ADD -->
+    <div class="ptab-panel" id="ptab-panel-add">
+      ${addSvcFormHtml()}
+    </div>
+  `;
+
+  // Load payments for each service asynchronously
+  for(const s of (svcs||[])){
+    loadPayArea(s.id, currentClientId);
+  }
+}
+
+function addSvcFormHtml(){
+  return `
+    <div class="fg" style="margin-bottom:12px">
+      <div class="f">
+        <label>Main Category *</label>
+        <div class="cdd" id="cdd_ns_main">
+          <div class="cdd-trigger" onclick="toggleCdd('cdd_ns_main')" tabindex="0">
+            <span class="cdd-val placeholder" id="cdd_ns_main_lbl">— Select service category —</span>
+            <i class="ti ti-chevron-down cdd-arrow"></i>
+          </div>
+          <div class="cdd-menu" id="cdd_ns_main_menu">
+            <div class="cdd-opt" data-value="VAT Filing &amp; Compliance" onclick="setCdd('cdd_ns_main','VAT Filing &amp; Compliance','VAT Filing &amp; Compliance');document.getElementById('ns_main').value='VAT Filing &amp; Compliance'"><i class="ti ti-receipt-tax" style="color:#5ECFA0;font-size:15px"></i> VAT Filing &amp; Compliance</div>
+            <div class="cdd-opt" data-value="Corporate Tax Filing" onclick="setCdd('cdd_ns_main','Corporate Tax Filing','Corporate Tax Filing');document.getElementById('ns_main').value='Corporate Tax Filing'"><i class="ti ti-building-bank" style="color:#C9A84C;font-size:15px"></i> Corporate Tax Filing</div>
+            <div class="cdd-opt" data-value="Bookkeeping &amp; Payroll" onclick="setCdd('cdd_ns_main','Bookkeeping &amp; Payroll','Bookkeeping &amp; Payroll');document.getElementById('ns_main').value='Bookkeeping &amp; Payroll'"><i class="ti ti-book" style="color:#93c5fd;font-size:15px"></i> Bookkeeping &amp; Payroll</div>
+            <div class="cdd-opt" data-value="Financial Reporting &amp; Audit" onclick="setCdd('cdd_ns_main','Financial Reporting &amp; Audit','Financial Reporting &amp; Audit');document.getElementById('ns_main').value='Financial Reporting &amp; Audit'"><i class="ti ti-chart-bar" style="color:#fca5a5;font-size:15px"></i> Financial Reporting &amp; Audit</div>
+            <div class="cdd-opt" data-value="Business Advisory" onclick="setCdd('cdd_ns_main','Business Advisory','Business Advisory');document.getElementById('ns_main').value='Business Advisory'"><i class="ti ti-bulb" style="color:#fde68a;font-size:15px"></i> Business Advisory</div>
+            <div class="cdd-opt" data-value="FTA Registration" onclick="setCdd('cdd_ns_main','FTA Registration','FTA Registration');document.getElementById('ns_main').value='FTA Registration'"><i class="ti ti-shield-check" style="color:#86efac;font-size:15px"></i> FTA Registration</div>
+            <div class="cdd-opt" data-value="Zakat Filing" onclick="setCdd('cdd_ns_main','Zakat Filing','Zakat Filing');document.getElementById('ns_main').value='Zakat Filing'"><i class="ti ti-star" style="color:#C9A84C;font-size:15px"></i> Zakat Filing</div>
+            <div class="cdd-opt" data-value="Feasibility Study" onclick="setCdd('cdd_ns_main','Feasibility Study','Feasibility Study');document.getElementById('ns_main').value='Feasibility Study'"><i class="ti ti-chart-dots" style="color:#c4b5fd;font-size:15px"></i> Feasibility Study</div>
+          </div>
+          <input type="hidden" id="ns_main" value="">
+        </div>
+      </div>
+      <div class="f">
+        <label>Sub Category</label>
+        <input list="sub-cats" id="ns_sub" placeholder="e.g. Q1 2025, Monthly, Annual…">
+        <datalist id="sub-cats">
+          <option>Q1 2025</option><option>Q2 2025</option><option>Q3 2025</option><option>Q4 2025</option>
+          <option>Monthly</option><option>Quarterly</option><option>Annual</option>
+          <option>2024 Return</option><option>2025 Return</option>
+        </datalist>
+      </div>
+      <div class="f">
+        <label>Invoice Reference</label>
+        <input type="text" id="ns_invoice_ref" placeholder="e.g. INV-2026-0001" style="font-family:'Syne',sans-serif;font-weight:700;letter-spacing:.04em">
+        <span class="input-hint">Optional — appears on the client's Statement of Account</span>
+      </div>
+      <div class="f">
+        <label>Custom Display Name</label>
+        <input type="text" id="ns_custom" placeholder="e.g. VAT Return Q1 2025">
+        <span class="input-hint">Leave blank to auto-use category name</span>
+      </div>
+      <div class="f">
+        <label>Status</label>
+        <div class="cdd" id="cdd_ns_status">
+          <div class="cdd-trigger" onclick="toggleCdd('cdd_ns_status')" tabindex="0">
+            <span id="cdd_ns_status_lbl">Active</span>
+            <i class="ti ti-chevron-down" style="margin-left:auto;font-size:12px;opacity:.5;transition:transform .2s"></i>
+          </div>
+          <div class="cdd-menu">
+            <div class="cdd-opt" data-value="active"   onclick="setCdd('cdd_ns_status','active','Active')">Active</div>
+            <div class="cdd-opt" data-value="pending"  onclick="setCdd('cdd_ns_status','pending','In Progress')">In Progress</div>
+            <div class="cdd-opt" data-value="completed" onclick="setCdd('cdd_ns_status','completed','Closed')">Closed</div>
+          </div>
+          <input type="hidden" id="ns_status" value="active">
+        </div>
+      </div>
+      <div class="f">
+        <label>Date Accepted / Start *</label>
+        <div class="cdp-wrap" style="width:100%">
+          <div class="cdp-trigger has-val" id="cdp_trigger_ns_start" onclick="cdpOpen('ns_start')" style="width:100%">
+            <i class="ti ti-calendar cdp-icon"></i>
+            <span class="cdp-display" id="cdp_display_ns_start">${new Date().toLocaleDateString('en-AE',{day:'numeric',month:'short',year:'numeric'})}</span>
+            <i class="ti ti-x cdp-clear" onclick="cdpClear('ns_start',event)" title="Clear"></i>
+          </div>
+          <div class="cdp-popup" id="cdp_popup_ns_start"></div>
+        </div>
+        <input type="hidden" id="ns_start" value="${new Date().toISOString().slice(0,10)}">
+      </div>
+      <div class="f">
+        <label>Service End / Deadline</label>
+        <div class="cdp-wrap" style="width:100%">
+          <div class="cdp-trigger" id="cdp_trigger_ns_end" onclick="cdpOpen('ns_end')" style="width:100%">
+            <i class="ti ti-calendar cdp-icon"></i>
+            <span class="cdp-display" id="cdp_display_ns_end">Select date</span>
+            <i class="ti ti-x cdp-clear" onclick="cdpClear('ns_end',event)" title="Clear"></i>
+          </div>
+          <div class="cdp-popup" id="cdp_popup_ns_end"></div>
+        </div>
+        <input type="hidden" id="ns_end" value="">
+      </div>
+      <div class="f">
+        <label>Agreed Fees (AED) *</label>
+        <input type="number" id="ns_fees" placeholder="0" min="0">
+      </div>
+      <div class="f">
+        <label>Initial Payment Received (AED)</label>
+        <input type="number" id="ns_initpay" placeholder="0 — record later if none" min="0">
+        <span class="input-hint">Recorded as Advance Payment</span>
+      </div>
+      <div class="f full">
+        <label>Notes for client</label>
+        <textarea id="ns_notes" placeholder="Visible to client in their portal…"></textarea>
+      </div>
+    </div>
+    <div style="display:flex;gap:10px;flex-wrap:wrap">
+      <button class="btn btn-gold" onclick="addService()"><i class="ti ti-plus"></i> Add Service</button>
+      <button class="btn btn-ghost" onclick="closeAddSvcForm()"><i class="ti ti-x"></i> Cancel</button>
+    </div>
+  `;
+  // init cdp pickers for the form
+  _cdp['ns_start']={value:new Date().toISOString().slice(0,10),year:new Date().getFullYear(),month:new Date().getMonth(),placeholder:'Select date',onChange:v=>{document.getElementById('ns_start').value=v;}};
+  _cdp['ns_end']={value:null,year:new Date().getFullYear(),month:new Date().getMonth(),placeholder:'Select date',onChange:v=>{document.getElementById('ns_end').value=v;}};
+}
+
+async function loadPayArea(svcId, clientId){
+  const el=document.getElementById('payarea-'+svcId);
+  if(!el) return;
+  const {data:pays}=await sb.from('payments').select('*').eq('service_id',svcId).order('payment_date');
+  const {data:s}=await sb.from('client_services').select('fees').eq('id',svcId).single();
+  const fees=Number(s?.fees||0);
+  const paid=(pays||[]).reduce((a,p)=>a+Number(p.amount),0);
+  const bal=fees-paid;
+  const pct=fees>0?Math.min(100,Math.round(paid/fees*100)):0;
+
+  el.innerHTML=`
+    ${fees>0?`<div class="fee-bar">
+      <div class="fee-bar-top"><span class="fee-bar-lbl">Payment Progress</span><span class="fee-bar-val">${pct}%</span></div>
+      <div class="fee-track"><div class="fee-fill" style="width:${pct}%"></div></div>
+      <div class="fee-nums"><span>Paid: ${fmtAED(paid)}</span><span>Balance: <span style="color:${bal<=0?'var(--green-l)':'var(--gold)'}">${fmtAED(Math.max(0,bal))}</span></span></div>
+    </div>`:''}
+    <div class="pay-list">
+      ${(pays||[]).map(p=>payRowHtml(p)).join('')}
+      ${!(pays||[]).length?`<div class="empty" style="padding:14px"><i class="ti ti-receipt-off"></i><p>No payments yet</p></div>`:''}
+    </div>
+    <div class="sec-label" style="font-size:12px;margin-bottom:10px">Record Payment</div>
+    <div class="fg4" style="margin-bottom:10px">
+      <div class="f">
+        <label>Type</label>
+        <div class="cdd" id="cdd_np_type_${svcId}">
+          <div class="cdd-trigger" onclick="toggleCdd('cdd_np_type_${svcId}')" tabindex="0">
+            <span id="cdd_np_type_${svcId}_lbl" style="font-size:12px">Advance</span>
+            <i class="ti ti-chevron-down" style="margin-left:auto;font-size:11px;opacity:.5;transition:transform .2s"></i>
+          </div>
+          <div class="cdd-menu">
+            <div class="cdd-opt selected" data-value="advance"  onclick="setCdd('cdd_np_type_${svcId}','advance','Advance')">Advance</div>
+            <div class="cdd-opt" data-value="second"   onclick="setCdd('cdd_np_type_${svcId}','second','2nd Payment')">2nd Payment</div>
+            <div class="cdd-opt" data-value="final"    onclick="setCdd('cdd_np_type_${svcId}','final','Final')">Final</div>
+            <div class="cdd-opt" data-value="other"    onclick="setCdd('cdd_np_type_${svcId}','other','Other')">Other</div>
+          </div>
+          <input type="hidden" id="np_type_${svcId}" value="advance">
+        </div>
+      </div>
+      <div class="f"><label>Amount (AED)</label><input type="number" id="np_amt_${svcId}" placeholder="0" min="0"></div>
+      <div class="f"><label>Date</label>
+        <div class="cdp-wrap" style="width:100%">
+          <div class="cdp-trigger has-val" id="cdp_trigger_np_date_${svcId}" onclick="cdpOpen('np_date_${svcId}')" style="width:100%">
+            <i class="ti ti-calendar cdp-icon"></i>
+            <span class="cdp-display" id="cdp_display_np_date_${svcId}">${new Date().toLocaleDateString('en-AE',{day:'numeric',month:'short',year:'numeric'})}</span>
+            <i class="ti ti-x cdp-clear" onclick="cdpClear('np_date_${svcId}',event)"></i>
+          </div>
+          <div class="cdp-popup" id="cdp_popup_np_date_${svcId}"></div>
+        </div>
+        <input type="hidden" id="np_date_${svcId}" value="${new Date().toISOString().slice(0,10)}">
+      </div>
+      <div class="f"><label>Notes</label><input type="text" id="np_note_${svcId}" placeholder="Optional"></div>
+    </div>
+    <button class="btn btn-green" style="font-size:12px;padding:8px 14px" onclick="addPayment('${svcId}','${clientId}')"><i class="ti ti-plus"></i> Record Payment</button>
+  `;
+  // init cdp for payment date
+  const today=new Date().toISOString().slice(0,10);
+  _cdp['np_date_'+svcId]={value:today,year:new Date().getFullYear(),month:new Date().getMonth(),placeholder:'Select date',
+    onChange:v=>{const h=document.getElementById('np_date_'+svcId);if(h)h.value=v;}};
+}
+
+function payRowHtml(p){
+  const ico={advance:'pi-advance ti-coins',second:'pi-second ti-cash',final:'pi-final ti-circle-check',other:'pi-other ti-credit-card'}[p.payment_type]||'pi-other ti-credit-card';
+  const [cls,icon]=ico.split(' ');
+  return `<div class="pay-row">
+    <div class="pay-ico ${cls}"><i class="ti ${icon}"></i></div>
+    <div class="pay-info">
+      <div class="pay-type">${p.payment_type} payment</div>
+      <div class="pay-date">${fmtDate(p.payment_date)}</div>
+      ${p.notes?`<div class="pay-note">${p.notes}</div>`:''}
+    </div>
+    <div class="pay-amt">${fmtAED(p.amount)}</div>
+    <button class="pay-del" onclick="delPay('${p.id}','${p.service_id}','${p.client_id}')"><i class="ti ti-trash"></i></button>
+  </div>`;
+}
+
+function toggleSvc(id){
+  const body=document.getElementById('sib-'+id);
+  const chev=document.getElementById('chev-'+id);
+  const open=body.classList.toggle('open');
+  chev.style.transform=open?'rotate(180deg)':'';
+}
+
+function switchPtab(name){
+  document.querySelectorAll('.ptab').forEach(t=>t.classList.remove('active'));
+  document.querySelectorAll('.ptab-panel').forEach(p=>p.classList.remove('active'));
+  document.getElementById('ptab-'+name).classList.add('active');
+  document.getElementById('ptab-panel-'+name).classList.add('active');
+}
+
+// ── ADD SERVICE ──
+async function addService(){
+  const main=document.getElementById('ns_main').value.trim();
+  const sub=document.getElementById('ns_sub').value.trim()||null;
+  const custom=document.getElementById('ns_custom').value.trim()||null;
+  const status=document.getElementById('ns_status').value;
+  const start=document.getElementById('ns_start').value||null;
+  const end=document.getElementById('ns_end').value||null;
+  const fees=parseFloat(document.getElementById('ns_fees').value)||0;
+  const initPay=parseFloat(document.getElementById('ns_initpay').value)||0;
+  const notes=document.getElementById('ns_notes').value.trim()||null;
+  const invoiceRef=document.getElementById('ns_invoice_ref').value.trim()||null;
+  if(!main){ toast('Main category required','err'); return; }
+
+  const {data:svc,error}=await sb.from('client_services').insert({
+    client_id:currentClientId,
+    service_name:main,
+    custom_name:custom||(sub?`${main} — ${sub}`:null),
+    start_date:start,
+    submission_date:end,
+    fees,status,notes,
+    invoice_ref:invoiceRef
+  }).select().single();
+  if(error){ toast(error.message,'err'); return; }
+
+  if(initPay>0){
+    await sb.from('payments').insert({
+      service_id:svc.id,client_id:currentClientId,
+      payment_type:'advance',amount:initPay,payment_date:start||new Date().toISOString().slice(0,10)
+    });
+  }
+  toast('Service added!');
+  sb.from('client_services').select('*').then(({data})=>{if(data){soaData.services=data;refreshOpenSOA();}});
+  await loadClients();
+  // if we're in the inline detail view, reload it; otherwise use old panel flow
+  if(document.getElementById('clientDetailView').style.display!=='none'){
+    const card=document.getElementById('addSvcFormCard');
+    if(card) card.style.display='none';
+    await openClientDetail(currentClientId);
+  } else {
+    await renderSvcList();
+  }
+}
+
+// ── EDIT SERVICE ──
+async function openEdit(svcId){
+  currentSvcId=svcId;
+  const {data:s}=await sb.from('client_services').select('*').eq('id',svcId).single();
+  document.getElementById('phSub').textContent='Editing: '+(s.custom_name||s.service_name);
+  const body=document.getElementById('panelBody');
+  body.innerHTML=`
+    <button style="background:none;border:none;color:var(--gold-l);font-size:13px;font-weight:600;cursor:pointer;display:flex;align-items:center;gap:5px;margin-bottom:16px;padding:0" onclick="renderSvcList()">
+      <i class="ti ti-arrow-left"></i> Back
+    </button>
+    <div class="fg" style="margin-bottom:14px">
+      <div class="f">
+        <label>Main Category</label>
+        <input list="ec-main-cats" id="es_main" value="${s.service_name||''}">
+        <datalist id="ec-main-cats">
+          <option>VAT Filing & Compliance</option><option>Corporate Tax Filing</option>
+          <option>Bookkeeping & Payroll</option><option>Financial Reporting & Audit</option>
+          <option>Business Advisory</option><option>FTA Registration</option>
+          <option>Zakat Filing</option><option>Feasibility Study</option>
+        </datalist>
+      </div>
+      <div class="f">
+        <label>Sub Category</label>
+        <input list="ec-sub-cats" id="es_sub" value="">
+        <datalist id="ec-sub-cats">
+          <option>Q1 2025</option><option>Q2 2025</option><option>Q3 2025</option><option>Q4 2025</option>
+          <option>Monthly</option><option>Quarterly</option><option>Annual</option>
+        </datalist>
+      </div>
+      <div class="f">
+        <label>Invoice Reference</label>
+        <input type="text" id="es_invoice_ref" value="${s.invoice_ref||''}" placeholder="e.g. INV-2026-0001" style="font-family:'Syne',sans-serif;font-weight:700;letter-spacing:.04em">
+        <span class="input-hint">Appears on the client's Statement of Account</span>
+      </div>
+      <div class="f">
+        <label>Custom Display Name</label>
+        <input type="text" id="es_custom" value="${s.custom_name||''}">
+      </div>
+      <div class="f">
+        <label>Status</label>
+        <div class="cdd" id="cdd_es_status">
+          <div class="cdd-trigger" onclick="toggleCdd('cdd_es_status')" tabindex="0">
+            <span id="cdd_es_status_lbl" style="font-size:12px">${s.status==='pending'?'In Progress':s.status==='completed'?'Closed':'Active'}</span>
+            <i class="ti ti-chevron-down" style="margin-left:auto;font-size:11px;opacity:.5;transition:transform .2s"></i>
+          </div>
+          <div class="cdd-menu">
+            <div class="cdd-opt ${(s.status||'active')==='active'?'selected':''}" data-value="active"     onclick="setCdd('cdd_es_status','active','Active')">Active</div>
+            <div class="cdd-opt ${s.status==='pending'?'selected':''}"             data-value="pending"   onclick="setCdd('cdd_es_status','pending','In Progress')">In Progress</div>
+            <div class="cdd-opt ${s.status==='completed'?'selected':''}"           data-value="completed" onclick="setCdd('cdd_es_status','completed','Closed')">Closed</div>
+          </div>
+          <input type="hidden" id="es_status" value="${s.status||'active'}">
+        </div>
+      </div>
+      <div class="f">
+        <label>Date Accepted / Start</label>
+        <div class="cdp-wrap" style="width:100%">
+          <div class="cdp-trigger ${s.start_date?'has-val':''}" id="cdp_trigger_es_start" onclick="cdpOpen('es_start')" style="width:100%">
+            <i class="ti ti-calendar cdp-icon"></i>
+            <span class="cdp-display" id="cdp_display_es_start">${s.start_date?new Date(s.start_date).toLocaleDateString('en-AE',{day:'numeric',month:'short',year:'numeric'}):'Select date'}</span>
+            <i class="ti ti-x cdp-clear" onclick="cdpClear('es_start',event)"></i>
+          </div>
+          <div class="cdp-popup" id="cdp_popup_es_start"></div>
+        </div>
+        <input type="hidden" id="es_start" value="${s.start_date||''}">
+      </div>
+      <div class="f">
+        <label>Service End / Deadline</label>
+        <div class="cdp-wrap" style="width:100%">
+          <div class="cdp-trigger ${s.submission_date?'has-val':''}" id="cdp_trigger_es_end" onclick="cdpOpen('es_end')" style="width:100%">
+            <i class="ti ti-calendar cdp-icon"></i>
+            <span class="cdp-display" id="cdp_display_es_end">${s.submission_date?new Date(s.submission_date).toLocaleDateString('en-AE',{day:'numeric',month:'short',year:'numeric'}):'Select date'}</span>
+            <i class="ti ti-x cdp-clear" onclick="cdpClear('es_end',event)"></i>
+          </div>
+          <div class="cdp-popup" id="cdp_popup_es_end"></div>
+        </div>
+        <input type="hidden" id="es_end" value="${s.submission_date||''}">
+      </div>
+      <div class="f">
+        <label>Agreed Fees (AED)</label>
+        <input type="number" id="es_fees" value="${s.fees||0}" min="0">
+      </div>
+      <div class="f full">
+        <label>Notes for client</label>
+        <textarea id="es_notes">${s.notes||''}</textarea>
+      </div>
+    </div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap">
+      <button class="btn btn-gold" onclick="saveService()"><i class="ti ti-device-floppy"></i> Save Changes</button>
+      <button class="btn btn-ghost" onclick="renderSvcList()">Cancel</button>
+    </div>
+  `;
+  // init cdp for edit form
+  const esY=s.start_date?parseInt(s.start_date.slice(0,4)):new Date().getFullYear();
+  const esM=s.start_date?parseInt(s.start_date.slice(5,7))-1:new Date().getMonth();
+  _cdp['es_start']={value:s.start_date||null,year:esY,month:esM,placeholder:'Select date',onChange:v=>{document.getElementById('es_start').value=v;}};
+  const eeY=s.submission_date?parseInt(s.submission_date.slice(0,4)):new Date().getFullYear();
+  const eeM=s.submission_date?parseInt(s.submission_date.slice(5,7))-1:new Date().getMonth();
+  _cdp['es_end']={value:s.submission_date||null,year:eeY,month:eeM,placeholder:'Select date',onChange:v=>{document.getElementById('es_end').value=v;}};
+}
+
+async function saveService(){
+  const main=document.getElementById('es_main').value.trim();
+  const sub=document.getElementById('es_sub').value.trim()||null;
+  const custom=document.getElementById('es_custom').value.trim()||null;
+  const status=document.getElementById('es_status').value;
+  const start=document.getElementById('es_start').value||null;
+  const end=document.getElementById('es_end').value||null;
+  const fees=parseFloat(document.getElementById('es_fees').value)||0;
+  const notes=document.getElementById('es_notes').value.trim()||null;
+  const invoiceRef=document.getElementById('es_invoice_ref').value.trim()||null;
+  if(!main){ toast('Main category required','err'); return; }
+  const {error}=await sb.from('client_services').update({
+    service_name:main,custom_name:custom||(sub?`${main} — ${sub}`:null),
+    start_date:start,submission_date:end,fees,status,notes,invoice_ref:invoiceRef
+  }).eq('id',currentSvcId);
+  if(error){ toast(error.message,'err'); return; }
+  toast('Saved!');
+  await renderSvcList();
+  await loadClients();
+  sb.from('client_services').select('*').then(({data})=>{if(data){soaData.services=data;refreshOpenSOA();}});
+}
+
+async function deleteSvc(svcId){
+  if(!confirm('Delete this service and all its payments?')) return;
+  await sb.from('payments').delete().eq('service_id',svcId);
+  const {error}=await sb.from('client_services').delete().eq('id',svcId);
+  if(error){ toast(error.message,'err'); return; }
+  toast('Service deleted');
+  loadClients();
+  // if in detail view, animate the row out instead of full reload
+  const inDetail=document.getElementById('clientDetailView').style.display!=='none';
+  if(inDetail){
+    const row=document.querySelector(`#cdSvcTable tr[data-svc="${svcId}"]`)||
+              [...document.querySelectorAll('#cdSvcTable tbody tr')].find(r=>r.innerHTML.includes(svcId));
+    if(row){
+      // collapse all cells to zero height cleanly
+      row.querySelectorAll('td').forEach(td=>{
+        td.style.padding='0';
+        td.style.overflow='hidden';
+        td.style.transition='all .32s ease';
+      });
+      row.style.transition='opacity .32s ease, transform .32s ease';
+      row.style.opacity='0';
+      row.style.transform='translateX(24px)';
+      setTimeout(()=>row.remove(),340);
+      return;
+    }
+    await openClientDetail(currentClientId);
+  } else {
+    await renderSvcList();
+  }
+}
+
+// ── PAYMENTS ──
+async function addPayment(svcId, clientId){
+  const type=document.getElementById('np_type_'+svcId).value;
+  const amount=parseFloat(document.getElementById('np_amt_'+svcId).value);
+  const date=document.getElementById('np_date_'+svcId).value;
+  const notes=document.getElementById('np_note_'+svcId)?.value.trim()||null;
+  if(!amount||amount<=0){ toast('Enter a valid amount','err'); return; }
+  const {error}=await sb.from('payments').insert({service_id:svcId,client_id:clientId,payment_type:type,amount,payment_date:date,notes});
+  if(error){ toast(error.message,'err'); return; }
+  toast('Payment recorded!');
+
+  // Auto-close prompt
+  const {data:pays}=await sb.from('payments').select('amount').eq('service_id',svcId);
+  const {data:s}=await sb.from('client_services').select('fees,status').eq('id',svcId).single();
+  const totalPaid=(pays||[]).reduce((a,p)=>a+Number(p.amount),0);
+  if(Number(s?.fees||0)>0 && totalPaid>=Number(s.fees) && s.status!=='completed'){
+    if(confirm(`Fully paid (${fmtAED(totalPaid)}). Mark this service as Closed?`)){
+      await sb.from('client_services').update({status:'completed'}).eq('id',svcId);
+      toast('Marked as Closed ✓');
+    }
+  }
+  await renderSvcList();
+  // Re-open the accordion
+  setTimeout(()=>{ const b=document.getElementById('sib-'+svcId); if(b){b.classList.add('open'); document.getElementById('chev-'+svcId).style.transform='rotate(180deg)';} },100);
+}
+
+async function delPay(payId, svcId){
+  if(!confirm('Delete this payment?')) return;
+  await sb.from('payments').delete().eq('id',payId);
+  toast('Deleted');
+  await renderSvcList();
+  setTimeout(()=>{ const b=document.getElementById('sib-'+svcId); if(b){b.classList.add('open'); document.getElementById('chev-'+svcId).style.transform='rotate(180deg)';} },100);
+}
+
+// ── SOA ──
+let soaData={clients:[],services:[],payments:[]};
+let soaCurrentClient=null;
+
+async function loadSOA(){
+  const el=document.getElementById('soaClientList');
+  el.innerHTML=`<div class="loading"><i class="ti ti-loader"></i>Loading…</div>`;
+  const [{data:svcs},{data:pays}]=await Promise.all([
+    sb.from('client_services').select('*'),
+    sb.from('payments').select('*')
+  ]);
+  soaData.services=svcs||[];
+  soaData.payments=pays||[];
+  soaData.clients=clients; // already loaded global
+
+  // stats
+  const totalPaid=(pays||[]).reduce((s,p)=>s+(parseFloat(p.amount)||0),0);
+  const totalCharged=(svcs||[]).reduce((s,v)=>s+(parseFloat(v.fees)||0),0);
+  document.getElementById('soaTotClients').textContent=clients.length;
+  document.getElementById('soaTotPaid').textContent='AED '+fmtMoney(totalPaid);
+  document.getElementById('soaTotBalance').textContent='AED '+fmtMoney(Math.max(0,totalCharged-totalPaid));
+
+  if(!clients.length){
+    el.innerHTML=`<div class="empty"><i class="ti ti-inbox"></i><p>No clients yet.</p></div>`;
+    return;
+  }
+  el.innerHTML=clients.map(c=>{
+    const cSvcs=(svcs||[]).filter(s=>s.client_id===c.id);
+    const cPays=(pays||[]).filter(p=>p.client_id===c.id);
+    const charged=cSvcs.reduce((s,v)=>s+(parseFloat(v.fees)||0),0);
+    const paid=cPays.reduce((s,p)=>s+(parseFloat(p.amount)||0),0);
+    const balance=Math.max(0,charged-paid);
+    const ini=(c.full_name||'?').split(' ').map(w=>w[0]).join('').toUpperCase().slice(0,2);
+    const statusColor=balance>0?'var(--gold-l)':'var(--green-l)';
+    const statusLabel=balance>0?`AED ${fmtMoney(balance)} due`:'Settled';
+    return `<div onclick="openSOA('${c.id}')" style="display:grid;grid-template-columns:auto 1fr auto auto;align-items:center;gap:14px;padding:14px 16px;border-bottom:1px solid rgba(94,207,160,.05);cursor:pointer;transition:background .15s;border-radius:var(--r-sm)" onmouseover="this.style.background='rgba(201,168,76,.04)'" onmouseout="this.style.background=''">
+      <div class="av" style="background:linear-gradient(135deg,var(--gold-d),var(--gold-l));color:var(--bg)">${ini}</div>
+      <div>
+        <div style="font-weight:600;font-size:13px">${c.full_name||'—'}</div>
+        <div style="font-size:11px;color:var(--text-3);margin-top:2px">${c.company||c.email||'—'} · ${cSvcs.length} service${cSvcs.length!==1?'s':''}</div>
+      </div>
+      <div style="text-align:right;font-size:12px">
+        <div style="color:var(--text-2)">Charged: <strong style="color:var(--text)">AED ${fmtMoney(charged)}</strong></div>
+        <div style="margin-top:2px;color:var(--text-2)">Paid: <strong style="color:var(--green-l)">AED ${fmtMoney(paid)}</strong></div>
+      </div>
+      <div style="text-align:right;min-width:90px">
+        <div style="font-size:13px;font-weight:700;color:${statusColor}">${statusLabel}</div>
+        <i class="ti ti-chevron-right" style="color:var(--text-3);font-size:14px;margin-top:4px;display:block"></i>
+      </div>
+    </div>`;
+  }).join('');
+  refreshOpenSOA();
+}
+
+function fmtMoney(n){
+  return Number(n||0).toLocaleString('en-AE',{minimumFractionDigits:2,maximumFractionDigits:2});
+}
+
+function openSOA(clientId){
+  const c=clients.find(cl=>cl.id===clientId);
+  if(!c) return;
+  soaCurrentClient=c;
+  const cSvcs=soaData.services.filter(s=>s.client_id===clientId);
+  const cPays=soaData.payments.filter(p=>p.client_id===clientId);
+  const charged=cSvcs.reduce((s,v)=>s+(parseFloat(v.fees)||0),0);
+  const paid=cPays.reduce((s,p)=>s+(parseFloat(p.amount)||0),0);
+  const balance=Math.max(0,charged-paid);
+  const ini=(c.full_name||'?').split(' ').map(w=>w[0]).join('').toUpperCase().slice(0,2);
+
+  document.getElementById('soaClientName').textContent=c.full_name||'—';
+  document.getElementById('soaClientSub').textContent=c.company||c.email||'';
+  document.getElementById('soaBillName').textContent=c.full_name||'—';
+  document.getElementById('soaBillCompany').textContent=c.company||'';
+  document.getElementById('soaBillEmail').textContent=c.email||'';
+  document.getElementById('soaSvcCount').textContent=cSvcs.length;
+  document.getElementById('soaTotalCharged').textContent='AED '+fmtMoney(charged);
+  document.getElementById('soaTotalPaidAmt').textContent='AED '+fmtMoney(paid);
+  document.getElementById('soaBalanceDue').textContent='AED '+fmtMoney(balance);
+  document.getElementById('soaIssueDate').textContent=new Date().toLocaleDateString('en-GB',{day:'2-digit',month:'long',year:'numeric'});
+  document.getElementById('soaRef').textContent='SOA-'+(clientId||'').slice(0,6).toUpperCase()+'-'+new Date().getFullYear();
+  document.getElementById('soaSubtotal').textContent='AED '+fmtMoney(charged);
+  document.getElementById('soaPaidRow').textContent='− AED '+fmtMoney(paid);
+  document.getElementById('soaBalRow').textContent='AED '+fmtMoney(balance);
+
+  // Services rows
+  const sTbody=document.getElementById('soaSvcRows');
+  if(!cSvcs.length){
+    sTbody.innerHTML=`<tr><td colspan="6" style="text-align:center;color:var(--text-3);padding:20px">No services found.</td></tr>`;
+  } else {
+    sTbody.innerHTML=cSvcs.map((s,i)=>{
+      const stCls=s.status==='active'?'st-active':s.status==='pending'?'st-pending':'st-completed';
+      const stLbl=s.status==='active'?'Active':s.status==='pending'?'In Progress':'Completed';
+      const invRef=s.invoice_ref||null;
+      return `<tr onclick="openSoaSvcPanel('${s.id}')" style="cursor:pointer" onmouseover="this.style.background='rgba(201,168,76,.04)'" onmouseout="this.style.background=''">
+        <td style="font-family:'Syne',sans-serif;font-size:11px;font-weight:700;color:${invRef?'var(--gold-l)':'var(--text-3)'};letter-spacing:.04em;white-space:nowrap">${invRef||'—'}</td>
+        <td style="font-weight:600;font-size:13px">${s.service_name||'—'}</td>
+        <td style="font-size:12px;color:var(--text-2)">${s.custom_name&&s.custom_name!==s.service_name?s.custom_name:'—'}</td>
+        <td style="font-size:12px;color:var(--text-2)">${fmtDate(s.submission_date)}</td>
+        <td style="font-weight:600;font-size:13px;color:var(--text)">${s.fees?'AED '+fmtMoney(s.fees):'—'}</td>
+        <td><span class="svc-status ${stCls}">${stLbl}</span></td>
+      </tr>`;
+    }).join('');
+  }
+
+  // Payments rows
+  const pTbody=document.getElementById('soaPayRows');
+  if(!cPays.length){
+    pTbody.innerHTML=`<tr><td colspan="5" style="text-align:center;color:var(--text-3);padding:20px">No payments recorded.</td></tr>`;
+  } else {
+    pTbody.innerHTML=cPays.map(p=>{
+      const paidCls=p.status==='paid'?'st-active':p.status==='partial'?'st-pending':'st-completed';
+      const paidLbl=p.status==='paid'?'Paid':p.status==='partial'?'Partial':'Pending';
+      return `<tr>
+        <td style="font-size:12px;color:var(--text-2)">${fmtDate(p.payment_date||p.created_at)}</td>
+        <td style="font-size:13px">${p.description||p.notes||'Payment'}</td>
+        <td style="font-size:12px;color:var(--text-2)">${p.method||'—'}</td>
+        <td style="font-weight:600;color:var(--green-l)">AED ${fmtMoney(p.amount)}</td>
+        <td><span class="svc-status ${paidCls}">${paidLbl}</span></td>
+      </tr>`;
+    }).join('');
+  }
+
+  document.getElementById('soaListView').style.display='none';
+  document.getElementById('soaDetailView').style.display='block';
+}
+
+function refreshOpenSOA(){
+  if(soaCurrentClient&&document.getElementById('soaDetailView').style.display!=='none'){
+    openSOA(soaCurrentClient.id);
+  }
+}
+
+let soaPayFile=null, soaActiveSvcId=null;
+
+function openSoaSvcPanel(svcId){
+  const s=soaData.services.find(x=>x.id===svcId);
+  if(!s) return;
+  soaActiveSvcId=svcId;
+  soaPayFile=null;
+  const c=clients.find(cl=>cl.id===s.client_id);
+  const svcPays=soaData.payments.filter(p=>p.service_id===svcId);
+  const stCls=s.status==='active'?'st-active':s.status==='pending'?'st-pending':'st-completed';
+  const stLbl=s.status==='active'?'Active':s.status==='pending'?'In Progress':'Completed';
+
+  document.getElementById('sspTitle').textContent=s.service_name||'Service';
+  document.getElementById('sspSub').textContent=c?.full_name||'';
+
+  const infoRows=[
+    {icon:'ti-file-invoice',label:'Invoice Ref',val:s.invoice_ref?`<span style="font-family:'Syne',sans-serif;font-weight:700;color:var(--gold-l);letter-spacing:.04em">${s.invoice_ref}</span>`:'<span style="color:var(--text-3)">Not assigned</span>'},
+    {icon:'ti-briefcase',label:'Main Category',val:s.service_name||'—'},
+    {icon:'ti-tag',label:'Sub-Service / Name',val:s.custom_name&&s.custom_name!==s.service_name?s.custom_name:'—'},
+    {icon:'ti-circle-check',label:'Status',val:`<span class="svc-status ${stCls}">${stLbl}</span>`},
+    {icon:'ti-calendar-due',label:'Due Date',val:fmtDate(s.submission_date)||'—'},
+    {icon:'ti-cash',label:'Agreed Fees',val:s.fees>0?`<span style="color:var(--gold-l);font-weight:700">AED ${fmtMoney(s.fees)}</span>`:'—'},
+    {icon:'ti-notes',label:'Notes',val:s.notes||'—'},
+  ].map(r=>`
+    <div style="display:flex;gap:12px;padding:11px 0;border-bottom:1px solid rgba(94,207,160,.06);align-items:flex-start">
+      <div style="width:30px;height:30px;border-radius:8px;background:rgba(201,168,76,.08);color:var(--gold-l);display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0"><i class="ti ${r.icon}"></i></div>
+      <div style="flex:1"><div style="font-size:9.5px;font-weight:700;color:var(--text-3);text-transform:uppercase;letter-spacing:.09em;margin-bottom:2px">${r.label}</div><div style="font-size:13px;color:var(--text)">${r.val}</div></div>
+    </div>`).join('');
+
+  const payList=svcPays.length?svcPays.map(p=>`
+    <div style="padding:12px;background:rgba(2,179,106,.04);border:1px solid rgba(2,179,106,.1);border-radius:var(--r-sm);margin-bottom:8px">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:8px">
+        <div>
+          <div style="font-size:13px;font-weight:600">${p.description||p.notes||'Payment'}</div>
+          <div style="font-size:11px;color:var(--text-3);margin-top:3px">${fmtDate(p.payment_date||p.created_at)} · ${p.method||'—'}</div>
+        </div>
+        <div style="font-size:15px;font-weight:700;color:var(--green-l);white-space:nowrap">AED ${fmtMoney(p.amount)}</div>
+      </div>
+      ${p.doc_url?`<a href="${p.doc_url}" target="_blank" style="display:inline-flex;align-items:center;gap:5px;margin-top:8px;font-size:11px;color:var(--gold-l);text-decoration:none;background:rgba(201,168,76,.08);border:1px solid rgba(201,168,76,.15);border-radius:6px;padding:4px 10px"><i class="ti ti-paperclip"></i>${p.doc_name||'Attachment'}</a>`:''}
+    </div>`).join(''):`<div style="padding:14px;text-align:center;color:var(--text-3);font-size:12px;border:1px dashed rgba(94,207,160,.1);border-radius:var(--r-sm)"><i class="ti ti-cash" style="font-size:18px;display:block;margin-bottom:5px;opacity:.35"></i>No payments yet</div>`;
+
+  const today=new Date().toISOString().slice(0,10);
+  const todayDisp=new Date().toLocaleDateString('en-AE',{day:'numeric',month:'short',year:'numeric'});
+
+  const addPayForm=`
+    <div style="margin-top:6px;padding:16px;background:rgba(201,168,76,.04);border:1px solid rgba(201,168,76,.12);border-radius:var(--r-sm)">
+      <div style="font-size:10px;font-weight:700;color:var(--gold-l);text-transform:uppercase;letter-spacing:.09em;margin-bottom:14px;display:flex;align-items:center;gap:6px"><i class="ti ti-plus"></i> Add Payment</div>
+      <div class="fg" style="margin-bottom:10px">
+        <div class="f"><label>Amount (AED) *</label><input type="number" id="ssp_amount" placeholder="0.00" min="0" step="0.01"></div>
+        <div class="f">
+          <label>Date *</label>
+          <div class="cdp-wrap" style="width:100%">
+            <div class="cdp-trigger has-val" id="cdp_trigger_ssp_date" onclick="cdpOpen('ssp_date')" style="width:100%">
+              <i class="ti ti-calendar cdp-icon"></i>
+              <span class="cdp-display" id="cdp_display_ssp_date">${todayDisp}</span>
+              <i class="ti ti-x cdp-clear" onclick="cdpClear('ssp_date',event)" title="Clear"></i>
+            </div>
+            <div class="cdp-popup" id="cdp_popup_ssp_date"></div>
+          </div>
+          <input type="hidden" id="ssp_date" value="${today}">
+        </div>
+      </div>
+      <div class="fg" style="margin-bottom:10px">
+        <div class="f">
+          <label>Method</label>
+          <div class="cdd" id="cdd_ssp_method">
+            <div class="cdd-trigger" onclick="toggleCdd('cdd_ssp_method')" tabindex="0">
+              <span class="cdd-val placeholder" id="cdd_ssp_method_lbl">— Select method —</span>
+              <i class="ti ti-chevron-down cdd-arrow"></i>
+            </div>
+            <div class="cdd-menu">
+              <div class="cdd-opt" data-value="Bank Transfer" onclick="setCdd('cdd_ssp_method','Bank Transfer','Bank Transfer');document.getElementById('ssp_method').value='Bank Transfer'"><i class="ti ti-building-bank" style="color:var(--gold-l)"></i>Bank Transfer</div>
+              <div class="cdd-opt" data-value="Cash" onclick="setCdd('cdd_ssp_method','Cash','Cash');document.getElementById('ssp_method').value='Cash'"><i class="ti ti-cash" style="color:var(--green-l)"></i>Cash</div>
+              <div class="cdd-opt" data-value="Cheque" onclick="setCdd('cdd_ssp_method','Cheque','Cheque');document.getElementById('ssp_method').value='Cheque'"><i class="ti ti-writing" style="color:var(--text-2)"></i>Cheque</div>
+              <div class="cdd-opt" data-value="Online" onclick="setCdd('cdd_ssp_method','Online','Online');document.getElementById('ssp_method').value='Online'"><i class="ti ti-world" style="color:var(--green-l)"></i>Online</div>
+              <div class="cdd-opt" data-value="Card" onclick="setCdd('cdd_ssp_method','Card','Card');document.getElementById('ssp_method').value='Card'"><i class="ti ti-credit-card" style="color:var(--gold-l)"></i>Card</div>
+            </div>
+            <input type="hidden" id="ssp_method" value="">
+          </div>
+        </div>
+        <div class="f"><label>Description</label><input type="text" id="ssp_desc" placeholder="e.g. Initial deposit"></div>
+      </div>
+      <!-- File attach -->
+      <div style="margin-bottom:12px">
+        <label style="font-size:11px;font-weight:600;color:var(--text-2);display:block;margin-bottom:6px">Attach Receipt / Document</label>
+        <label for="ssp_file" id="ssp_dropzone" style="display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;padding:18px;border:1.5px dashed rgba(201,168,76,.25);border-radius:var(--r-sm);cursor:pointer;transition:all .2s;background:rgba(201,168,76,.03)" onmouseover="this.style.borderColor='rgba(201,168,76,.5)'" onmouseout="this.style.borderColor='rgba(201,168,76,.25)'">
+          <i class="ti ti-cloud-upload" style="font-size:22px;color:var(--gold-l);opacity:.7"></i>
+          <span id="ssp_fname" style="font-size:12px;color:var(--text-3)">PDF, JPG, PNG — click or drag</span>
+        </label>
+        <input type="file" id="ssp_file" accept=".pdf,.jpg,.jpeg,.png,.webp" style="display:none" onchange="soaFileChange(this)">
+      </div>
+      <button class="btn btn-gold" style="width:100%" id="ssp_saveBtn" onclick="saveSoaPayment('${svcId}','${s.client_id}')"><i class="ti ti-device-floppy"></i> Save Payment</button>
+    </div>`;
+
+  document.getElementById('sspBody').innerHTML=`
+    ${infoRows}
+    <div style="margin-top:22px">
+      <div style="font-size:10px;font-weight:700;color:var(--text-3);text-transform:uppercase;letter-spacing:.09em;margin-bottom:10px;display:flex;align-items:center;gap:7px"><i class="ti ti-cash" style="color:var(--green-l)"></i> Payment History</div>
+      <div id="sspPayList">${payList}</div>
+      ${addPayForm}
+    </div>`;
+
+  // init CDP for date picker
+  _cdp['ssp_date']={value:today,year:new Date().getFullYear(),month:new Date().getMonth(),placeholder:'Select date',maxDate:today,onChange:v=>{document.getElementById('ssp_date').value=v;}};
+
+  document.getElementById('soaSvcOverlay').classList.add('open');
+  document.getElementById('soaSvcPanel').classList.add('open');
+}
+
+function soaFileChange(input){
+  soaPayFile=input.files[0]||null;
+  document.getElementById('ssp_fname').textContent=soaPayFile?soaPayFile.name:'PDF, JPG, PNG — click or drag';
+  document.getElementById('ssp_dropzone').style.borderColor=soaPayFile?'rgba(94,207,160,.5)':'rgba(201,168,76,.25)';
+}
+
+async function saveSoaPayment(svcId,clientId){
+  const amount=parseFloat(document.getElementById('ssp_amount').value)||0;
+  const date=document.getElementById('ssp_date').value||null;
+  const method=document.getElementById('ssp_method').value||null;
+  const desc=document.getElementById('ssp_desc').value.trim()||null;
+  if(!amount){ toast('Enter a payment amount','err'); return; }
+
+  const btn=document.getElementById('ssp_saveBtn');
+  btn.disabled=true; btn.innerHTML='<i class="ti ti-loader"></i> Saving…';
+
+  let doc_url=null, doc_name=null;
+  if(soaPayFile){
+    const ext=soaPayFile.name.split('.').pop().toLowerCase();
+    const path=`${clientId}/pay_${Date.now()}.${ext}`;
+    const {error:upErr}=await sb.storage.from('client-files').upload(path,soaPayFile,{upsert:false});
+    if(upErr){ toast(upErr.message,'err'); btn.disabled=false; btn.innerHTML='<i class="ti ti-device-floppy"></i> Save Payment'; return; }
+    const {data:urlData}=sb.storage.from('client-files').getPublicUrl(path);
+    doc_url=urlData.publicUrl;
+    doc_name=soaPayFile.name;
+    await sb.from('documents').insert({client_id:clientId,service_id:svcId,file_name:soaPayFile.name,file_url:doc_url,notes:desc?`Payment receipt: ${desc}`:'Payment receipt',uploaded_at:new Date().toISOString()});
+  }
+
+  const {error}=await sb.from('payments').insert({
+    service_id:svcId,client_id:clientId,
+    payment_type:'payment',amount,
+    payment_date:date,notes:desc,method,
+    doc_url,doc_name
+  });
+  if(error){ toast(error.message,'err'); btn.disabled=false; btn.innerHTML='<i class="ti ti-device-floppy"></i> Save Payment'; return; }
+
+  toast('Payment saved!');
+  soaPayFile=null;
+  // reload SOA data and reopen panel
+  const [{data:svcs},{data:pays}]=await Promise.all([
+    sb.from('client_services').select('*'),
+    sb.from('payments').select('*')
+  ]);
+  soaData.services=svcs||[];
+  soaData.payments=pays||[];
+  openSoaSvcPanel(svcId);
+}
+
+function closeSoaSvcPanel(){
+  document.getElementById('soaSvcOverlay').classList.remove('open');
+  document.getElementById('soaSvcPanel').classList.remove('open');
+}
+
+function closeSoaDetail(){
+  soaCurrentClient=null;
+  document.getElementById('soaDetailView').style.display='none';
+  document.getElementById('soaListView').style.display='block';
+}
+
+function printSOA(){
+  const c=soaCurrentClient;
+  if(!c) return;
+  const clientId=c.id;
+  const cSvcs=soaData.services.filter(s=>s.client_id===clientId);
+  const cPays=soaData.payments.filter(p=>p.client_id===clientId);
+  const charged=cSvcs.reduce((s,v)=>s+(parseFloat(v.fees)||0),0);
+  const paid=cPays.reduce((s,p)=>s+(parseFloat(p.amount)||0),0);
+  const balance=Math.max(0,charged-paid);
+  const issueDate=new Date().toLocaleDateString('en-GB',{day:'2-digit',month:'long',year:'numeric'});
+  const ref='SOA-'+(clientId||'').slice(0,6).toUpperCase()+'-'+new Date().getFullYear();
+
+  const svcRows=cSvcs.map((s,i)=>{
+    const invRef=s.invoice_ref||null;
+    const stColor=s.status==='active'?'#027a48':s.status==='pending'?'#92400e':'#1e3a5f';
+    const stBg=s.status==='active'?'#ecfdf3':s.status==='pending'?'#fffbeb':'#eff6ff';
+    const stLbl=s.status==='active'?'Active':s.status==='pending'?'In Progress':'Completed';
+    return `<tr>
+      <td style="color:${invRef?'#b08020':'#bbb'};font-weight:700;font-size:11px;letter-spacing:.04em;white-space:nowrap">${invRef||'—'}</td>
+      <td style="font-weight:600">${s.service_name||'—'}</td>
+      <td style="color:#666">${s.custom_name&&s.custom_name!==s.service_name?s.custom_name:'—'}</td>
+      <td style="color:#666;white-space:nowrap">${fmtDate(s.submission_date)}</td>
+      <td style="font-weight:700;text-align:right">${s.fees?'AED '+fmtMoney(s.fees):'—'}</td>
+      <td style="text-align:center"><span style="background:${stBg};color:${stColor};border-radius:4px;padding:3px 9px;font-size:10px;font-weight:700;white-space:nowrap">${stLbl}</span></td>
+    </tr>`;
+  }).join('');
+
+  const payRows=cPays.length?cPays.map(p=>{
+    return `<tr>
+      <td style="color:#666;white-space:nowrap">${fmtDate(p.payment_date||p.created_at)}</td>
+      <td>${p.description||p.notes||'Payment'}</td>
+      <td style="color:#666">${p.method||'—'}</td>
+      <td style="color:#027a48;font-weight:700;text-align:right">AED ${fmtMoney(p.amount)}</td>
+      <td style="text-align:center"><span style="background:#ecfdf3;color:#027a48;border-radius:4px;padding:3px 9px;font-size:10px;font-weight:700">Paid</span></td>
+    </tr>`;
+  }).join(''):`<tr><td colspan="5" style="text-align:center;color:#999;padding:20px;font-style:italic">No payments recorded.</td></tr>`;
+
+  const w=window.open('','_blank','width=960,height=800');
+  w.document.write(`<!DOCTYPE html><html><head>
+  <meta charset="UTF-8">
+  <title>SOA — ${c.full_name||''}</title>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <style>
+    *{box-sizing:border-box;margin:0;padding:0}
+    body{font-family:'Inter',sans-serif;background:#f4f4f0;color:#1a1a1a;font-size:13px;line-height:1.6}
+    .page{max-width:820px;margin:30px auto;background:#fff;border-radius:12px;overflow:hidden;box-shadow:0 4px 40px rgba(0,0,0,.1)}
+
+    /* Header band */
+    .hd{background:linear-gradient(135deg,#0a1f0e 0%,#0f2d14 60%,#1a3a10 100%);padding:36px 44px;display:flex;justify-content:space-between;align-items:flex-start}
+    .hd-brand{color:#fff}
+    .hd-brand .wordmark{font-family:'Syne',sans-serif;font-size:32px;font-weight:800;letter-spacing:-.03em;line-height:1}
+    .hd-brand .wordmark span{color:#C9A84C}
+    .hd-brand .tagline{font-size:10.5px;color:rgba(255,255,255,.5);text-transform:uppercase;letter-spacing:.12em;margin-top:5px}
+    .hd-brand .contact{font-size:11px;color:rgba(255,255,255,.45);margin-top:8px;line-height:1.8}
+    .hd-right{text-align:right;color:#fff}
+    .hd-right .doc-title{font-family:'Syne',sans-serif;font-size:20px;font-weight:800;color:#C9A84C;text-transform:uppercase;letter-spacing:.06em;line-height:1}
+    .hd-right .meta{font-size:11px;color:rgba(255,255,255,.5);margin-top:8px;line-height:1.9}
+    .hd-right .meta strong{color:rgba(255,255,255,.8)}
+
+    /* Gold accent bar */
+    .accent-bar{height:4px;background:linear-gradient(90deg,#C9A84C,#E5C97A,#A0732A)}
+
+    /* Body padding */
+    .body{padding:36px 44px}
+
+    /* Bill-to + summary grid */
+    .info-grid{display:grid;grid-template-columns:1fr 1fr;gap:0;margin-bottom:32px;border:1px solid #e8e0d0;border-radius:8px;overflow:hidden}
+    .info-box{padding:20px 22px;background:#fdfcf8}
+    .info-box:first-child{border-right:1px solid #e8e0d0}
+    .info-lbl{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.12em;color:#b08020;margin-bottom:8px}
+    .info-name{font-size:16px;font-weight:700;font-family:'Syne',sans-serif;margin-bottom:3px}
+    .info-sub{font-size:12px;color:#666;line-height:1.7}
+    .sum-row{display:flex;justify-content:space-between;font-size:12px;padding:4px 0;color:#555}
+    .sum-row strong{color:#1a1a1a}
+    .sum-total-row{display:flex;justify-content:space-between;font-size:15px;font-weight:800;font-family:'Syne',sans-serif;margin-top:8px;padding-top:8px;border-top:2px solid #C9A84C}
+    .balance-val{color:${balance>0?'#C9A84C':'#027a48'}}
+
+    /* Section headers */
+    .sec-hd{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:#888;margin:28px 0 12px;display:flex;align-items:center;gap:8px}
+    .sec-hd::after{content:'';flex:1;height:1px;background:#e8e0d0}
+
+    /* Tables */
+    table{width:100%;border-collapse:collapse}
+    thead tr{background:#f8f5ef}
+    th{text-align:left;font-size:9.5px;font-weight:700;text-transform:uppercase;letter-spacing:.09em;color:#999;padding:9px 12px;border-bottom:2px solid #e8e0d0}
+    td{padding:11px 12px;border-bottom:1px solid #f0ebe0;font-size:12px;vertical-align:middle}
+    tr:last-child td{border-bottom:none}
+    tr:nth-child(even) td{background:#fefcf8}
+    th:last-child,td:last-child{text-align:center}
+
+    /* Bottom summary */
+    .totals-wrap{display:flex;justify-content:flex-end;margin-top:28px;padding-top:24px;border-top:1px solid #e8e0d0}
+    .totals{min-width:300px}
+    .tot-row{display:flex;justify-content:space-between;padding:7px 0;border-bottom:1px solid #f0ebe0;font-size:13px;color:#555}
+    .tot-row span:last-child{font-weight:600;color:#1a1a1a}
+    .tot-paid span:last-child{color:#027a48}
+    .tot-final{display:flex;justify-content:space-between;padding:12px 14px;margin-top:8px;background:${balance>0?'#fffbeb':'#ecfdf3'};border-radius:8px;border:1px solid ${balance>0?'#e8c840':'#86efac'}}
+    .tot-final .lbl{font-family:'Syne',sans-serif;font-size:15px;font-weight:800}
+    .tot-final .val{font-family:'Syne',sans-serif;font-size:15px;font-weight:800;color:${balance>0?'#92400e':'#027a48'}}
+
+    /* Footer */
+    .footer{background:#f8f5ef;border-top:1px solid #e8e0d0;padding:18px 44px;display:flex;justify-content:space-between;align-items:center;margin-top:36px}
+    .footer-note{font-size:10.5px;color:#999;max-width:440px;line-height:1.6}
+    .footer-stamp{font-family:'Syne',sans-serif;font-size:11px;font-weight:700;color:#C9A84C;text-align:right;line-height:1.8}
+
+    @media print{
+      @page{margin:10mm;size:A4}
+      body{background:#fff}
+      .page{margin:0;border-radius:0;box-shadow:none}
+    }
+  </style></head><body>
+  <div class="page">
+    <div class="hd">
+      <div class="hd-brand">
+        <div class="wordmark">AHCA<span>.</span></div>
+        <div class="tagline">Al Hasib Certified Accountants</div>
+        <div class="contact">Dubai, UAE<br>+971 54 XXX XXXX · info@ahca.ae</div>
+      </div>
+      <div class="hd-right">
+        <div class="doc-title">Statement of Account</div>
+        <div class="meta">
+          Issued: <strong>${issueDate}</strong><br>
+          Ref: <strong>${ref}</strong>
+        </div>
+      </div>
+    </div>
+    <div class="accent-bar"></div>
+
+    <div class="body">
+      <div class="info-grid">
+        <div class="info-box">
+          <div class="info-lbl">Billed To</div>
+          <div class="info-name">${c.full_name||'—'}</div>
+          <div class="info-sub">${c.company?c.company+'<br>':''}${c.email||''}</div>
+        </div>
+        <div class="info-box">
+          <div class="info-lbl">Account Summary</div>
+          <div class="sum-row"><span>Services</span><strong>${cSvcs.length}</strong></div>
+          <div class="sum-row"><span>Total Charged</span><strong>AED ${fmtMoney(charged)}</strong></div>
+          <div class="sum-row"><span>Total Paid</span><strong style="color:#027a48">AED ${fmtMoney(paid)}</strong></div>
+          <div class="sum-total-row"><span>Balance Due</span><span class="balance-val">AED ${fmtMoney(balance)}</span></div>
+        </div>
+      </div>
+
+      <div class="sec-hd">Services</div>
+      <table>
+        <thead><tr>
+          <th>Invoice Ref</th><th>Service</th><th>Sub-Service</th><th>Due Date</th><th style="text-align:right">Amount (AED)</th><th>Status</th>
+        </tr></thead>
+        <tbody>${svcRows||`<tr><td colspan="7" style="text-align:center;color:#999;padding:20px;font-style:italic">No services.</td></tr>`}</tbody>
+      </table>
+
+      <div class="sec-hd">Payment History</div>
+      <table>
+        <thead><tr><th>Date</th><th>Description</th><th>Method</th><th style="text-align:right">Amount (AED)</th><th>Status</th></tr></thead>
+        <tbody>${payRows}</tbody>
+      </table>
+
+      <div class="totals-wrap">
+        <div class="totals">
+          <div class="tot-row"><span>Subtotal</span><span>AED ${fmtMoney(charged)}</span></div>
+          <div class="tot-row tot-paid"><span>Total Paid</span><span>− AED ${fmtMoney(paid)}</span></div>
+          <div class="tot-final"><span class="lbl">Balance Due</span><span class="val">AED ${fmtMoney(balance)}</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="footer">
+      <div class="footer-note">This statement is generated automatically from the AHCA client portal. For queries contact your assigned accountant or email <strong>info@ahca.ae</strong>.</div>
+      <div class="footer-stamp">AHCA Portal<br>${issueDate}</div>
+    </div>
+  </div>
+  <script>window.onload=()=>{window.print();}<\/script>
+  </body></html>`);
+  w.document.close();
+}
+
+document.getElementById('logoutBtn').addEventListener('click',async()=>{await sb.auth.signOut();window.location.href='login.html'});
+document.querySelectorAll('.nav-a').forEach(a=>{
+  if(a.id==='logoutBtn') return;
+  a.addEventListener('click',function(){document.querySelectorAll('.nav-a').forEach(x=>x.classList.remove('active'));this.classList.add('active')});
+});
+
+// Restore last tab immediately before any async work
+(()=>{
+  const t=localStorage.getItem('ahca_admin_tab');
+  if(t&&document.getElementById('panel-'+t)){
+    document.querySelectorAll('.tab-panel').forEach(p=>p.classList.remove('active'));
+    document.querySelectorAll('.tab').forEach(b=>b.classList.remove('active'));
+    document.querySelectorAll('.nav-a[data-tab]').forEach(a=>a.classList.toggle('active',a.dataset.tab===t));
+    document.getElementById('panel-'+t).classList.add('active');
+    const tabBtn=document.getElementById('tab-'+t);
+    if(tabBtn) tabBtn.classList.add('active');
+  }
+})();
+
+init();
+
+// ── CUSTOM DROPDOWN ──
+function toggleCdd(id){
+  const el=document.getElementById(id);
+  const isOpen=el.classList.contains('open');
+  document.querySelectorAll('.cdd.open').forEach(d=>d.classList.remove('open'));
+  if(!isOpen) el.classList.add('open');
+}
+function setCdd(id,value,label,sub){
+  const el=document.getElementById(id);
+  if(!el) return;
+  // update label — try _lbl first (new pattern), then _val (old pattern)
+  const lblEl=document.getElementById(id+'_lbl')||document.getElementById(id+'_val');
+  if(lblEl){ lblEl.textContent=label; lblEl.classList&&lblEl.classList.toggle('placeholder',!value); }
+  // update hidden input: first look inside the cdd, then fallback map
+  const inner=el.querySelector('input[type="hidden"]');
+  if(inner){ inner.value=value; }
+  else {
+    const hiddenId=id==='cdd_client'?'ud_client':id==='cdd_svc'?'ud_service':'docs_filter';
+    const h=document.getElementById(hiddenId); if(h) h.value=value;
+  }
+  el.querySelectorAll('.cdd-opt').forEach(o=>o.classList.toggle('selected',o.dataset.value===value));
+  el.classList.remove('open');
+  if(id==='cdd_client') loadClientServices();
+  if(id==='cdd_filter') renderDocsList();
+}
+document.addEventListener('click',e=>{
+  if(!e.target.closest('.cdd')) document.querySelectorAll('.cdd.open').forEach(d=>d.classList.remove('open'));
+});
+
+// ── CUSTOM CURSOR + TRAIL ──
+(function(){
+  const cur=document.getElementById('cur'),curR=document.getElementById('curR');
+  if(!cur||!curR||!window.matchMedia('(hover:hover)').matches) return;
+  let mx=0,my=0,rx=0,ry=0,lastTrail=0;
+  document.addEventListener('mousemove',e=>{
+    mx=e.clientX; my=e.clientY;
+    cur.style.transform=`translate(${mx}px,${my}px) translate(-50%,-50%)`;
+    const now=Date.now();
+    if(now-lastTrail>30){
+      lastTrail=now;
+      const dot=document.createElement('div');
+      dot.className='cursor-trail';
+      const s=Math.random()*5+3;
+      dot.style.cssText=`width:${s}px;height:${s}px;left:${mx}px;top:${my}px;opacity:.45`;
+      document.body.appendChild(dot);
+      setTimeout(()=>dot.remove(),550);
+    }
+  },{passive:true});
+  (function ring(){
+    rx+=(mx-rx)*.32; ry+=(my-ry)*.32;
+    curR.style.transform=`translate(${rx}px,${ry}px) translate(-50%,-50%)`;
+    requestAnimationFrame(ring);
+  })();
+})();
+
+// ── FIREFLY PARTICLES ──
+(function(){
+  const canvas=document.getElementById('particleCanvas');
+  if(!canvas||window.matchMedia('(prefers-reduced-motion:reduce)').matches) return;
+  const ctx=canvas.getContext('2d');
+  let W,H;
+  const resize=()=>{W=canvas.width=window.innerWidth;H=canvas.height=window.innerHeight};
+  resize(); window.addEventListener('resize',resize,{passive:true});
+  const isMob=window.innerWidth<768;
+  const COLORS=[[94,207,160],[2,179,106],[1,143,84],[201,168,76],[180,255,210]];
+  const ff=Array.from({length:isMob?40:80},()=>{
+    const ci=Math.random()<.12?3:Math.random()<.08?4:Math.floor(Math.random()*3);
+    return{x:Math.random()*window.innerWidth,y:Math.random()*window.innerHeight,vx:(Math.random()-.5)*.28,vy:(Math.random()-.5)*.28,r:Math.random()*1.8+.6,col:COLORS[ci],phase:Math.random()*Math.PI*2,speed:Math.random()*.01+.006,gR:Math.random()*7+4};
+  });
+  (function draw(){
+    ctx.clearRect(0,0,W,H);
+    ff.forEach(f=>{
+      f.phase+=f.speed; f.x+=f.vx+Math.sin(f.phase*.7)*.14; f.y+=f.vy+Math.cos(f.phase*.5)*.14;
+      if(f.x<-10)f.x=W+10; if(f.x>W+10)f.x=-10; if(f.y<-10)f.y=H+10; if(f.y>H+10)f.y=-10;
+      const p=.5+.5*Math.sin(f.phase);
+      const [r,g,b]=f.col;
+      const grd=ctx.createRadialGradient(f.x,f.y,0,f.x,f.y,f.gR);
+      grd.addColorStop(0,`rgba(${r},${g},${b},${.05+.06*p})`);
+      grd.addColorStop(1,`rgba(${r},${g},${b},0)`);
+      ctx.beginPath(); ctx.arc(f.x,f.y,f.gR,0,Math.PI*2); ctx.fillStyle=grd; ctx.fill();
+      ctx.beginPath(); ctx.arc(f.x,f.y,f.r,0,Math.PI*2); ctx.fillStyle=`rgba(${r},${g},${b},${.15+.18*p})`; ctx.fill();
+    });
+    requestAnimationFrame(draw);
+  })();
+})();
+
+// ── AURORA MOUSE PARALLAX (exact copy from website) ──
+const _blobs=document.querySelectorAll('.aurora-blob');
+document.addEventListener('mousemove',e=>{
+  const xPct=(e.clientX/window.innerWidth-.5)*2;
+  const yPct=(e.clientY/window.innerHeight-.5)*2;
+  _blobs.forEach((blob,i)=>{
+    const depth=(i+1)*8;
+    blob.style.setProperty('--mx',`${xPct*depth}px`);
+    blob.style.setProperty('--my',`${yPct*depth}px`);
+    blob.style.transform=`translate(var(--mx),var(--my))`;
+  });
+},{passive:true});
+
+// ── CLIENT PICKER ──
+function openClientPicker(){
+  const overlay=document.getElementById('cpOverlay');
+  overlay.style.display='flex';
+  const list=document.getElementById('cpList');
+  if(!clients.length){list.innerHTML=`<div style="text-align:center;padding:20px;color:var(--text-3);font-size:13px">No clients found</div>`;return;}
+  list.innerHTML=clients.map(c=>`
+    <a href="dashboard.html?client=${c.id}" target="_blank"
+      style="display:flex;align-items:center;gap:12px;padding:12px 14px;background:rgba(255,255,255,.03);border:1px solid var(--border);border-radius:12px;text-decoration:none;transition:all .18s;cursor:pointer"
+      onmouseover="this.style.background='rgba(201,168,76,.08)';this.style.borderColor='rgba(201,168,76,.25)'"
+      onmouseout="this.style.background='rgba(255,255,255,.03)';this.style.borderColor='var(--border)'">
+      <div style="width:38px;height:38px;border-radius:50%;background:linear-gradient(135deg,var(--green-d),var(--green));display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-weight:800;font-size:13px;color:var(--bg);flex-shrink:0">${(c.full_name||'?').split(' ').map(w=>w[0]).join('').toUpperCase().slice(0,2)}</div>
+      <div style="flex:1;min-width:0">
+        <div style="font-size:13px;font-weight:600;color:var(--text)">${c.full_name}</div>
+        <div style="font-size:11px;color:var(--text-3);margin-top:1px">${c.company||c.email||''}</div>
+      </div>
+      <i class="ti ti-external-link" style="color:var(--gold-l);font-size:14px;flex-shrink:0"></i>
+    </a>`).join('');
+}
+function closeClientPicker(){
+  document.getElementById('cpOverlay').style.display='none';
+}
+document.getElementById('cpOverlay').addEventListener('click',function(e){
+  if(e.target===this) closeClientPicker();
+});
+</script>
+</body>
+</html>
