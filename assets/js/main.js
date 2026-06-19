@@ -185,18 +185,33 @@
     })();
     const resPrev = document.querySelector('.res-prev');
     const resNext = document.querySelector('.res-next');
-    if (resPrev) resPrev.addEventListener('click', () => {
+    // Snap to a whole card (not a fractional auto-scroll position) and glide there.
+    let snapTimer;
+    const snap = delta => {
       paused = true;
-      pos = Math.max(0, pos - step);
+      const half = resTrack.scrollWidth / 2;            // one full copy of the cards
+      const cur = Math.round(pos / step) * step;        // nearest card boundary
+      let target = cur + delta * step;
+      if (target < 0) {                                 // jump a loop ahead so there's content to the left
+        pos = cur + half;
+        resTrack.style.transition = 'none';
+        resTrack.style.transform = `translateX(${-pos}px)`;
+        void resTrack.offsetWidth;                      // force reflow so the jump isn't animated
+        target += half;
+      }
+      resTrack.style.transition = 'transform .5s cubic-bezier(.4,0,.2,1)';
+      pos = target;
       resTrack.style.transform = `translateX(${-pos}px)`;
-      setTimeout(() => paused = false, 1000);
-    });
-    if (resNext) resNext.addEventListener('click', () => {
-      paused = true;
-      pos = (pos + step) % (resTrack.scrollWidth / 2);
-      resTrack.style.transform = `translateX(${-pos}px)`;
-      setTimeout(() => paused = false, 1000);
-    });
+      clearTimeout(snapTimer);
+      snapTimer = setTimeout(() => {
+        resTrack.style.transition = '';
+        pos = ((pos % half) + half) % half;             // normalise seamlessly (track is duplicated)
+        resTrack.style.transform = `translateX(${-pos}px)`;
+        paused = false;
+      }, 600);
+    };
+    if (resPrev) resPrev.addEventListener('click', () => snap(-1));
+    if (resNext) resNext.addEventListener('click', () => snap(1));
   }
 
   /* ── 5. MOBILE MENU ── */
