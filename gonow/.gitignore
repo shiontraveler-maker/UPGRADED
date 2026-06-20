@@ -10,3 +10,7 @@ env/
 .vscode/
 .idea/
 .DS_Store
+
+# Local scratch / generated previews
+_shots.py
+previews/
