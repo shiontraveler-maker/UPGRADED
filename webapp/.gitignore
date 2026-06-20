@@ -1,0 +1,15 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+env/
+
+# App data
+tasks.db
+
+# Editor / OS
+.vscode/
+.idea/
+.DS_Store
