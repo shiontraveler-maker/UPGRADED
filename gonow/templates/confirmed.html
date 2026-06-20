@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% block title %}GoNow — you're going!{% endblock %}
+
+{% block content %}
+<section class="confirmed">
+    <div class="big-check">✓</div>
+    <h2>You're going to {{ pkg.label }}! 🎉</h2>
+    <p class="meta">
+        Paid {{ '{:,}'.format(pkg.costs.total) }} {{ currency }} with {{ method_label }}
+        · {{ req.nights }} nights · {{ req.travelers }} traveler(s)
+    </p>
+    <div class="card">
+        <p>✈ Flight {{ pkg.flight.from }} → {{ pkg.flight.to }} booked</p>
+        <p>🏨 {{ pkg.hotel.name }} {{ '★' * pkg.hotel.stars }} — {{ pkg.hotel.nights }} nights</p>
+        <p>🛂 Entry: {{ pkg.visa.label }} — {{ pkg.visa.note }}</p>
+        <p>📋 Your full day-by-day plan is saved to the trip.</p>
+    </div>
+    <a class="cta" href="{{ url_for('index') }}">Plan another escape</a>
+    <p class="fineprint">Demo confirmation — no real booking or payment was made.</p>
+</section>
+{% endblock %}

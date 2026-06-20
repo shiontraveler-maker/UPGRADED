@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}GoNow{% endblock %}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="wrap">
+        <header class="topbar">
+            <a class="brand" href="{{ url_for('index') }}">
+                <span class="logo">✈</span> Go<span class="accent">Now</span>
+            </a>
+            <span class="market">Departing {{ origin.city if origin else 'Dubai' }}</span>
+        </header>
+        {% block content %}{% endblock %}
+        <footer class="foot">
+            GoNow MVP · last-minute trips, decided for you · sample data
+        </footer>
+    </div>
+</body>
+</html>
