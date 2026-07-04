@@ -808,7 +808,8 @@
   <script type="module">
   import * as THREE from 'three';
   import { EffectComposer, RenderPass, UnrealBloomPass } from 'three';
-  try {
+  function boot(){
+   try {
     const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
     const isMobile = Math.min(innerWidth, innerHeight) < 640;
     const V = THREE.MathUtils.lerp;
@@ -838,7 +839,7 @@
     );
     scene.add(nebGrp);
 
-    const G = { count: reduce ? 22000 : (isMobile ? 55000 : 165000), radius:6.5, branches:4,
+    const G = { count: reduce ? 18000 : (isMobile ? 45000 : 100000), radius:6.5, branches:4,
       randomnessPower:3.0, randomness:0.42,
       inside:new THREE.Color(0x59A87E), mid:new THREE.Color(0x3FCF94),
       outside:new THREE.Color(0x05633c), gold:new THREE.Color(0xE6C766) };
@@ -866,18 +867,19 @@
     geo.setAttribute('aColor',new THREE.BufferAttribute(colors,3));
     geo.setAttribute('aScale',new THREE.BufferAttribute(scales,1));
     const mat=new THREE.ShaderMaterial({ transparent:true, depthWrite:false, blending:THREE.AdditiveBlending,
-      uniforms:{ uTime:{value:0}, uHue:{value:0}, uSize:{value:(isMobile?34:30)*renderer.getPixelRatio()} },
+      uniforms:{ uTime:{value:0}, uHue:{value:0}, uSize:{value:(isMobile?38:34)*renderer.getPixelRatio()} },
       vertexShader:`uniform float uTime;uniform float uSize;attribute float aScale;attribute vec3 aColor;
         varying vec3 vColor;varying float vTw;varying float vd;
         void main(){ vec4 mp=modelMatrix*vec4(position,1.0); vec4 vp=viewMatrix*mp; gl_Position=projectionMatrix*vp;
           vd=-vp.z;
           float tw=0.55+0.45*sin(uTime*1.5+aScale*42.0); vTw=tw;
-          gl_PointSize=min(uSize*aScale*tw*(1.0/-vp.z), 42.0); vColor=aColor; }`,
+          gl_PointSize=min(uSize*aScale*tw*(1.0/-vp.z), 56.0); vColor=aColor; }`,
       fragmentShader:`uniform float uHue;varying vec3 vColor;varying float vTw;varying float vd;
         vec3 hue(vec3 c,float a){ const vec3 k=vec3(0.57735); float ca=cos(a); return c*ca+cross(k,c)*sin(a)+k*dot(k,c)*(1.0-ca); }
-        void main(){ float s=1.0-distance(gl_PointCoord,vec2(0.5))*2.0; if(s<=0.0)discard;
-          s=pow(s,3.4); float nf=smoothstep(0.2,1.9,vd);
-          vec3 c=hue(vColor,uHue); gl_FragColor=vec4(c*(0.55+0.7*vTw)*s*nf, s*nf); }` });
+        void main(){ float d=distance(gl_PointCoord,vec2(0.5))*2.0; if(d>=1.0)discard;
+          float core=pow(1.0-d,3.2); float glow=pow(1.0-d,1.4)*0.55; float s=core+glow;   // baked bloom-like halo
+          float nf=smoothstep(0.2,1.9,vd);
+          vec3 c=hue(vColor,uHue); gl_FragColor=vec4(c*(0.62+0.72*vTw)*s*nf, s*nf); }` });
     const galaxy=new THREE.Points(geo,mat); galaxy.rotation.x=0.5; scene.add(galaxy);
 
     function core(col,sz,op){ const sp=new THREE.Sprite(new THREE.SpriteMaterial({map:ct,color:col,transparent:true,blending:THREE.AdditiveBlending,depthWrite:false,opacity:op})); sp.scale.set(sz,sz,1); return sp; }
@@ -891,10 +893,7 @@
     const stars=new THREE.Points(sg,new THREE.PointsMaterial({size:0.06,color:0x9fded0,transparent:true,opacity:0.5,depthWrite:false,blending:THREE.AdditiveBlending,map:ct,alphaTest:0.01,sizeAttenuation:true}));
     scene.add(stars);
 
-    const composer=new EffectComposer(renderer);
-    composer.addPass(new RenderPass(scene,camera));
-    const bloom=new UnrealBloomPass(new THREE.Vector2(innerWidth,innerHeight), 0.34, 0.5, 0.26);
-    composer.addPass(bloom);
+    // no post-processing: glow is baked into the star sprites → no bloom shader compile (kills the start-up freeze)
 
     const tiltX=0.5, cT=Math.cos(tiltX), sT=Math.sin(tiltX);
     const tilt=(v)=>{ const y=v.y*cT - v.z*sT, z=v.y*sT + v.z*cT; v.y=y; v.z=z; return v; };
@@ -934,19 +933,19 @@
     function onScroll(){ const max=document.body.scrollHeight-innerHeight; target=max>0?Math.min(1,Math.max(0,scrollY/max)):0; }
     addEventListener('scroll',onScroll,{passive:true}); onScroll();
     addEventListener('resize',()=>{camera.aspect=innerWidth/innerHeight;camera.updateProjectionMatrix();
-      renderer.setSize(innerWidth,innerHeight);composer.setSize(innerWidth,innerHeight);onScroll();},{passive:true});
+      renderer.setSize(innerWidth,innerHeight);onScroll();},{passive:true});
 
     const clock=new THREE.Clock();
     let _cpos, _clook, _warp=0;
-    let baseSize=mat.uniforms.uSize.value; const baseBloom=bloom.strength;
+    let baseSize=mat.uniforms.uSize.value;
     // ── adaptive quality governor: steps quality down until this device holds a smooth frame rate ──
-    let tier=0, bloomOn=true, fCount=0, fT0=performance.now(), badWin=0;
+    let tier=0, fCount=0, fT0=performance.now(), badWin=0, winIdx=0;
     function applyTier(){
       if(tier===1){ renderer.setPixelRatio(Math.min(devicePixelRatio,1.2)); }
-      else if(tier===2){ renderer.setPixelRatio(1); geo.setDrawRange(0,Math.floor(G.count*0.62)); }
-      else if(tier===3){ bloomOn=false; geo.setDrawRange(0,Math.floor(G.count*0.4)); }
-      renderer.setSize(innerWidth,innerHeight); composer.setSize(innerWidth,innerHeight);
-      baseSize=(isMobile?34:30)*renderer.getPixelRatio(); mat.uniforms.uSize.value=baseSize;
+      else if(tier===2){ renderer.setPixelRatio(1); geo.setDrawRange(0,Math.floor(G.count*0.7)); }
+      else if(tier===3){ geo.setDrawRange(0,Math.floor(G.count*0.45)); }
+      renderer.setSize(innerWidth,innerHeight);
+      baseSize=(isMobile?38:34)*renderer.getPixelRatio(); mat.uniforms.uSize.value=baseSize;
       window.__quality=tier;
     }
     function frame(){
@@ -957,11 +956,11 @@
       if(hueV!==window.__hueLast){ window.__hueLast=hueV; window.__accentVal='hsl('+hueV+',62%,63%)';
         document.documentElement.style.setProperty('--accent',window.__accentVal); }
       m.x += (mt.x-m.x)*0.04; m.y += (mt.y-m.y)*0.04;
-      // ── warp surge while gliding between stops: wider FOV + brighter bloom + swollen stars ──
+      // ── warp surge while gliding between stops: wider FOV + swollen glowing stars ──
       _warp += ((window.__warp||0)-_warp)*0.14;
       if(_warp>0.002){ camera.fov=62+_warp*8; camera.updateProjectionMatrix();
-        bloom.strength=baseBloom+_warp*0.5; mat.uniforms.uSize.value=baseSize*(1+_warp*0.7); }
-      else if(camera.fov!==62){ camera.fov=62; camera.updateProjectionMatrix(); bloom.strength=baseBloom; mat.uniforms.uSize.value=baseSize; }
+        mat.uniforms.uSize.value=baseSize*(1+_warp*0.9); }
+      else if(camera.fov!==62){ camera.fov=62; camera.updateProjectionMatrix(); mat.uniforms.uSize.value=baseSize; }
       const cp=camAt(prog), la=lookAt(prog);
       if(!_cpos){ _cpos=cp.clone(); _clook=la.clone(); }
       _cpos.lerp(cp, 0.09);
@@ -970,19 +969,24 @@
       camera.position.set(_cpos.x + m.x*0.25 + fx, _cpos.y - m.y*0.18 + fy, _cpos.z);
       camera.lookAt(_clook);
       stars.rotation.y = t*0.006;
-      if(bloomOn) composer.render(); else renderer.render(scene,camera);
+      renderer.render(scene,camera);
       if(!window.__gxUp){ window.__gxUp=1; canvas.classList.add('ready'); }   // progressive entrance: fade in on first frame
       // fps sampling (2s windows; windows stretched by tab-throttling are discarded)
       fCount++; const nowMs=performance.now(), span=nowMs-fT0;
-      if(span>=2000){
-        if(span<3500){ const fps=fCount*1000/span;
+      if(span>=2000){ winIdx++;
+        if(winIdx>1 && span<3500){ const fps=fCount*1000/span;   // window 1 = warm-up, never downgrade on load jank
           if(fps<48 && tier<3){ if(++badWin>=2){ tier++; badWin=0; applyTier(); } } else badWin=0; }
         fCount=0; fT0=nowMs;
       }
       if(!reduce) requestAnimationFrame(frame);
     }
-    frame();
-  } catch(e){ console.error('Galaxy background failed:', e); }
+    // compile shaders off the main thread (parallel), then start → no first-frame compile stall
+    if(renderer.compileAsync){ renderer.compileAsync(scene,camera).then(function(){ frame(); },function(){ frame(); }); }
+    else frame();
+   } catch(e){ console.error('Galaxy background failed:', e); }
+  }
+  // defer the heavy build off the first-paint / hero-reveal path → no start-up freeze
+  if(window.requestIdleCallback) requestIdleCallback(boot,{timeout:900}); else setTimeout(boot,300);
   </script>
 
   <script src="assets/js/taxbot.js"></script>
