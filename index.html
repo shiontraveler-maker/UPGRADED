@@ -2,623 +2,511 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <meta name="description" content="AHCA — UAE FTA-Approved Tax Agent. Corporate tax preparation, VAT services, bookkeeping and financial planning across UAE. AED 100M+ in VAT refunds approved.">
-  <meta name="keywords" content="UAE tax agent, FTA approved tax agent, corporate tax UAE, VAT services Dubai, bookkeeping Abu Dhabi, financial planning UAE, AHCA">
-  <meta name="author" content="AHCA">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="AHCA — FTA-approved tax agent in Dubai & Abu Dhabi. Corporate tax registration & filing UAE, VAT registration & return filing, bookkeeping and tax advisory. AED 100M+ in VAT refunds approved by the FTA.">
+  <meta name="keywords" content="FTA approved tax agent, tax agent Dubai, corporate tax registration UAE, corporate tax consultant Dubai, VAT registration Dubai, VAT return filing UAE, corporate tax UAE, bookkeeping Dubai, tax consultants in UAE, small business relief corporate tax">
   <meta name="robots" content="index, follow">
-  <meta property="og:title" content="AHCA — Approved Tax Agent | UAE">
-  <meta property="og:description" content="UAE FTA-Approved Tax Agent. Corporate tax, VAT, bookkeeping &amp; financial planning across UAE.">
+  <title>AHCA — FTA-Approved Tax Agent Dubai & Abu Dhabi | Corporate Tax, VAT & Bookkeeping UAE</title>
+  <meta property="og:title" content="AHCA — FTA-Approved Tax Agent Dubai & Abu Dhabi">
+  <meta property="og:description" content="Corporate tax registration & filing, VAT registration & returns, bookkeeping and advisory across the UAE. AED 100M+ VAT refunds approved.">
   <meta property="og:type" content="website">
   <meta property="og:locale" content="en_AE">
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="AHCA — Approved Tax Agent | UAE">
-  <meta name="twitter:description" content="UAE FTA-Approved Tax Agent. AED 100M+ in VAT refunds approved.">
+  <link rel="preload" href="assets/fonts/syne-latin-var.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="assets/fonts/inter-latin-var.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="modulepreload" href="assets/vendor/three-bundle.min.js">
+  <script type="application/ld+json">
+  {"@context":"https://schema.org","@type":"AccountingService","name":"AHCA","description":"FTA-approved tax agent in the UAE. Corporate tax registration and filing, VAT registration and return filing, bookkeeping and tax advisory.","telephone":"+971545050689","email":"abdelfattah@ahca.ae","areaServed":["Dubai","Abu Dhabi","United Arab Emirates"],"address":{"@type":"PostalAddress","addressRegion":"Dubai & Abu Dhabi","addressCountry":"AE"},"sameAs":["https://wa.me/971545050689"],"knowsAbout":["Corporate tax registration UAE","VAT registration Dubai","VAT return filing","FTA compliance","Bookkeeping","Small business relief corporate tax"]}
+  </script>
+  <style>
+  /* self-hosted variable fonts (latin subsets) — no third-party requests */
+  @font-face{font-family:'Inter';font-style:normal;font-weight:100 900;font-display:swap;
+    src:url('assets/fonts/inter-latin-var.woff2') format('woff2');
+    unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+2013-2014,U+2018-201A,U+201C-201E,U+2022,U+2026}
+  @font-face{font-family:'Syne';font-style:normal;font-weight:400 800;font-display:swap;
+    src:url('assets/fonts/syne-latin-var.woff2') format('woff2');
+    unicode-range:U+0000-00FF,U+2013-2014,U+2018-201A,U+201C-201E}
+  /* inline SVG icons (replaces the Tabler webfont) */
+  i.ti{display:inline-flex;line-height:1}
+  svg.ic{width:1em;height:1em;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;display:inline-block}
+  :root{ --green:#02B36A; --green-l:#5ECFA0; --accent:#5ECFA0; --gold:#C9A84C;
+         --text:#EAF6EE; --text-2:#bcd8cc; --text-3:#83a899; --head-h:64px; }
+  *{box-sizing:border-box}
+  html,body{margin:0;overflow-x:hidden}
+  html{background:#000;-webkit-text-size-adjust:100%}
+  body{font-family:Inter,system-ui,sans-serif;color:var(--text);background:transparent;-webkit-font-smoothing:antialiased}
+  a{color:inherit}
+  ::selection{background:rgba(94,207,160,.32)}
 
-  <title>AHCA — Approved Tax Agent | UAE</title>
+  /* ── galaxy background ── */
+  #gx{position:fixed;inset:0;width:100vw;height:100vh;z-index:-2;display:block;pointer-events:none;
+    opacity:0;transition:opacity .9s ease}
+  #gx.ready{opacity:1}
+  .gx-scrim{position:fixed;inset:0;z-index:-1;pointer-events:none;
+    background:radial-gradient(ellipse 120% 95% at 50% 42%,transparent 48%,rgba(0,0,0,.42) 84%,rgba(0,0,0,.7) 100%),
+               linear-gradient(180deg,rgba(0,0,0,.55),transparent 20%,transparent 80%,rgba(0,0,0,.6))}
 
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800;900&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
-  <link rel="stylesheet" href="assets/css/style.css">
+  /* ── top nav ── */
+  nav.top{position:fixed;top:0;left:0;right:0;height:var(--head-h);z-index:40;display:flex;align-items:center;
+    justify-content:space-between;padding:0 clamp(18px,4vw,46px);border-bottom:1px solid transparent;
+    transition:background .4s,backdrop-filter .4s,border-color .4s}
+  nav.top.scrolled{background:rgba(1,6,4,.92)}
+  .brand{font-family:Syne,sans-serif;font-weight:800;font-size:21px;letter-spacing:.04em;text-decoration:none;display:flex;align-items:center;gap:4px}
+  .brand i{width:6px;height:6px;border-radius:50%;background:var(--accent);box-shadow:0 0 8px var(--accent)}
+  .nav-links{display:flex;gap:30px;list-style:none;margin:0;padding:0;font-size:13.5px;font-weight:400}
+  .nav-links a{position:relative;text-decoration:none;color:var(--text-2);opacity:.85;padding-bottom:4px;transition:opacity .25s,color .25s}
+  .nav-links a:hover{opacity:1;color:#fff}
+  .nav-links a.on{opacity:1;color:#fff}
+  .nav-links a.on::after{content:'';position:absolute;left:0;right:0;bottom:0;height:1px;background:var(--accent);box-shadow:0 0 6px var(--accent)}
+  .nav-wa{display:inline-flex;align-items:center;gap:8px;font-size:12.5px;font-weight:500;letter-spacing:.03em;text-decoration:none;
+    padding:8px 17px;border-radius:100px;border:1px solid color-mix(in srgb,var(--accent) 40%,transparent);color:var(--accent);transition:all .25s}
+  .nav-wa:hover{border-color:var(--accent);background:color-mix(in srgb,var(--accent) 8%,transparent)}
+  .nav-hair{position:absolute;left:5%;right:5%;bottom:0;height:1px;background:rgba(255,255,255,.08);pointer-events:none}
+  .nav-hair em{position:absolute;top:0;width:56px;height:1px;left:50%;opacity:0;transition:left .5s cubic-bezier(.2,.7,.2,1),opacity .4s;
+    background:linear-gradient(90deg,transparent,var(--accent),transparent);box-shadow:0 0 8px var(--accent)}
+  .nav-hair em.show{opacity:1}
+  @media(max-width:760px){
+    nav.top{height:54px;padding:0 12px}
+    .brand{font-size:16px}
+    .nav-links{gap:11px;font-size:11px}
+    .nav-wa{padding:6px 9px}
+    .nav-wa span{display:none}
+  }
+
+  /* ── scroller / immersive stops ── */
+  #scroller{position:relative;z-index:2}
+  .stop{min-height:100vh;min-height:100svh;display:flex;align-items:center;justify-content:space-between;gap:clamp(24px,5vw,70px);padding:15vh clamp(22px,7vw,8vw)}
+  .stop.right{flex-direction:row-reverse;text-align:right}
+  .stop.center{justify-content:center;text-align:center}
+  .panel{position:relative;flex:0 1 540px;max-width:540px;opacity:0;transform:translateY(32px);transition:opacity .9s ease,transform .95s cubic-bezier(.2,.7,.2,1)}
+  .panel::before{content:'';position:absolute;inset:-52% -34%;pointer-events:none;opacity:.42;border-radius:50%;
+    background:radial-gradient(closest-side,rgba(94,207,160,.16),transparent)}
+  .stop.in .panel{opacity:1;transform:none}
+  .stop.center .panel{flex:0 1 auto;max-width:780px}
+  .kicker{display:inline-flex;align-items:center;gap:9px;font-size:12px;font-weight:600;letter-spacing:.18em;
+    text-transform:uppercase;color:var(--accent);text-shadow:0 0 16px rgba(94,207,160,.5)}
+  .kicker .num{font-family:Syne,sans-serif;font-weight:800;font-size:13px;color:#fff;opacity:.5}
+  .kicker .dot{width:7px;height:7px;border-radius:50%;background:var(--accent);box-shadow:0 0 10px var(--accent)}
+  .big{font-family:Syne,sans-serif;font-weight:800;line-height:1.04;letter-spacing:-.02em;margin:14px 0 16px;
+    font-size:clamp(36px,6vw,68px);text-shadow:0 4px 30px rgba(0,0,0,.55),0 0 50px rgba(94,207,160,.18)}
+  .big em{font-style:normal;color:var(--accent);text-shadow:0 0 30px var(--accent)}
+  .lead{margin:0;color:var(--text-2);font-size:clamp(15px,1.35vw,18px);line-height:1.66;max-width:48ch;text-shadow:0 2px 18px rgba(0,0,0,.6)}
+  .stop.right .lead{margin-left:auto}
+  .stop.center .lead{margin:0 auto}
+  .dustline{margin-top:20px;height:56px;opacity:0;transition:opacity .8s ease .9s}
+  .stop.in .dustline{opacity:1}
+  .dustline canvas{display:block;width:100%;height:56px}
+
+  /* ── cinematic reveal choreography: kicker → headline lines → lead → actions ── */
+  .panel .kicker,.panel .lead,.panel .btns,.panel .lines,.panel .stats{opacity:0;transform:translateY(18px);
+    transition:opacity .7s ease,transform .85s cubic-bezier(.16,1,.3,1)}
+  .stop.in .panel .kicker{transition-delay:.04s}
+  .stop.in .panel .lead{transition-delay:.52s}
+  .stop.in .panel .btns{transition-delay:.66s}
+  .stop.in .panel .lines{transition-delay:.55s}
+  .stop.in .panel .stats{transition-delay:.68s}
+  .stop.in .panel .kicker,.stop.in .panel .lead,.stop.in .panel .btns,.stop.in .panel .lines,.stop.in .panel .stats{opacity:1;transform:none}
+  .big .rl{display:block;overflow:hidden;padding:0.06em 0.15em 0;margin:0 -0.15em}
+  .big .rli{display:block;transform:translateY(114%);opacity:0;filter:blur(9px);
+    transition:transform .9s cubic-bezier(.16,1,.3,1),opacity .75s ease,filter .9s ease}
+  .stop.in .big .rl:nth-child(1) .rli{transition-delay:.16s}
+  .stop.in .big .rl:nth-child(2) .rli{transition-delay:.30s}
+  .stop.in .big .rl:nth-child(3) .rli{transition-delay:.44s}
+  .stop.in .big .rli{transform:none;opacity:1;filter:blur(0)}
+
+  /* ── nav polish: hue-synced scroll progress + landing vignette + cursor glow ── */
+  #sprog{position:fixed;top:0;left:0;right:0;height:3px;z-index:45;background:rgba(255,255,255,.04);pointer-events:none}
+  #sprog span{display:block;height:100%;width:0;border-radius:0 3px 3px 0;
+    background:linear-gradient(90deg,var(--green),var(--accent));box-shadow:0 0 10px var(--accent)}
+  #vflash{position:fixed;inset:0;z-index:3;pointer-events:none;opacity:0;transition:opacity .55s ease;
+    background:radial-gradient(ellipse 80% 62% at 50% 50%,transparent 42%,color-mix(in srgb,var(--accent) 14%,transparent) 100%)}
+  #vflash.on{opacity:1}
+  #ctrail{position:fixed;inset:0;z-index:80;pointer-events:none;mix-blend-mode:screen}
+  @media(pointer:coarse){#ctrail{display:none}}
+  .btn.primary{animation:ctaPulse 2.8s ease-in-out infinite}
+  @keyframes ctaPulse{0%,100%{box-shadow:0 0 0 1px rgba(255,255,255,.12),0 16px 38px -12px var(--accent)}
+    50%{box-shadow:0 0 0 1px rgba(255,255,255,.2),0 18px 52px -10px var(--accent),0 0 30px -4px var(--accent)}}
+  @media(prefers-reduced-motion:reduce){
+    .panel .kicker,.panel .lead,.panel .btns,.panel .lines,.panel .stats,.big .rli{opacity:1!important;transform:none!important;filter:none!important;transition:none!important}
+    .btn.primary{animation:none}
+    #ctrail,#vflash{display:none}
+  }
+
+  /* buttons */
+  .btns{display:flex;gap:13px;flex-wrap:wrap;margin-top:30px}
+  .stop.right .btns{justify-content:flex-end}
+  .stop.center .btns{justify-content:center}
+  .btn{display:inline-flex;align-items:center;gap:9px;padding:14px 26px;border-radius:100px;font-weight:700;
+    font-size:14.5px;text-decoration:none;cursor:pointer;border:0;transition:transform .2s,box-shadow .3s,background .3s,border-color .3s}
+  .btn.primary{background:linear-gradient(180deg,color-mix(in srgb,var(--accent),#fff 16%),var(--accent));color:#04140d;
+    box-shadow:0 0 0 1px rgba(255,255,255,.12),0 16px 38px -12px var(--accent)}
+  .btn.primary:hover{transform:translateY(-2px);box-shadow:0 22px 52px -12px var(--accent)}
+  .btn.ghost{background:rgba(255,255,255,.03);border:1px solid rgba(94,207,160,.3);color:var(--text)}
+  .btn.ghost:hover{border-color:var(--accent);background:rgba(94,207,160,.08)}
+
+  /* feature lines */
+  .lines{list-style:none;margin:24px 0 0;padding:0;display:grid;gap:15px}
+  .stop.center .lines{max-width:560px;margin:24px auto 0;text-align:left}
+  .lines li{display:flex;gap:13px;align-items:flex-start;color:var(--text-2);font-size:15.5px;line-height:1.5}
+  .lines i{color:var(--accent);font-size:20px;margin-top:1px;filter:drop-shadow(0 0 8px rgba(94,207,160,.5))}
+  .lines b{color:var(--text);font-weight:700}
+
+  /* proof stats */
+  .stats{display:flex;flex-wrap:wrap;gap:26px 48px;justify-content:center;margin-top:38px}
+  .stat .v{font-family:Syne,sans-serif;font-weight:800;font-size:clamp(26px,3.3vw,38px);color:#fff;text-shadow:0 0 24px rgba(94,207,160,.3)}
+  .stat .v em{font-style:normal;color:var(--accent)}
+  .stat .l{font-size:11.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--text-3);margin-top:4px}
+
+  /* contact */
+  .contact-wrap{display:grid;grid-template-columns:1fr 1fr;gap:32px;margin-top:34px;text-align:left;width:100%}
+  @media(max-width:820px){.contact-wrap{grid-template-columns:1fr}}
+  .cinfo{display:grid;gap:13px;align-content:start}
+  .wa-big{display:flex;align-items:center;gap:14px;padding:15px 18px;border-radius:16px;text-decoration:none;
+    background:rgba(2,179,106,.12);border:1px solid rgba(94,207,160,.28);color:var(--text);transition:all .25s}
+  .wa-big:hover{background:rgba(2,179,106,.2);border-color:var(--accent);transform:translateY(-1px)}
+  .wa-big .ico{width:42px;height:42px;border-radius:12px;display:grid;place-items:center;background:var(--green);color:#04140d;font-size:22px;flex:none}
+  .wa-big .t{font-weight:700}.wa-big .s{font-size:12.5px;color:var(--text-3)}
+  .crow{display:flex;align-items:center;gap:13px;font-size:14.5px}
+  .crow .ico{width:38px;height:38px;border-radius:11px;display:grid;place-items:center;background:rgba(255,255,255,.05);
+    border:1px solid rgba(94,207,160,.18);color:var(--accent);flex:none}
+  .crow a{text-decoration:none;color:var(--text)}.crow a:hover{color:var(--accent)}
+  .crow .cl{font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--text-3)}
+
+  /* form */
+  .cform{display:grid;gap:14px;padding:24px;border-radius:20px;background:linear-gradient(165deg,#0a1a13,#05100b);
+    border:1px solid rgba(94,207,160,.18);box-shadow:0 34px 90px -26px rgba(0,0,0,.9),inset 0 1px 0 rgba(255,255,255,.04)}
+  .cform .fg{display:grid;gap:6px}
+  .cform label{font-size:11.5px;color:var(--text-3);letter-spacing:.05em;text-transform:uppercase}
+  .cform input,.cform select,.cform textarea{width:100%;padding:12px 14px;border-radius:12px;background:rgba(255,255,255,.04);
+    border:1px solid rgba(94,207,160,.18);color:var(--text);font:inherit;font-size:14px;outline:none;transition:border-color .2s,background .2s}
+  .cform input::placeholder,.cform textarea::placeholder{color:#5e776c}
+  .cform input:focus,.cform select:focus,.cform textarea:focus{border-color:var(--accent);background:rgba(94,207,160,.06)}
+  .cform select{appearance:none;cursor:pointer}
+  .cform textarea{resize:vertical;min-height:84px}
+  .cform .row2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+  @media(max-width:520px){.cform .row2{grid-template-columns:1fr}}
+  .form-ok{display:none;align-items:center;gap:8px;color:var(--accent);font-size:14px;margin-top:2px}
+  .form-ok.show{display:flex}
+
+  /* ── footer (contact details live here now) ── */
+  /* contact stop with the footer pinned at its bottom — content centered above, footer below, one screen */
+  .stop.has-footer{flex-direction:column;justify-content:space-between;padding:0;text-align:center}
+  .has-footer .contact-body{flex:1 1 auto;display:flex;align-items:center;justify-content:center;width:100%;min-height:0;padding:90px clamp(22px,7vw,8vw) 50px}
+  .has-footer .site-footer{width:100%}
+  .site-footer{position:relative;z-index:2;padding:44px clamp(22px,7vw,8vw) 26px;border-top:1px solid rgba(94,207,160,.22);
+    box-shadow:0 -1px 30px -8px rgba(94,207,160,.18);background:linear-gradient(180deg,rgba(3,12,8,.62),rgba(3,11,8,.97))}
+  .foot-inner{display:flex;flex-wrap:wrap;gap:44px 70px;max-width:1080px;margin:0 auto}
+  .foot-brand{flex:1 1 220px}
+  .foot-logo{font-family:Syne,sans-serif;font-weight:800;font-size:26px;color:#fff}
+  .foot-logo span{color:var(--accent)}
+  .foot-brand p{color:var(--text-3);margin:10px 0 14px;font-size:14px}
+  .foot-cert{display:inline-flex;align-items:center;gap:7px;font-size:12.5px;color:var(--accent);border:1px solid rgba(94,207,160,.25);border-radius:100px;padding:6px 13px}
+  .foot-col h4{font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--text-3);margin:0 0 14px}
+  .foot-col a,.foot-col span{display:flex;align-items:center;gap:9px;color:var(--text-2);text-decoration:none;font-size:14px;margin-bottom:11px}
+  .foot-col a:hover{color:var(--accent)}
+  .foot-col i{color:var(--accent);font-size:16px}
+  .foot-bottom{display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px;max-width:1080px;margin:30px auto 0;padding-top:20px;border-top:1px solid rgba(94,207,160,.1);font-size:12.5px;color:var(--text-3)}
+
+  /* ── side HUD modules: old tools (service icon + skill bar + status) advanced into 3D glass ── */
+  .aside{flex:0 1 380px;display:flex;justify-content:center;perspective:1100px;
+    opacity:0;transform:translateY(46px);transition:opacity 1s ease,transform 1s cubic-bezier(.2,.7,.2,1) .12s}
+  .stop.in .aside{opacity:1;transform:none}
+  /* free float — no container: model + stat live directly on the galaxy */
+  .hud{position:relative;width:320px;padding:10px 6px;transform-style:preserve-3d;will-change:transform;background:transparent;border:0;box-shadow:none}
+  .hud::before{content:'';position:absolute;inset:-14% -20%;border-radius:50%;pointer-events:none;
+    background:radial-gradient(closest-side,color-mix(in srgb,var(--accent) 13%,transparent),transparent)}
+  .hud-3dwrap{width:100%;height:172px;margin:0 auto 6px;transform:translateZ(40px)}
+  .hud-3d{width:100%;height:100%;display:block}
+  .hud-title{text-align:center;font-family:Inter,sans-serif;font-weight:600;font-size:12px;letter-spacing:.22em;text-transform:uppercase;
+    color:var(--accent);text-shadow:0 0 14px color-mix(in srgb,var(--accent) 55%,transparent);transform:translateZ(28px)}
+  .hud-fig{text-align:center;margin:12px 0 0;font-family:Syne,sans-serif;font-weight:800;line-height:1.04;font-size:38px;color:var(--accent);
+    text-shadow:0 0 30px color-mix(in srgb,var(--accent) 55%,transparent);transform:translateZ(20px);white-space:nowrap}
+  .hud-fig small{display:block;font-family:Inter,sans-serif;font-weight:500;font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--text-3);margin-top:10px;text-shadow:none}
+  .hud-meta{display:flex;align-items:center;justify-content:center;gap:12px;font-size:13px;color:var(--text-2);margin-top:16px;transform:translateZ(14px)}
+  .hud-meta span::after{content:'';display:inline-block;width:44px;height:1px;margin-left:12px;vertical-align:middle;
+    background:linear-gradient(90deg,transparent,var(--accent),transparent)}
+  .hud-meta b{color:var(--accent);font-family:Syne,sans-serif;font-size:14px}
+  @media(max-width:880px){.aside{display:none}}
+
+  /* rail / hint / floats */
+  .rail{position:fixed;right:22px;top:50%;transform:translateY(-50%);z-index:30;display:flex;flex-direction:column;gap:13px}
+  .rail b{width:9px;height:9px;border-radius:50%;background:rgba(94,207,160,.25);border:1px solid rgba(94,207,160,.4);cursor:pointer;transition:all .3s}
+  .rail b.on{background:var(--accent);box-shadow:0 0 12px var(--accent);transform:scale(1.3)}
+  @media(max-width:760px){.rail{right:7px;gap:9px} .rail b{width:7px;height:7px}}
+  .hint{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);z-index:20;color:var(--text-3);font-size:11px;
+    letter-spacing:.16em;text-transform:uppercase;display:flex;flex-direction:column;align-items:center;gap:6px;transition:opacity .5s}
+  .hint .arr{animation:bob 1.6s ease-in-out infinite}
+  @keyframes bob{0%,100%{transform:translateY(0);opacity:.55}50%{transform:translateY(6px);opacity:1}}
+  .wa-float{position:fixed;right:22px;bottom:22px;z-index:35}
+  .wa-float a{position:relative;width:58px;height:58px;border-radius:50%;display:grid;place-items:center;
+    background:rgba(4,10,8,.88);color:var(--accent);font-size:27px;text-decoration:none;
+    border:1.5px solid var(--accent);transition:transform .2s,color .3s,border-color .3s,box-shadow .3s;
+    box-shadow:0 0 26px -6px var(--accent),inset 0 0 16px -8px var(--accent)}
+  .wa-float a:hover{transform:scale(1.08)}
+  .wa-float .radar{position:absolute;inset:0;border-radius:50%;border:1.5px solid var(--accent);pointer-events:none;
+    animation:radar 2.4s ease-out infinite}
+  .wa-float .radar.r2{animation-delay:1.2s}
+  @keyframes radar{0%{transform:scale(1);opacity:.75}100%{transform:scale(2);opacity:0}}
+  @media(prefers-reduced-motion:reduce){.wa-float .radar{display:none}}
+
+  /* ── AI tax bot ── */
+  .ai-btn{position:fixed;left:22px;bottom:22px;z-index:35;display:inline-flex;align-items:center;gap:9px;padding:11px 18px;
+    border-radius:100px;border:1px solid rgba(94,207,160,.3);background:rgba(4,18,13,.92);
+    color:var(--text);font:inherit;font-size:13.5px;font-weight:600;cursor:pointer;box-shadow:0 8px 26px -10px rgba(0,0,0,.7);transition:all .25s}
+  .ai-btn:hover{border-color:var(--accent);transform:translateY(-2px)}
+  .ai-btn i{color:var(--accent);font-size:18px}
+  .ai-chat{position:fixed;left:22px;bottom:22px;z-index:50;width:min(380px,calc(100vw - 44px));height:min(560px,calc(100vh - 100px));
+    display:flex;flex-direction:column;border-radius:20px;overflow:hidden;background:rgba(4,16,12,.92);backdrop-filter:blur(18px);
+    border:1px solid rgba(94,207,160,.2);box-shadow:0 26px 70px -18px rgba(0,0,0,.85);
+    opacity:0;visibility:hidden;transform:translateY(16px) scale(.98);transform-origin:left bottom;transition:all .3s cubic-bezier(.2,.7,.2,1)}
+  .ai-chat.open{opacity:1;visibility:visible;transform:none}
+  .ai-chat-header{display:flex;align-items:center;gap:11px;padding:14px 16px;border-bottom:1px solid rgba(94,207,160,.14);background:rgba(2,179,106,.07)}
+  .ai-chat-avatar{width:38px;height:38px;border-radius:11px;display:grid;place-items:center;background:var(--green);color:#04140d;font-size:20px;flex:none}
+  .ai-chat-name{font-weight:700;font-size:14.5px}
+  .ai-chat-status{font-size:11.5px;color:var(--text-3);display:flex;align-items:center;gap:6px}
+  .ai-status-dot{width:7px;height:7px;border-radius:50%;background:#3ce08f;box-shadow:0 0 8px #3ce08f}
+  .ai-chat-close{margin-left:auto;width:30px;height:30px;border-radius:9px;border:0;background:rgba(255,255,255,.05);color:var(--text-2);cursor:pointer;font-size:16px;display:grid;place-items:center}
+  .ai-chat-close:hover{background:rgba(255,255,255,.1);color:#fff}
+  .ai-chat-messages{flex:1;overflow-y:auto;padding:16px;display:flex;flex-direction:column;gap:12px}
+  .ai-msg{max-width:84%;padding:11px 14px;border-radius:14px;font-size:13.5px;line-height:1.5}
+  .ai-msg p{margin:0}.ai-msg p+p{margin-top:6px}
+  .ai-msg--bot{align-self:flex-start;background:rgba(255,255,255,.05);border:1px solid rgba(94,207,160,.14);border-bottom-left-radius:5px}
+  .ai-msg--user{align-self:flex-end;background:linear-gradient(180deg,color-mix(in srgb,var(--accent),#fff 14%),var(--accent));color:#04140d;border-bottom-right-radius:5px}
+  .ai-msg-ar{color:var(--text-3);font-size:12.5px;direction:rtl}
+  .ai-quick-btns{display:flex;flex-wrap:wrap;gap:8px}
+  .ai-quick-btn{padding:8px 12px;border-radius:100px;border:1px solid rgba(94,207,160,.25);background:transparent;color:var(--text-2);font:inherit;font-size:12px;cursor:pointer;transition:all .2s}
+  .ai-quick-btn:hover{border-color:var(--accent);color:var(--accent)}
+  .ai-chat-typing{display:flex;gap:5px;padding:6px 4px}
+  .ai-chat-typing span{width:7px;height:7px;border-radius:50%;background:var(--accent);opacity:.5;animation:tdot 1s infinite}
+  .ai-chat-typing span:nth-child(2){animation-delay:.15s}.ai-chat-typing span:nth-child(3){animation-delay:.3s}
+  @keyframes tdot{0%,100%{opacity:.3;transform:translateY(0)}50%{opacity:1;transform:translateY(-4px)}}
+  .ai-chat-input-wrap{display:flex;gap:8px;padding:12px;border-top:1px solid rgba(94,207,160,.14)}
+  .ai-chat-input{flex:1;padding:11px 14px;border-radius:12px;background:rgba(255,255,255,.04);border:1px solid rgba(94,207,160,.18);color:var(--text);font:inherit;font-size:13.5px;outline:none}
+  .ai-chat-input:focus{border-color:var(--accent)}
+  .ai-chat-send{width:42px;border-radius:12px;border:0;background:var(--green);color:#04140d;font-size:18px;cursor:pointer;display:grid;place-items:center}
+  .ai-chat-footer{padding:9px 14px;font-size:11px;color:var(--text-3);text-align:center;border-top:1px solid rgba(94,207,160,.1)}
+  .ai-chat-footer a{color:var(--accent);text-decoration:none}
+  [hidden]{display:none!important}
+
+  @media(max-width:760px){
+    .stop,.stop.right{flex-direction:column;justify-content:center;text-align:center;padding:88px 20px 64px}
+    .stop .lead,.stop.right .lead{margin:0 auto}
+    .stop .btns{justify-content:center}
+    .has-footer .contact-body{padding:78px 20px 36px}
+    .site-footer{padding:34px 20px 92px}   /* bottom clearance for the floating Tax AI / WhatsApp buttons */
+  }
+  @media(prefers-reduced-motion:reduce){ .panel{transition:none;opacity:1;transform:none} }
+  </style>
 </head>
 <body>
+  <svg xmlns="http://www.w3.org/2000/svg" style="display:none" aria-hidden="true"><defs>
+    <symbol id="tico-brand-whatsapp" viewBox="0 0 24 24"><path fill="currentColor" stroke="none" d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5.1-1.3A10 10 0 1 0 12 2zm5.2 14.2c-.2.6-1.2 1.2-1.7 1.2-.4.1-1 .1-1.6-.1-.4-.1-.9-.3-1.5-.5-2.6-1.1-4.3-3.8-4.4-4-.1-.2-1.1-1.4-1.1-2.7s.7-1.9.9-2.2c.2-.2.5-.3.7-.3h.5c.2 0 .4 0 .6.4l.9 2.1c.1.2.1.4 0 .6l-.4.6-.5.5c-.1.1-.3.3-.1.6.2.3.8 1.3 1.7 2.1 1.2 1 2.1 1.4 2.4 1.5.3.1.5.1.7-.1l1-1.2c.2-.3.4-.2.7-.1l2 1c.3.1.5.2.6.4 0-.1 0 .5-.2 1.2z"/></symbol>
+    <symbol id="tico-calendar" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="17" rx="2"/><path d="M16 2v4M8 2v4M3 9h18"/></symbol>
+    <symbol id="tico-layout-grid" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></symbol>
+    <symbol id="tico-eye" viewBox="0 0 24 24"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7z"/><circle cx="12" cy="12" r="3"/></symbol>
+    <symbol id="tico-message-circle" viewBox="0 0 24 24"><path d="M12 20a8.5 8.5 0 1 0-7.6-4.7L3 21l5.7-1.4A8.46 8.46 0 0 0 12 20z"/></symbol>
+    <symbol id="tico-shield-check" viewBox="0 0 24 24"><path d="M12 3l7 3v5c0 4.7-3 8.6-7 10-4-1.4-7-5.3-7-10V6l7-3z"/><path d="M9 12l2 2 4-4"/></symbol>
+    <symbol id="tico-rocket" viewBox="0 0 24 24"><path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09z"/><path d="M12 15l-3-3a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-6 11a22.35 22.35 0 0 1-4 2z"/><path d="M9 12H4s.55-3.03 2-4c1.62-1.08 5 0 5 0"/><path d="M12 15v5s3.03-.55 4-2c1.08-1.62 0-5 0-5"/></symbol>
+    <symbol id="tico-phone" viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.12.81.37 1.6.72 2.34a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.74-1.29a2 2 0 0 1 2.11-.45c.74.35 1.53.6 2.34.72A2 2 0 0 1 22 16.92z"/></symbol>
+    <symbol id="tico-mail" viewBox="0 0 24 24"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-10 5L2 7"/></symbol>
+    <symbol id="tico-map-pin" viewBox="0 0 24 24"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0z"/><circle cx="12" cy="10" r="3"/></symbol>
+    <symbol id="tico-arrow-up" viewBox="0 0 24 24"><path d="M12 19V5"/><path d="m5 12 7-7 7 7"/></symbol>
+    <symbol id="tico-robot" viewBox="0 0 24 24"><rect x="4" y="9" width="16" height="11" rx="2"/><path d="M12 5v4"/><circle cx="12" cy="4" r="1"/><path d="M9 14h.01M15 14h.01"/><path d="M9.5 17h5"/></symbol>
+    <symbol id="tico-x" viewBox="0 0 24 24"><path d="M18 6 6 18M6 6l12 12"/></symbol>
+    <symbol id="tico-send" viewBox="0 0 24 24"><path d="M22 2 11 13"/><path d="M22 2 15 22l-4-9-9-4 20-7z"/></symbol>
+  </defs></svg>
+  <canvas id="gx" aria-hidden="true"></canvas>
+  <div class="gx-scrim" aria-hidden="true"></div>
 
-  <a href="#main" class="skip-link">Skip to main content</a>
-  <div class="scroll-progress" id="scrollProgress" aria-hidden="true"></div>
-  <div class="cursor" id="cur" aria-hidden="true"></div>
-  <div class="cursor-ring" id="curR" aria-hidden="true"></div>
-
-  <!-- Aurora background -->
-  <div id="aurora" aria-hidden="true">
-    <div class="aurora-blob aurora-blob--1"></div>
-    <div class="aurora-blob aurora-blob--2"></div>
-    <div class="aurora-blob aurora-blob--3"></div>
-    <div class="aurora-blob aurora-blob--4"></div>
-  </div>
-
-  <!-- Particle canvas -->
-  <canvas id="particleCanvas" aria-hidden="true"></canvas>
-
-  <!-- Full-page scroll aurora zones -->
-  <div id="aurora-scroll" aria-hidden="true">
-    <div class="as-blob as-blob--1"></div>
-    <div class="as-blob as-blob--2"></div>
-    <div class="as-blob as-blob--3"></div>
-    <div class="as-blob as-blob--4"></div>
-    <div class="as-blob as-blob--5"></div>
-    <div class="as-blob as-blob--6"></div>
-  </div>
-
-  <!-- HEADER: nav + ticker -->
-  <header>
-    <nav class="nav" id="nav" aria-label="Main navigation">
-      <a href="#" class="logo" aria-label="AHCA — Home">
-        AHCA<span class="logo-dot" aria-hidden="true"></span>
-      </a>
-
-      <ul class="nav-links" role="list">
-        <li><a href="#services">Services</a></li>
-        <li><a href="#why">Why AHCA</a></li>
-        <li><a href="#results">Results</a></li>
-        <li><a href="#contact">Contact</a></li>
-      </ul>
-
-      <div class="nav-actions">
-        <a href="https://wa.me/971545050689" class="nav-wa" target="_blank" rel="noopener noreferrer" aria-label="Call or WhatsApp us">
-          <i class="ti ti-brand-whatsapp" aria-hidden="true"></i>
-          <span>+971 54 505 0689</span>
-        </a>
-        <button class="nav-burger" id="navBurger" aria-label="Open navigation menu" aria-expanded="false" aria-controls="mobileMenu">
-          <span></span><span></span><span></span>
-        </button>
-      </div>
-    </nav>
-
-    <div class="ticker-wrap" aria-hidden="true">
-      <div class="ticker-track">
-        <span class="ti-item ti-hi">AHCA</span><span class="ti-sep">·</span>
-        <span class="ti-item">UAE FTA Approved Tax Agent</span><span class="ti-sep">·</span>
-        <span class="ti-item">Corporate Tax Preparation</span><span class="ti-sep">·</span>
-        <span class="ti-item">VAT Services</span><span class="ti-sep">·</span>
-        <span class="ti-item">Bookkeeping</span><span class="ti-sep">·</span>
-        <span class="ti-item">Financial Planning</span><span class="ti-sep">·</span>
-        <span class="ti-item">Dubai &amp; Abu Dhabi</span><span class="ti-sep">·</span>
-        <span class="ti-item ti-gold">AED 100M+ VAT Refund Approved</span><span class="ti-sep">·</span>
-        <span class="ti-item ti-hi">AHCA</span><span class="ti-sep">·</span>
-        <span class="ti-item">UAE FTA Approved Tax Agent</span><span class="ti-sep">·</span>
-        <span class="ti-item">Corporate Tax Preparation</span><span class="ti-sep">·</span>
-        <span class="ti-item">VAT Services</span><span class="ti-sep">·</span>
-        <span class="ti-item">Bookkeeping</span><span class="ti-sep">·</span>
-        <span class="ti-item">Financial Planning</span><span class="ti-sep">·</span>
-        <span class="ti-item">Dubai &amp; Abu Dhabi</span><span class="ti-sep">·</span>
-        <span class="ti-item ti-gold">AED 100M+ VAT Refund Approved</span><span class="ti-sep">·</span>
-      </div>
-    </div>
-  </header>
-
-  <!-- MOBILE MENU -->
-  <div class="mobile-menu" id="mobileMenu" role="dialog" aria-modal="true" aria-label="Navigation menu" aria-hidden="true">
-    <div class="mobile-menu-inner">
-      <ul role="list">
-        <li><a href="#services" class="mobile-link">Services</a></li>
-        <li><a href="#why" class="mobile-link">Why AHCA</a></li>
-        <li><a href="#results" class="mobile-link">Results</a></li>
-        <li><a href="#contact" class="mobile-link">Contact</a></li>
-      </ul>
-      <a href="https://wa.me/971545050689" class="mobile-wa" target="_blank" rel="noopener noreferrer">
-        <i class="ti ti-brand-whatsapp" aria-hidden="true"></i> WhatsApp Us
-      </a>
-    </div>
-  </div>
-
-  <main id="main">
-
-    <!-- HERO -->
-    <section class="hero" aria-label="Introduction">
-      <div class="hero-sun" aria-hidden="true"></div>
-      <div class="hero-mesh" aria-hidden="true">
-        <div class="mesh-orb mesh-orb--1"></div>
-        <div class="mesh-orb mesh-orb--2"></div>
-        <div class="mesh-orb mesh-orb--3"></div>
-      </div>
-      <div class="hero-grid-overlay" aria-hidden="true"></div>
-
-      <div class="hero-content">
-        <div class="hero-badge">
-          <span class="badge-dot" aria-hidden="true"></span>
-          <i class="ti ti-shield-check" aria-hidden="true"></i>
-          Approved Tax Agent — UAE FTA
-        </div>
-
-        <h1 class="hero-h1">
-          <span class="h1-line l1">Your money</span>
-          <span class="h1-line l2 h1-rotate" aria-label="works harder">
-            <span class="rot-word is-active" aria-hidden="true">works harder</span>
-            <span class="rot-word is-next" aria-hidden="true">stretches further</span>
-            <span class="rot-word is-next" aria-hidden="true">moves faster</span>
-          </span>
-          <span class="h1-line l3">when we do the <span class="num-scramble" data-text="numbers.">numbers.</span></span>
-        </h1>
-
-        <p class="hero-sub">
-          From corporate tax preparation to VAT services and bookkeeping — AHCA is your FTA-approved financial partner across UAE.
-        </p>
-
-        <div class="hero-btns">
-          <a href="#contact" class="btn btn--primary">
-            <i class="ti ti-calendar" aria-hidden="true"></i> Book free consult
-          </a>
-          <a href="#services" class="btn btn--ghost">
-            <i class="ti ti-layout-grid" aria-hidden="true"></i> Our services
-          </a>
-          <a href="#results" class="btn btn--ghost">
-            See results <i class="ti ti-arrow-down" aria-hidden="true"></i>
-          </a>
-        </div>
-      </div>
-
-    </section>
-
-    <!-- TRUST -->
-    <section class="trust-section" aria-label="Trust indicators">
-      <div class="container">
-        <div class="cert-card reveal-up">
-          <div class="cert-icon" aria-hidden="true"><i class="ti ti-shield-check"></i></div>
-          <div class="cert-text">
-            <div class="cert-title">Approved Tax Agent</div>
-            <div class="cert-sub">Registered with the UAE Federal Tax Authority (FTA)</div>
-          </div>
-          <div class="cert-verified" aria-label="Verified certification">
-            <i class="ti ti-circle-check" aria-hidden="true"></i> Verified
-          </div>
-        </div>
-
-        <div class="stats-grid" role="list" aria-label="Key statistics">
-          <div class="stat-card reveal-up" style="--d:.05s" role="listitem">
-            <div class="stat-row">
-              <span class="stat-num" data-val="200">0</span><span class="stat-sfx" aria-hidden="true">+</span>
-            </div>
-            <div class="stat-lbl">Happy Clients</div>
-          </div>
-          <div class="stat-card reveal-up" style="--d:.12s" role="listitem">
-            <div class="stat-row">
-              <span class="stat-num" data-val="10">0</span>
-            </div>
-            <div class="stat-lbl">Years in UAE</div>
-          </div>
-          <div class="stat-card reveal-up" style="--d:.19s" role="listitem">
-            <div class="stat-row">
-              <span class="stat-num" data-val="500">0</span><span class="stat-sfx" aria-hidden="true">+</span>
-            </div>
-            <div class="stat-lbl">Cases Handled</div>
-          </div>
-          <div class="stat-card reveal-up" style="--d:.26s" role="listitem">
-            <div class="stat-row">
-              <span class="stat-num" data-val="24">0</span><span class="stat-sfx" aria-hidden="true">h</span>
-            </div>
-            <div class="stat-lbl">Response Time</div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- SERVICES -->
-    <section class="section" id="services" aria-labelledby="svc-heading">
-      <div class="container">
-        <div class="section-hd">
-          <div class="sec-label reveal-up">What We Do</div>
-          <h2 class="sec-h reveal-up" id="svc-heading">Everything your business needs</h2>
-          <p class="sec-sub reveal-up">From corporate tax filing to VAT registration — AHCA covers it all across the UAE.</p>
-        </div>
-        <div class="svc-grid reveal-up" style="--d:.08s" role="list" aria-label="Our services">
-          <article class="svc-card svc-card--feat" role="listitem">
-            <div class="svc-glow" aria-hidden="true"></div>
-            <span class="svc-tag">Featured</span>
-            <i class="ti ti-building-skyscraper svc-ico" aria-hidden="true"></i>
-            <h3>Corporate Tax Preparation</h3>
-            <p>Full UAE corporate tax filing, compliance, and planning for businesses of all sizes.</p>
-            <div class="svc-arr" aria-hidden="true"><i class="ti ti-arrow-up-right"></i></div>
-          </article>
-          <article class="svc-card" role="listitem">
-            <div class="svc-glow" aria-hidden="true"></div>
-            <i class="ti ti-file-invoice svc-ico" aria-hidden="true"></i>
-            <h3>Tax Preparation</h3>
-            <p>Business tax filing that maximizes every dirham owed to you — accurate and on time.</p>
-            <div class="svc-arr" aria-hidden="true"><i class="ti ti-arrow-up-right"></i></div>
-          </article>
-          <article class="svc-card" role="listitem">
-            <div class="svc-glow" aria-hidden="true"></div>
-            <i class="ti ti-receipt-tax svc-ico" aria-hidden="true"></i>
-            <h3>UAE VAT Services</h3>
-            <p>Registration, filing, and full FTA compliance — penalty-free, every time.</p>
-            <div class="svc-arr" aria-hidden="true"><i class="ti ti-arrow-up-right"></i></div>
-          </article>
-          <article class="svc-card" role="listitem">
-            <div class="svc-glow" aria-hidden="true"></div>
-            <i class="ti ti-calculator svc-ico" aria-hidden="true"></i>
-            <h3>Bookkeeping</h3>
-            <p>Clean, audit-ready records every month — zero stress, total accuracy.</p>
-            <div class="svc-arr" aria-hidden="true"><i class="ti ti-arrow-up-right"></i></div>
-          </article>
-          <article class="svc-card" role="listitem">
-            <div class="svc-glow" aria-hidden="true"></div>
-            <i class="ti ti-chart-pie svc-ico" aria-hidden="true"></i>
-            <h3>Financial Planning</h3>
-            <p>Smart strategies to grow your wealth and legally reduce your tax bill.</p>
-            <div class="svc-arr" aria-hidden="true"><i class="ti ti-arrow-up-right"></i></div>
-          </article>
-          <article class="svc-card" role="listitem">
-            <div class="svc-glow" aria-hidden="true"></div>
-            <i class="ti ti-building svc-ico" aria-hidden="true"></i>
-            <h3>Business Advisory</h3>
-            <p>Real advice from real experts. Not a spreadsheet — a strategy for growth.</p>
-            <div class="svc-arr" aria-hidden="true"><i class="ti ti-arrow-up-right"></i></div>
-          </article>
-        </div>
-      </div>
-    </section>
-
-    <!-- WHY -->
-    <section class="section section--alt" id="why" aria-labelledby="why-heading">
-      <div class="container">
-        <div class="section-hd">
-          <div class="sec-label reveal-up">Why AHCA</div>
-          <h2 class="sec-h reveal-up" id="why-heading">We're not just accountants.</h2>
-          <p class="sec-sub reveal-up">FTA-approved co-pilots obsessed with finding you every legal advantage.</p>
-        </div>
-        <div class="why-grid">
-          <div class="why-card reveal-l" style="--d:.04s">
-            <div class="why-num" aria-hidden="true">01</div>
-            <i class="ti ti-eye why-ico" aria-hidden="true"></i>
-            <h3>We spot what others miss</h3>
-            <p>Most firms file and forget. We dig deeper to find deductions hiding in plain sight — every dirham counts.</p>
-          </div>
-          <div class="why-card reveal-r" style="--d:.08s">
-            <div class="why-num" aria-hidden="true">02</div>
-            <i class="ti ti-message-circle why-ico" aria-hidden="true"></i>
-            <h3>Clear Arabic &amp; English</h3>
-            <p>No jargon. No confusion. Just clear answers in the language you're most comfortable with, today.</p>
-          </div>
-          <div class="why-card reveal-l" style="--d:.12s">
-            <div class="why-num" aria-hidden="true">03</div>
-            <i class="ti ti-shield-check why-ico" aria-hidden="true"></i>
-            <h3>FTA Approved — Always Compliant</h3>
-            <p>Registered Approved Tax Agents — your business is always protected, never penalised.</p>
-          </div>
-          <div class="why-card reveal-r" style="--d:.16s">
-            <div class="why-num" aria-hidden="true">04</div>
-            <i class="ti ti-rocket why-ico" aria-hidden="true"></i>
-            <h3>Built for Growth</h3>
-            <p>Freelancer or 50-person company — AHCA scales with your ambition and grows alongside you.</p>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- EXPERTISE -->
-    <section class="section" aria-labelledby="exp-heading">
-      <div class="container">
-        <div class="section-hd">
-          <div class="sec-label reveal-up">Expertise</div>
-          <h2 class="sec-h reveal-up" id="exp-heading">Our skill areas</h2>
-        </div>
-        <div class="bars-wrap reveal-up" style="--d:.05s">
-          <div class="bar-row">
-            <div class="bar-meta"><span>Corporate Tax Preparation</span><span class="bar-pct">97%</span></div>
-            <div class="bar-track" role="progressbar" aria-valuenow="97" aria-valuemin="0" aria-valuemax="100" aria-label="Corporate tax preparation: 97%">
-              <div class="bar-fill" data-w="97"></div>
-            </div>
-          </div>
-          <div class="bar-row">
-            <div class="bar-meta"><span>UAE VAT &amp; FTA Compliance</span><span class="bar-pct">96%</span></div>
-            <div class="bar-track" role="progressbar" aria-valuenow="96" aria-valuemin="0" aria-valuemax="100" aria-label="VAT and FTA compliance: 96%">
-              <div class="bar-fill" data-w="96"></div>
-            </div>
-          </div>
-          <div class="bar-row">
-            <div class="bar-meta"><span>Bookkeeping &amp; Payroll</span><span class="bar-pct">98%</span></div>
-            <div class="bar-track" role="progressbar" aria-valuenow="98" aria-valuemin="0" aria-valuemax="100" aria-label="Bookkeeping and payroll: 98%">
-              <div class="bar-fill" data-w="98"></div>
-            </div>
-          </div>
-          <div class="bar-row">
-            <div class="bar-meta"><span>Financial Reporting &amp; Audit</span><span class="bar-pct">93%</span></div>
-            <div class="bar-track" role="progressbar" aria-valuenow="93" aria-valuemin="0" aria-valuemax="100" aria-label="Financial reporting and audit: 93%">
-              <div class="bar-fill" data-w="93"></div>
-            </div>
-          </div>
-          <div class="bar-row" style="margin-bottom:0">
-            <div class="bar-meta"><span>Business Advisory</span><span class="bar-pct">90%</span></div>
-            <div class="bar-track" role="progressbar" aria-valuenow="90" aria-valuemin="0" aria-valuemax="100" aria-label="Business advisory: 90%">
-              <div class="bar-fill" data-w="90"></div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- RESULTS -->
-    <section class="section section--alt" id="results" aria-labelledby="res-heading">
-      <div class="container">
-        <div class="section-hd">
-          <div class="sec-label reveal-up">Real Results</div>
-          <h2 class="sec-h reveal-up" id="res-heading">Numbers don't lie.</h2>
-          <p class="sec-sub reveal-up">Wins delivered for UAE businesses just like yours.</p>
-        </div>
-        <div class="res-slider-wrap">
-          <button class="res-arrow res-prev" aria-label="Previous results"><i class="ti ti-chevron-left" aria-hidden="true"></i></button>
-          <div class="res-slider">
-          <div class="res-track">
-            <article class="res-card">
-              <span class="res-tag res-tag--g">Corporate</span>
-              <h3>Corporate Tax Filing</h3>
-              <p>End-to-end corporate tax preparation for a UAE trading company — on time, fully compliant.</p>
-              <div class="res-outcome">
-                <i class="ti ti-check" aria-hidden="true"></i> Zero penalties, 100% FTA compliant
-              </div>
-            </article>
-            <article class="res-card res-card--gold">
-              <span class="res-tag res-tag--gold"><i class="ti ti-star" aria-hidden="true"></i> Major Win</span>
-              <h3>VAT Refund Claim</h3>
-              <p>Large-scale VAT refund prepared and submitted — approved by the FTA without dispute.</p>
-              <div class="res-amount">
-                <span class="res-amount-lbl">Refund approved</span>
-                <span class="res-amount-val">AED 100,000,000+</span>
-              </div>
-              <div class="gold-badge"><i class="ti ti-shield-check" aria-hidden="true"></i> FTA Approved</div>
-            </article>
-            <article class="res-card">
-              <span class="res-tag res-tag--g">Tech Startup</span>
-              <h3>Launch-Ready Finances</h3>
-              <p>VAT registration, payroll setup, and investor-ready reports from day one of operations.</p>
-              <div class="res-outcome">
-                <i class="ti ti-rocket" aria-hidden="true"></i> Funded within 6 months
-              </div>
-            </article>
-            <article class="res-card">
-              <span class="res-tag res-tag--g">Real Estate</span>
-              <h3>Bookkeeping Overhaul</h3>
-              <p>Full financial restructuring for a Dubai property developer — 3 years of records cleaned and FTA-ready.</p>
-              <div class="res-amount">
-                <span class="res-amount-lbl">Deductions identified</span>
-                <span class="res-amount-val">AED 2,400,000+</span>
-              </div>
-              <div class="res-outcome">
-                <i class="ti ti-check" aria-hidden="true"></i> Audit-ready in 90 days
-              </div>
-            </article>
-            <article class="res-card">
-              <span class="res-tag res-tag--g">Hospitality</span>
-              <h3>Payroll Compliance</h3>
-              <p>Multi-branch F&amp;B group with 12 locations brought fully compliant with UAE payroll regulations.</p>
-              <div class="res-outcome">
-                <i class="ti ti-building-store" aria-hidden="true"></i> 12 branches, zero disputes
-              </div>
-            </article>
-            <article class="res-card">
-              <span class="res-tag res-tag--g">Freelancer</span>
-              <h3>Fast-Track Setup</h3>
-              <p>UAE freelance permit, VAT registration, and first tax return — all sorted in under a week.</p>
-              <div class="res-outcome">
-                <i class="ti ti-bolt" aria-hidden="true"></i> Fully compliant in 5 days
-              </div>
-            </article>
-            <article class="res-card res-card--gold">
-              <span class="res-tag res-tag--gold"><i class="ti ti-trending-up" aria-hidden="true"></i> Tax Saving</span>
-              <h3>E-Commerce Tax Plan</h3>
-              <p>Cross-border e-commerce restructured with an optimised corporate tax position — fully FTA compliant.</p>
-              <div class="res-amount">
-                <span class="res-amount-lbl">Annual tax saving</span>
-                <span class="res-amount-val">AED 380,000</span>
-              </div>
-              <div class="gold-badge"><i class="ti ti-shield-check" aria-hidden="true"></i> FTA Approved</div>
-            </article>
-          </div>
-          </div>
-          <button class="res-arrow res-next" aria-label="Next results"><i class="ti ti-chevron-right" aria-hidden="true"></i></button>
-        </div>
-      </div>
-    </section>
-
-    <!-- CTA BAND -->
-    <div class="cta-band reveal-up" style="--d:.05s">
-      <div class="cta-glow" aria-hidden="true"></div>
-      <div class="cta-content">
-        <div class="cta-label">UAE FTA Approved Tax Agent · Dubai &amp; Abu Dhabi</div>
-        <h2 class="cta-h">Let's take control<br>of your finances.</h2>
-        <p class="cta-sub">Corporate tax. VAT. Bookkeeping. Payroll. All handled by certified UAE tax professionals.</p>
-      </div>
-    </div>
-
-    <!-- CONTACT -->
-    <section class="section" id="contact" aria-labelledby="contact-heading">
-      <div class="galaxy" aria-hidden="true">
-        <span class="galaxy-core"></span>
-        <canvas class="galaxy-stars" id="galaxyStars"></canvas>
-      </div>
-      <div class="container">
-        <div class="section-hd">
-          <div class="sec-label reveal-up">Get in Touch</div>
-          <h2 class="sec-h reveal-up" id="contact-heading">Ready when you are.</h2>
-          <p class="sec-sub reveal-up">Free 30-min consultation with an FTA-approved tax agent — no obligation, no pressure.</p>
-        </div>
-
-        <div class="contact-layout">
-          <div class="contact-info reveal-l">
-            <a href="https://wa.me/971545050689" class="wa-cta" target="_blank" rel="noopener noreferrer" aria-label="Message us on WhatsApp">
-              <div class="wa-cta-ico" aria-hidden="true"><i class="ti ti-brand-whatsapp"></i></div>
-              <div>
-                <div class="wa-cta-title">Message us on WhatsApp</div>
-                <div class="wa-cta-sub">Usually replies within minutes</div>
-              </div>
-              <i class="ti ti-chevron-right wa-arr" aria-hidden="true"></i>
-            </a>
-
-            <div class="contact-details" role="list">
-              <div class="contact-row" role="listitem">
-                <div class="contact-ico" aria-hidden="true"><i class="ti ti-phone"></i></div>
-                <div>
-                  <div class="contact-lbl">Phone / WhatsApp</div>
-                  <a href="tel:+971545050689" class="contact-val">+971 54 505 0689</a>
-                </div>
-              </div>
-              <div class="contact-row" role="listitem">
-                <div class="contact-ico" aria-hidden="true"><i class="ti ti-mail"></i></div>
-                <div>
-                  <div class="contact-lbl">Email</div>
-                  <a href="mailto:abdelfattah@ahca.ae" class="contact-val">abdelfattah@ahca.ae</a>
-                </div>
-              </div>
-              <div class="contact-row" role="listitem">
-                <div class="contact-ico" aria-hidden="true"><i class="ti ti-map-pin"></i></div>
-                <div>
-                  <div class="contact-lbl">Location</div>
-                  <span class="contact-val">Dubai &amp; Abu Dhabi, UAE</span>
-                </div>
-              </div>
-              <div class="contact-row" role="listitem">
-                <div class="contact-ico" aria-hidden="true"><i class="ti ti-shield-check"></i></div>
-                <div>
-                  <div class="contact-lbl">Certification</div>
-                  <span class="contact-val">FTA Approved Tax Agent</span>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div class="contact-form-wrap reveal-r">
-            <form class="cform" id="contactForm" novalidate aria-label="Contact form">
-              <div class="form-row">
-                <div class="fg">
-                  <label for="fname">Your name <span class="req" aria-label="required">*</span></label>
-                  <input type="text" id="fname" name="name" placeholder="e.g. Ahmed Al Mansoori" required autocomplete="name">
-                  <span class="ferr" role="alert" id="fname-err"></span>
-                </div>
-                <div class="fg">
-                  <label for="femail">Email address <span class="req" aria-label="required">*</span></label>
-                  <input type="email" id="femail" name="email" placeholder="you@example.com" required autocomplete="email">
-                  <span class="ferr" role="alert" id="femail-err"></span>
-                </div>
-              </div>
-              <div class="form-row">
-                <div class="fg">
-                  <label for="fphone">Phone number</label>
-                  <input type="tel" id="fphone" name="phone" placeholder="+971 54 505 0689" autocomplete="tel">
-                </div>
-                <div class="fg">
-                  <label for="fservice">Service needed <span class="req" aria-label="required">*</span></label>
-                  <div class="sel-wrap">
-                    <select id="fservice" name="service" required>
-                      <option value="" disabled selected>Select a service</option>
-                      <option>Corporate tax preparation</option>
-                      <option>Tax preparation</option>
-                      <option>UAE VAT registration &amp; filing</option>
-                      <option>Bookkeeping</option>
-                      <option>Financial planning</option>
-                      <option>Business advisory</option>
-                      <option>Payroll setup</option>
-                    </select>
-                    <i class="ti ti-chevron-down" aria-hidden="true"></i>
-                  </div>
-                  <span class="ferr" role="alert" id="fservice-err"></span>
-                </div>
-              </div>
-              <div class="fg">
-                <label for="fmsg">Tell us about your business</label>
-                <textarea id="fmsg" name="message" placeholder="What's your biggest financial challenge right now?" rows="4"></textarea>
-              </div>
-              <button type="submit" class="btn btn--primary btn--submit" id="submitBtn">
-                <span class="btn-txt">Send message — it's free</span>
-                <i class="ti ti-send btn-ico" aria-hidden="true"></i>
-                <span class="btn-spin" aria-hidden="true"></span>
-              </button>
-              <div class="form-ok" id="formOk" role="status" aria-live="polite" hidden>
-                <i class="ti ti-circle-check" aria-hidden="true"></i>
-                Thank you! We'll be in touch within 24 hours.
-              </div>
-            </form>
-          </div>
-        </div>
-      </div>
-    </section>
-
-  </main>
-
-  <!-- FOOTER -->
-  <footer class="footer" role="contentinfo">
-    <div class="container">
-      <div class="footer-inner">
-        <div class="footer-brand">
-          <div class="footer-logo">AHCA<span>.</span></div>
-          <p class="footer-tag">Your money. Our mission.</p>
-          <div class="footer-cert">
-            <i class="ti ti-shield-check" aria-hidden="true"></i> FTA Approved Tax Agent
-          </div>
-        </div>
-        <div class="footer-cols">
-          <div class="footer-col">
-            <div class="fcol-title">Services</div>
-            <ul role="list">
-              <li><a href="#services">Corporate Tax</a></li>
-              <li><a href="#services">VAT Services</a></li>
-              <li><a href="#services">Bookkeeping</a></li>
-              <li><a href="#services">Financial Planning</a></li>
-              <li><a href="#services">Business Advisory</a></li>
-            </ul>
-          </div>
-          <div class="footer-col">
-            <div class="fcol-title">Contact</div>
-            <ul role="list">
-              <li><a href="tel:+971545050689">+971 54 505 0689</a></li>
-              <li><a href="mailto:abdelfattah@ahca.ae">abdelfattah@ahca.ae</a></li>
-              <li><span>Dubai, UAE</span></li>
-              <li><span>Abu Dhabi, UAE</span></li>
-            </ul>
-          </div>
-        </div>
-      </div>
-      <div class="footer-bottom">
-        <span>&copy; 2026 AHCA. All rights reserved.</span>
-        <span>Dubai &amp; Abu Dhabi, UAE</span>
-      </div>
-    </div>
-  </footer>
-
-  <!-- SCROLL TO TOP -->
-  <button class="scroll-top" id="scrollTop" aria-label="Back to top">
-    <i class="ti ti-arrow-up" aria-hidden="true"></i>
-  </button>
-
-  <!-- WA FLOAT -->
-  <div class="wa-float" aria-label="Quick WhatsApp contact">
-    <span class="wa-float-lbl">Chat with us!</span>
-    <a href="https://wa.me/971545050689" class="wa-float-btn" target="_blank" rel="noopener noreferrer" aria-label="Open WhatsApp chat">
-      <i class="ti ti-brand-whatsapp" aria-hidden="true"></i>
+  <nav class="top" id="nav">
+    <a href="#top" class="brand">AHCA<i></i></a>
+    <ul class="nav-links">
+      <li><a href="#services">Services</a></li>
+      <li><a href="#why">Why AHCA</a></li>
+      <li><a href="#proof">Results</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+    <a href="https://wa.me/971545050689" class="nav-wa" target="_blank" rel="noopener noreferrer">
+      <i class="ti"><svg class="ic"><use href="#tico-brand-whatsapp"/></svg></i><span>+971 54 505 0689</span>
     </a>
+    <div class="nav-hair"><em id="navSeg"></em></div>
+  </nav>
+
+  <div id="scroller">
+
+    <!-- 0 · HERO -->
+    <section class="stop center" id="top">
+      <div class="panel">
+        <span class="kicker"><span class="dot"></span> AHCA · UAE FTA-Approved Tax Agent</span>
+        <h1 class="big">Your money,<br><em>working harder.</em></h1>
+        <p class="lead">AHCA is your FTA-approved tax agent in Dubai &amp; Abu Dhabi — corporate tax registration &amp; filing, VAT returns, bookkeeping and advisory for UAE businesses.</p>
+        <div class="btns">
+          <a class="btn primary" href="#contact"><i class="ti"><svg class="ic"><use href="#tico-calendar"/></svg></i> Book free consult</a>
+          <a class="btn ghost" href="#services"><i class="ti"><svg class="ic"><use href="#tico-layout-grid"/></svg></i> Our services</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- 1 · CORPORATE TAX -->
+    <section class="stop" id="services">
+      <div class="panel">
+        <span class="kicker"><span class="num">01</span> Corporate Tax</span>
+        <h2 class="big">Always<br><em>compliant.</em></h2>
+        <p class="lead">UAE corporate tax registration, filing and planning — handled end-to-end and penalty-free, with Small Business Relief claimed whenever you qualify.</p>
+        <div class="dustline" data-lines="Corporate structuring that saves tax.|Registration &amp; filing, end-to-end.|Small Business Relief claimed for you.|Zero penalties to date."><canvas></canvas></div>
+      </div>
+      <div class="aside">
+        <div class="hud" style="--off:0">
+          <div class="hud-3dwrap"><canvas class="hud-3d" id="bk-canvas"></canvas></div>
+          <div class="hud-title">Corporate Tax</div>
+          <div class="hud-fig">0<small>Penalties to date</small></div>
+          <div class="hud-meta"><span>FTA compliant</span><b>100%</b></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 2 · VAT -->
+    <section class="stop right">
+      <div class="panel">
+        <span class="kicker"><span class="num">02</span> UAE VAT</span>
+        <h2 class="big">Every quarter,<br><em>on time.</em></h2>
+        <p class="lead">VAT registration in Dubai &amp; across the UAE, and every VAT return filed before its deadline with full FTA compliance — no scramble, no penalties.</p>
+        <div class="dustline" data-lines="VAT registration in Dubai &amp; the UAE.|Every return filed before its deadline.|AED 100M+ in refunds approved.|Full FTA compliance, always."><canvas></canvas></div>
+      </div>
+      <div class="aside">
+        <div class="hud" style="--off:14">
+          <div class="hud-3dwrap"><canvas class="hud-3d" id="hud3d-coin"></canvas></div>
+          <div class="hud-title">UAE VAT</div>
+          <div class="hud-fig">AED&nbsp;100M+<small>Refunds approved</small></div>
+          <div class="hud-meta"><span>On-time filing</span><b>96%</b></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 3 · BOOKKEEPING -->
+    <section class="stop">
+      <div class="panel">
+        <span class="kicker"><span class="num">03</span> Bookkeeping</span>
+        <h2 class="big">Always<br><em>reconciled.</em></h2>
+        <p class="lead">Clean, audit-ready records every month — every transaction recorded and matched, so your accounts stay tidy year-round.</p>
+        <div class="dustline" data-lines="Every transaction recorded &amp; matched.|Audit-ready records, every month.|500+ cases handled, 98% accuracy.|Clean books, month after month."><canvas></canvas></div>
+      </div>
+      <div class="aside">
+        <div class="hud" style="--off:7">
+          <div class="hud-3dwrap"><canvas class="hud-3d" id="hud3d-books"></canvas></div>
+          <div class="hud-title">Bookkeeping</div>
+          <div class="hud-fig">500+<small>Cases handled</small></div>
+          <div class="hud-meta"><span>Accuracy</span><b>98%</b></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 4 · PLANNING & ADVISORY -->
+    <section class="stop right">
+      <div class="panel">
+        <span class="kicker"><span class="num">04</span> Planning &amp; Advisory</span>
+        <h2 class="big">Advice when<br><em>it counts.</em></h2>
+        <p class="lead">Real guidance from approved tax agents — smart structure, timing and legal savings that grow your wealth, before you need them.</p>
+        <div class="dustline" data-lines="Corporate structuring that saves tax.|Timing that protects your cash flow.|AED 380K saved on average, every year.|Real agents. Real answers."><canvas></canvas></div>
+      </div>
+      <div class="aside">
+        <div class="hud" style="--off:34">
+          <div class="hud-3dwrap"><canvas class="hud-3d" id="hud3d-gem"></canvas></div>
+          <div class="hud-title">Planning &amp; Advisory</div>
+          <div class="hud-fig">AED&nbsp;380K<small>Avg tax saved / yr</small></div>
+          <div class="hud-meta"><span>Growth strategy</span><b>90%</b></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 5 · WHY AHCA -->
+    <section class="stop center" id="why">
+      <div class="panel">
+        <span class="kicker"><span class="dot"></span> Why AHCA</span>
+        <h2 class="big">We don't just<br><em>file.</em></h2>
+        <ul class="lines">
+          <li><i class="ti"><svg class="ic"><use href="#tico-eye"/></svg></i><span><b>We spot what others miss.</b> We dig deeper to find deductions hiding in plain sight — every dirham counts.</span></li>
+          <li><i class="ti"><svg class="ic"><use href="#tico-message-circle"/></svg></i><span><b>Clear Arabic &amp; English.</b> No jargon, no confusion — answers in the language you're most comfortable with.</span></li>
+          <li><i class="ti"><svg class="ic"><use href="#tico-shield-check"/></svg></i><span><b>FTA-approved, always compliant.</b> Registered Approved Tax Agents — your business is protected, never penalised.</span></li>
+          <li><i class="ti"><svg class="ic"><use href="#tico-rocket"/></svg></i><span><b>Built for growth.</b> Freelancer or 50-person company — AHCA scales with your ambition.</span></li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- 6 · PROOF -->
+    <section class="stop center" id="proof">
+      <div class="panel">
+        <span class="kicker"><span class="dot"></span> Real results</span>
+        <h2 class="big"><em>AED 100M+</em><br>in VAT refunds approved.</h2>
+        <p class="lead">A large-scale VAT refund prepared and submitted by AHCA — approved by the FTA without dispute. Numbers don't lie.</p>
+        <div class="stats">
+          <div class="stat"><div class="v" data-to="200">0<em>+</em></div><div class="l">Happy clients</div></div>
+          <div class="stat"><div class="v" data-to="10">0</div><div class="l">Years in UAE</div></div>
+          <div class="stat"><div class="v" data-to="500">0<em>+</em></div><div class="l">Cases handled</div></div>
+          <div class="stat"><div class="v" data-to="24">0<em>h</em></div><div class="l">Response time</div></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 7 · CONTACT (+ footer below, same stop) -->
+    <section class="stop center has-footer" id="contact">
+      <div class="contact-body">
+        <div class="panel">
+          <span class="kicker"><span class="dot"></span> Get in touch</span>
+          <h2 class="big">Ready when<br><em>you are.</em></h2>
+          <p class="lead">A free 30-minute consultation with an FTA-approved tax agent — no obligation, no pressure.</p>
+          <div class="btns">
+            <a class="btn primary" href="https://wa.me/971545050689" target="_blank" rel="noopener noreferrer"><i class="ti"><svg class="ic"><use href="#tico-brand-whatsapp"/></svg></i> Message us on WhatsApp</a>
+            <a class="btn ghost" href="tel:+971545050689"><i class="ti"><svg class="ic"><use href="#tico-phone"/></svg></i> +971 54 505 0689</a>
+          </div>
+        </div>
+      </div>
+      <footer class="site-footer">
+        <div class="foot-inner">
+        <div class="foot-brand">
+          <div class="foot-logo">AHCA<span>.</span></div>
+          <p>Your money. Our mission.</p>
+          <span class="foot-cert"><i class="ti"><svg class="ic"><use href="#tico-shield-check"/></svg></i> FTA Approved Tax Agent</span>
+        </div>
+        <div class="foot-col">
+          <h4>Contact</h4>
+          <a href="tel:+971545050689"><i class="ti"><svg class="ic"><use href="#tico-phone"/></svg></i> +971 54 505 0689</a>
+          <a href="mailto:abdelfattah@ahca.ae"><i class="ti"><svg class="ic"><use href="#tico-mail"/></svg></i> abdelfattah@ahca.ae</a>
+          <a href="https://wa.me/971545050689" target="_blank" rel="noopener noreferrer"><i class="ti"><svg class="ic"><use href="#tico-brand-whatsapp"/></svg></i> WhatsApp us</a>
+        </div>
+        <div class="foot-col">
+          <h4>Office</h4>
+          <span><i class="ti"><svg class="ic"><use href="#tico-map-pin"/></svg></i> Dubai &amp; Abu Dhabi, UAE</span>
+          <span><i class="ti"><svg class="ic"><use href="#tico-shield-check"/></svg></i> FTA Approved Tax Agent</span>
+          <a href="#top"><i class="ti"><svg class="ic"><use href="#tico-arrow-up"/></svg></i> Back to top</a>
+        </div>
+      </div>
+      <div class="foot-bottom"><span>&copy; 2026 AHCA. All rights reserved.</span><span>Dubai &amp; Abu Dhabi, UAE</span></div>
+      </footer>
+    </section>
+
   </div>
 
-  <!-- AI TAX ASSISTANT TRIGGER -->
-  <button class="ai-chat-btn" id="aiChatBtn" aria-label="Open Tax AI assistant" aria-expanded="false">
-    <i class="ti ti-robot" aria-hidden="true"></i>
-    <span class="ai-chat-btn-lbl">Tax AI</span>
-  </button>
+  <div id="sprog"><span></span></div>
+  <div id="vflash"></div>
+  <canvas id="ctrail"></canvas>
+  <div class="hint" id="hint"><span>Scroll</span><span class="arr">↓</span></div>
+  <div class="rail" id="rail"></div>
 
-  <!-- AI TAX ASSISTANT WIDGET -->
+  <div class="wa-float"><a href="https://wa.me/971545050689" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp"><span class="radar"></span><span class="radar r2"></span><i class="ti"><svg class="ic"><use href="#tico-brand-whatsapp"/></svg></i></a></div>
+
+  <!-- AI Tax Assistant -->
+  <button class="ai-btn" id="aiChatBtn" aria-expanded="false"><i class="ti"><svg class="ic"><use href="#tico-robot"/></svg></i> Tax AI</button>
   <div class="ai-chat" id="aiChat" role="dialog" aria-label="AHCA Tax Assistant" aria-hidden="true">
     <div class="ai-chat-header">
-      <div class="ai-chat-avatar"><i class="ti ti-robot" aria-hidden="true"></i></div>
-      <div class="ai-chat-header-info">
-        <div class="ai-chat-name">AHCA Tax Assistant</div>
-        <div class="ai-chat-status"><span class="ai-status-dot"></span>Online · UAE Tax Expert</div>
-      </div>
-      <button class="ai-chat-close" id="aiChatClose" aria-label="Close chat"><i class="ti ti-x"></i></button>
+      <div class="ai-chat-avatar"><i class="ti"><svg class="ic"><use href="#tico-robot"/></svg></i></div>
+      <div><div class="ai-chat-name">AHCA Tax Assistant</div><div class="ai-chat-status"><span class="ai-status-dot"></span>Online · UAE Tax Expert</div></div>
+      <button class="ai-chat-close" id="aiChatClose" aria-label="Close"><i class="ti"><svg class="ic"><use href="#tico-x"/></svg></i></button>
     </div>
     <div class="ai-chat-messages" id="aiChatMessages">
       <div class="ai-msg ai-msg--bot">
         <p>Hello! I'm AHCA's AI Tax Assistant. Ask me anything about UAE Corporate Tax, VAT, or FTA compliance.</p>
-        <p class="ai-msg-ar">مرحباً! أنا مساعد الضرائب الذكي. اسألني عن ضريبة الشركات أو ضريبة القيمة المضافة.</p>
+        <p class="ai-msg-ar">مرحباً! أنا مساعد الضرائب الذكي. اسألني عن ضريبة الشركات أو القيمة المضافة.</p>
       </div>
       <div class="ai-quick-btns">
         <button class="ai-quick-btn" data-q="What is the UAE corporate tax rate?">Corporate tax rate?</button>
@@ -626,22 +514,668 @@
         <button class="ai-quick-btn" data-q="What are the VAT filing deadlines in UAE?">VAT deadlines?</button>
         <button class="ai-quick-btn" data-q="What is the small business relief for corporate tax?">Small business relief?</button>
       </div>
-      <div class="ai-chat-typing" id="aiChatTyping" hidden>
-        <span></span><span></span><span></span>
-      </div>
+      <div class="ai-chat-typing" id="aiChatTyping" hidden><span></span><span></span><span></span></div>
     </div>
     <div class="ai-chat-input-wrap">
       <input type="text" class="ai-chat-input" id="aiChatInput" placeholder="Ask a UAE tax question…" autocomplete="off">
-      <button class="ai-chat-send" id="aiChatSend" aria-label="Send message">
-        <i class="ti ti-send" aria-hidden="true"></i>
-      </button>
+      <button class="ai-chat-send" id="aiChatSend" aria-label="Send"><i class="ti"><svg class="ic"><use href="#tico-send"/></svg></i></button>
     </div>
-    <div class="ai-chat-footer">
-      Powered by AHCA · <a href="#contact">Book a free call</a>
-    </div>
+    <div class="ai-chat-footer">Powered by AHCA · <a href="#contact">Book a free call</a></div>
   </div>
 
-  <script src="assets/js/main.js"></script>
+  <!-- ── UI: reveals, rail, nav, stat count-up, form ── -->
+  <script>
+  (function(){
+    var stops=[].slice.call(document.querySelectorAll('.stop'));
+    var rail=document.getElementById('rail'), nav=document.getElementById('nav'), hint=document.getElementById('hint');
+    var noMotion = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    // cinematic headline reveal: wrap each line so it can rise out of a clip mask
+    document.querySelectorAll('#scroller .big').forEach(function(h){
+      var parts=h.innerHTML.split(/<br\s*\/?>/i);
+      h.innerHTML=parts.map(function(p){ return '<span class="rl"><span class="rli">'+p+'</span></span>'; }).join('');
+    });
+    // auto-fit: shrink a headline until every line fits its panel (no clipping, no overflow)
+    function fitHeads(){ document.querySelectorAll('#scroller .big').forEach(function(h){
+      h.style.fontSize='';
+      var fs=parseFloat(getComputedStyle(h).fontSize)||48, guard=0, lis=h.querySelectorAll('.rli');
+      function over(){ var lh=fs*1.3;
+        for(var i=0;i<lis.length;i++){ if(lis[i].scrollWidth>h.clientWidth+2 || lis[i].getBoundingClientRect().height>lh*1.45) return true; }
+        return false; }
+      while(over() && fs>24 && guard<26){ fs-=2; h.style.fontSize=fs+'px'; guard++; }
+    }); }
+    addEventListener('load',fitHeads); addEventListener('resize',fitHeads,{passive:true});
+    if(document.fonts&&document.fonts.ready) document.fonts.ready.then(fitHeads);
+    setTimeout(fitHeads,500); fitHeads();
+    stops.forEach(function(s,i){ var b=document.createElement('b'); b.title='Section '+(i+1);
+      b.onclick=function(){ go(i); }; rail.appendChild(b); });
+    var dots=[].slice.call(rail.children);
+
+    // reveal on enter (once)
+    var io=new IntersectionObserver(function(es){ es.forEach(function(e){ if(e.isIntersecting){ e.target.classList.add('in');
+      if(e.target.id==='proof') countUp(); } }); }, {threshold:0.28});
+    stops.forEach(function(s){ io.observe(s); });
+
+    // stat count-up
+    var counted=false;
+    function countUp(){ if(counted) return; counted=true;
+      document.querySelectorAll('.stat .v').forEach(function(el){ var to=+el.getAttribute('data-to'), suf=el.querySelector('em');
+        var sfx=suf?suf.outerHTML:'', t0=null;
+        function step(ts){ if(!t0)t0=ts; var p=Math.min(1,(ts-t0)/1100); var val=Math.round(to*(p*(2-p)));
+          el.innerHTML=val+sfx; if(p<1) requestAnimationFrame(step); }
+        requestAnimationFrame(step); }); }
+
+    var sprog=document.querySelector('#sprog span');
+    function onScroll(){ var y=scrollY;
+      nav.classList.toggle('scrolled', y>40);
+      if(hint) hint.style.opacity = y>60 ? 0 : 1;
+      if(sprog){ var mx=document.body.scrollHeight-innerHeight; sprog.style.width=(mx>0?(y/mx*100):0)+'%'; }
+      var vpC=innerHeight*0.5, near=0, nd=1e9;
+      for(var i=0;i<stops.length;i++){ var r=stops[i].getBoundingClientRect(), c=r.top+r.height*0.5, d=Math.abs(c-vpC);
+        if(d<nd){nd=d;near=i;} }
+      for(var j=0;j<dots.length;j++) dots[j].classList.toggle('on', j===near);
+      if(near!==window.__stopNear){ window.__stopNear=near;
+        try{ window.dispatchEvent(new CustomEvent('ahca:stop',{detail:near})); }catch(err){} }
+    }
+    addEventListener('scroll',onScroll,{passive:true}); onScroll();
+
+    // editorial nav: active link + hairline glow segment follow the current section
+    var navLinks=[].slice.call(document.querySelectorAll('.nav-links a')), navSeg=document.getElementById('navSeg');
+    function navFor(i){ if(i>=1&&i<=4) return 0; if(i===5) return 1; if(i===6) return 2; if(i===7) return 3; return -1; }
+    function setNav(i){ var k=navFor(i);
+      navLinks.forEach(function(a,j){ a.classList.toggle('on', j===k); });
+      if(!navSeg) return;
+      if(k<0){ navSeg.classList.remove('show'); return; }
+      var r=navLinks[k].getBoundingClientRect(), hair=navSeg.parentElement.getBoundingClientRect();
+      navSeg.style.left=(r.left-hair.left+r.width/2-28)+'px'; navSeg.classList.add('show');
+    }
+    window.addEventListener('ahca:stop',function(e){ setNav(e.detail); });
+    addEventListener('resize',function(){ if(typeof window.__stopNear==='number') setNav(window.__stopNear); },{passive:true});
+    if(typeof window.__stopNear==='number') setNav(window.__stopNear);
+
+    // contact form — client-side feedback
+    var f=document.getElementById('contactForm');
+    if(f) f.addEventListener('submit',function(e){ e.preventDefault();
+      if(!f.name.value.trim()||!f.email.value.trim()||!f.service.value){ f.reportValidity&&f.reportValidity(); return; }
+      document.getElementById('formOk').classList.add('show'); f.reset();
+    });
+
+    // ── section scroll: one gesture glides fully to the next stop, never resting half-way ──
+    var sections = stops;   // footer lives inside the last stop now, not a separate glide
+    var current = 0, locked = false, lastWheel = 0;
+    function clampScroll(v){ return Math.max(0, Math.min(v, document.body.scrollHeight - innerHeight)); }
+    function syncCurrent(){ var y=scrollY, best=0, bd=1e9;
+      for(var i=0;i<sections.length;i++){ var d=Math.abs(sections[i].offsetTop-y); if(d<bd){bd=d;best=i;} } current=best; }
+    var vflash=document.getElementById('vflash'), vfT=null;
+    function landFlash(){ if(noMotion||!vflash) return; vflash.classList.add('on');
+      clearTimeout(vfT); vfT=setTimeout(function(){ vflash.classList.remove('on'); }, 520); }
+    function tweenTo(target){ locked=true; var start=scrollY, dist=target-start, t0=null, dur=940;
+      function step(ts){ if(t0===null)t0=ts; var p=Math.min(1,(ts-t0)/dur);
+        var e=p<0.5?16*p*p*p*p*p:1-Math.pow(-2*p+2,5)/2;            // easeInOutQuint — long glide, soft landing
+        if(!noMotion) window.__warp = Math.sin(p*Math.PI);          // galaxy warp peaks mid-flight
+        scrollTo(0, start+dist*e);
+        if(p<1) requestAnimationFrame(step);
+        else { window.__warp=0; landFlash();
+          (function idle(){ if(performance.now()-lastWheel>140) locked=false; else setTimeout(idle,60); })(); }
+      }
+      requestAnimationFrame(step);
+    }
+    function go(i){ i=Math.max(0,Math.min(sections.length-1,i)); var target=clampScroll(sections[i].offsetTop);
+      if(Math.abs(target-scrollY)<2) return; current=i; tweenTo(target); }
+    addEventListener('wheel', function(e){
+      if(e.target.closest && e.target.closest('.ai-chat, textarea')) return;   // let inner areas scroll natively
+      e.preventDefault(); lastWheel=performance.now();
+      if(locked || Math.abs(e.deltaY)<4) return;
+      syncCurrent(); go(current + (e.deltaY>0?1:-1));
+    }, {passive:false});
+    addEventListener('keydown', function(e){ var t=(e.target.tagName||'');
+      if(t==='INPUT'||t==='TEXTAREA'||t==='SELECT'||locked) return;
+      if(e.key==='ArrowDown'||e.key==='PageDown'||e.key===' '){ e.preventDefault(); syncCurrent(); go(current+1); }
+      else if(e.key==='ArrowUp'||e.key==='PageUp'){ e.preventDefault(); syncCurrent(); go(current-1); }
+      else if(e.key==='Home'){ e.preventDefault(); go(0); } else if(e.key==='End'){ e.preventDefault(); go(sections.length-1); }
+    });
+    var _ty=null;
+    addEventListener('touchstart', function(e){ _ty=(e.target.closest && e.target.closest('.ai-chat, textarea, select, input'))?null:e.touches[0].clientY; }, {passive:true});
+    addEventListener('touchmove', function(e){ if(_ty!==null) e.preventDefault(); }, {passive:false});
+    addEventListener('touchend', function(e){ if(_ty===null||locked) return; var dy=_ty-e.changedTouches[0].clientY; _ty=null;
+      if(Math.abs(dy)<40) return; syncCurrent(); go(current+(dy>0?1:-1)); }, {passive:true});
+
+    // side HUD modules — mouse tilt + idle float + scroll parallax (old tool cards advanced into 3D)
+    var huds=[].slice.call(document.querySelectorAll('.hud'));
+    var hmx=0,hmy=0; addEventListener('mousemove',function(e){hmx=e.clientX/innerWidth-0.5;hmy=e.clientY/innerHeight-0.5;},{passive:true});
+    huds.forEach(function(h,i){ h.__ph=i*1.7; });
+    function hudTick(ts){ var t=ts/1000;
+      for(var i=0;i<huds.length;i++){ var h=huds[i], r=h.getBoundingClientRect();
+        if(r.bottom<-40||r.top>innerHeight+40) continue;
+        var off=((r.top+r.height/2)-innerHeight/2)/innerHeight;       // -0.5 … 0.5 across the viewport
+        var par=off*-30, fl=Math.sin(t*0.9+h.__ph)*5;
+        h.style.transform='rotateX('+(-hmy*8).toFixed(2)+'deg) rotateY('+(hmx*12).toFixed(2)+'deg) translateY('+(par+fl).toFixed(1)+'px)';
+      }
+      requestAnimationFrame(hudTick);
+    }
+    requestAnimationFrame(hudTick);
+
+    // ── keep HUD figures inside their card: shrink font until it fits ──
+    function fitFigs(){ document.querySelectorAll('.hud-fig').forEach(function(el){ el.style.fontSize='';
+      var fs=parseFloat(getComputedStyle(el).fontSize)||28, guard=0;
+      while(el.scrollWidth>el.clientWidth+1 && fs>14 && guard<24){ fs-=1; el.style.fontSize=fs+'px'; guard++; } }); }
+    addEventListener('load',fitFigs); addEventListener('resize',fitFigs,{passive:true});
+    if(document.fonts&&document.fonts.ready) document.fonts.ready.then(fitFigs);
+    setTimeout(fitFigs,500); fitFigs();
+
+    // ── comet-trail cursor: fading tail + glowing core, blooms over interactive elements ──
+    var ctr=document.getElementById('ctrail');
+    if(ctr && !noMotion && matchMedia('(pointer:fine)').matches){
+      var cc=ctr.getContext('2d'), TW=0, TH=0;
+      function csz(){ TW=innerWidth; TH=innerHeight; ctr.width=TW; ctr.height=TH; }
+      csz(); addEventListener('resize',csz,{passive:true});
+      var tx=-100,ty=-100,cx=-100,cy=-100,hot=0,hotT=0,trail=[];
+      addEventListener('pointermove',function(e){ tx=e.clientX; ty=e.clientY;
+        hotT=(e.target.closest && e.target.closest('a,button,.btn,.rail b,.hud,select,input,textarea'))?1:0;
+      },{passive:true});
+      (function cl(){
+        cx+=(tx-cx)*0.3; cy+=(ty-cy)*0.3; hot+=(hotT-hot)*0.15;
+        trail.push({x:cx,y:cy}); if(trail.length>16) trail.shift();
+        cc.clearRect(0,0,TW,TH);
+        var h=window.__hueLast||'155';
+        cc.globalCompositeOperation='lighter';
+        for(var i=0;i<trail.length;i++){ var p=i/trail.length, q=trail[i];
+          cc.fillStyle='hsla('+h+',70%,70%,'+(p*0.42).toFixed(3)+')';
+          cc.beginPath(); cc.arc(q.x,q.y,1+p*(3.5+hot*2),0,6.283); cc.fill(); }
+        var g=cc.createRadialGradient(cx,cy,0,cx,cy,12+hot*10);
+        g.addColorStop(0,'hsla('+h+',70%,72%,.5)'); g.addColorStop(1,'hsla('+h+',70%,60%,0)');
+        cc.fillStyle=g; cc.beginPath(); cc.arc(cx,cy,12+hot*10,0,6.283); cc.fill();
+        cc.fillStyle='hsla('+h+',60%,94%,.95)'; cc.beginPath(); cc.arc(cx,cy,2.6+hot*1.4,0,6.283); cc.fill();
+        cc.globalCompositeOperation='source-over';
+        requestAnimationFrame(cl);
+      })();
+    }
+
+    // ── magnetic buttons: primary CTAs lean toward the cursor ──
+    if(!noMotion && matchMedia('(pointer:fine)').matches){
+      document.querySelectorAll('.btn, .nav-wa').forEach(function(b){
+        b.addEventListener('pointermove',function(e){ var r=b.getBoundingClientRect();
+          var mx=(e.clientX-r.left-r.width/2)*0.22, my=(e.clientY-r.top-r.height/2)*0.3;
+          b.style.transform='translate('+mx.toFixed(1)+'px,'+my.toFixed(1)+'px)'; });
+        b.addEventListener('pointerleave',function(){ b.style.transform=''; });
+      });
+    }
+  })();
+  </script>
+
+  <!-- ── dust lines: rotating content that streams up from dust, holds crisp, blows away ── -->
+  <script>
+  (function(){
+    var els=[].slice.call(document.querySelectorAll('.dustline'));
+    if(!els.length) return;
+    if(window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches){
+      els.forEach(function(el){ var l=(el.getAttribute('data-lines')||'').split('|')[0]||'';
+        el.innerHTML='<div style="font:600 16px Inter,sans-serif;color:var(--accent);opacity:.85">'+l+'</div>'; });
+      return;
+    }
+    function sm(a,b,x){ x=(x-a)/(b-a); return x<0?0:x>1?1:x; }
+    var sprCache={};
+    function sprite(h){ if(sprCache[h]) return sprCache[h];
+      var c=document.createElement('canvas'); c.width=c.height=16; var g=c.getContext('2d');
+      var gr=g.createRadialGradient(8,8,0,8,8,8);
+      gr.addColorStop(0,'hsla('+h+',85%,96%,1)'); gr.addColorStop(.35,'hsla('+h+',75%,72%,.85)'); gr.addColorStop(1,'hsla('+h+',70%,40%,0)');
+      g.fillStyle=gr; g.fillRect(0,0,16,16); sprCache[h]=c; return c; }
+    var insts=[];
+    function Dust(el){
+      var lines=(el.getAttribute('data-lines')||'').split('|');
+      var stop=el.closest('.stop');
+      var align='left';   // resolved from computed style in size() — follows the mobile centered layout
+      var cv=el.querySelector('canvas'), ctx=cv.getContext('2d');
+      var DPR=Math.min(window.devicePixelRatio||1,1.5), W=0,H=56, ps=[], built=-1, idx=0, arrivals=0, state='hidden', t0=0, running=false, raf=null;
+      var myIndex=[].slice.call(document.querySelectorAll('.stop')).indexOf(stop);
+      var FONT='600 16.5px Inter,system-ui,sans-serif';
+      function size(){ W=el.clientWidth||460; cv.width=Math.round(W*DPR); cv.height=Math.round(H*DPR); ctx.setTransform(DPR,0,0,DPR,0,0);
+        var ta=getComputedStyle(stop).textAlign; align=(ta==='center')?'center':(ta==='right'?'right':'left'); built=-1; }
+      function tx(){ return align==='center'?W/2:(align==='right'?W-2:2); }
+      function build(i){
+        var off=document.createElement('canvas'); off.width=W; off.height=H; var og=off.getContext('2d');
+        og.font=FONT; og.textAlign=align; og.textBaseline='middle'; og.fillStyle='#fff';
+        og.fillText(lines[i], tx(), H/2-6);
+        var d=og.getImageData(0,0,W,H).data; ps=[];
+        for(var y=0;y<H;y+=2) for(var x=0;x<W;x+=2){ if(d[(y*W+x)*4+3]>110){
+          var a1=Math.random()*6.283,m1=40+Math.random()*110, a2=Math.random()*6.283,m2=45+Math.random()*130;
+          ps.push({tx:x,ty:y, ix:x+Math.cos(a1)*m1, iy:y+Math.abs(Math.sin(a1))*m1*0.5+46,
+            ox:x+Math.cos(a2)*m2+70, oy:y+Math.sin(a2)*m2*0.4-30,
+            sd:Math.random(), tw:Math.random()*6.283, r:0.45+Math.random()*0.8}); } }
+        built=i;
+      }
+      function drawCrisp(a,h){ if(a<=0.004) return;
+        ctx.save(); ctx.globalAlpha=a; ctx.font=FONT; ctx.textAlign=align; ctx.textBaseline='middle';
+        ctx.shadowColor='hsla('+h+',75%,65%,.95)'; ctx.shadowBlur=16; ctx.fillStyle='hsl('+h+',70%,84%)';
+        ctx.fillText(lines[idx],tx(),H/2-6);
+        ctx.shadowBlur=0; ctx.globalAlpha=a*0.8; ctx.fillStyle='hsl('+h+',30%,97%)'; ctx.fillText(lines[idx],tx(),H/2-6); ctx.restore(); }
+      function frame(now){
+        if(!running){ raf=null; return; }
+        var p=(now-t0)/1000, t=now/1000, h=window.__hueLast||'155';
+        ctx.clearRect(0,0,W,H);
+        if(state==='forming'){                                    // arrival: dust streams up and settles into the line
+          if(built!==idx) build(idx);
+          drawCrisp(sm(1.3,1.85,p),h);
+          var wIn=1-sm(1.45,1.95,p);
+          if(wIn>0.004){ var spr=sprite(h); ctx.globalCompositeOperation='lighter';
+            for(var i2=0;i2<ps.length;i2++){ var q=ps[i2];
+              var f=sm(0,1,(p-q.sd*0.55)/1.2), e=1-Math.pow(1-f,3);
+              var x=q.ix+(q.tx-q.ix)*e+Math.sin(t*1.2+q.tw)*2.5*(1-e), y=q.iy+(q.ty-q.iy)*e;
+              ctx.globalAlpha=Math.max(0,Math.min(1,(0.25+0.75*f)*wIn*(0.8+0.2*Math.sin(t*2.6+q.tw))));
+              ctx.drawImage(spr,x-q.r,y-q.r,q.r*2,q.r*2); }
+            ctx.globalAlpha=1; ctx.globalCompositeOperation='source-over'; }
+          if(p>=2.05){ state='holding'; ctx.clearRect(0,0,W,H); drawCrisp(1,h); running=false; raf=null; return; }
+        } else if(state==='dissolving'){                          // departure: the line blows away as sand
+          drawCrisp(1-sm(0.05,0.45,p),h);
+          var spr2=sprite(h); ctx.globalCompositeOperation='lighter';
+          for(var i3=0;i3<ps.length;i3++){ var q2=ps[i3];
+            var d2=sm(0,1,(p-q2.sd*0.45)/1.05); if(d2>=1) continue; var e2=d2*d2*(3-2*d2);
+            var x2=q2.tx+(q2.ox-q2.tx)*e2+Math.sin(t*1.3+q2.tw)*3, y2=q2.ty+(q2.oy-q2.ty)*e2;
+            ctx.globalAlpha=Math.max(0,Math.min(1,(1-d2)*0.8*(0.8+0.2*Math.sin(t*2.6+q2.tw))));
+            ctx.drawImage(spr2,x2-q2.r,y2-q2.r,q2.r*2,q2.r*2); }
+          ctx.globalAlpha=1; ctx.globalCompositeOperation='source-over';
+          if(p>1.75){ state='hidden'; ctx.clearRect(0,0,W,H); running=false; raf=null; return; }
+        } else { running=false; raf=null; return; }
+        raf=requestAnimationFrame(frame);
+      }
+      function start(){ running=true; if(!raf) raf=requestAnimationFrame(frame); }
+      // scroll-driven: form on arrival at this stop, dissolve when scrolling away; next visit shows the next line
+      window.addEventListener('ahca:stop',function(ev){
+        var i=ev.detail;
+        if(i===myIndex){
+          if(state==='forming'||state==='holding') return;
+          idx=arrivals%lines.length; arrivals++; built=-1;
+          state='forming'; t0=performance.now(); start();
+        } else if(state==='forming'||state==='holding'){
+          if(built!==idx) build(idx);
+          state='dissolving'; t0=performance.now(); start();
+        }
+      });
+      size();
+      addEventListener('resize',function(){ size(); },{passive:true});
+      if(window.__stopNear===myIndex){ idx=0; arrivals=1; state='forming'; t0=performance.now(); start(); }
+      insts.push({inval:function(){ built=-1; if(state==='holding'){ build(idx); ctx.clearRect(0,0,W,H); drawCrisp(1,window.__hueLast||'155'); } }});
+    }
+    els.forEach(function(e){ Dust(e); });
+    if(document.fonts&&document.fonts.ready) document.fonts.ready.then(function(){ insts.forEach(function(i){ i.inval(); }); });
+  })();
+  </script>
+
+  <!-- ── GALAXY 3D BACKGROUND — Three.js fly-through, driven by page scroll ── -->
+  <script type="importmap">
+  { "imports": { "three": "./assets/vendor/three-bundle.min.js" } }
+  </script>
+  <script type="module">
+  import * as THREE from 'three';
+  import { EffectComposer, RenderPass, UnrealBloomPass } from 'three';
+  try {
+    const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const isMobile = Math.min(innerWidth, innerHeight) < 640;
+    const V = THREE.MathUtils.lerp;
+    const SPIN = 0.55;
+
+    const canvas = document.getElementById('gx');
+    const renderer = new THREE.WebGLRenderer({ canvas, antialias:true });
+    renderer.setClearColor(0x000000, 1);
+    renderer.setPixelRatio(Math.min(devicePixelRatio, 1.5));   // lower cap → bloom + 165k points stay 60fps
+    renderer.setSize(innerWidth, innerHeight);
+
+    const scene = new THREE.Scene();
+    scene.fog = new THREE.FogExp2(0x000000, 0.009);
+    const camera = new THREE.PerspectiveCamera(62, innerWidth/innerHeight, 0.1, 120);
+
+    const ct = (()=>{ const s=128,c=document.createElement('canvas');c.width=c.height=s;const g=c.getContext('2d');
+      const gr=g.createRadialGradient(s/2,s/2,0,s/2,s/2,s/2);gr.addColorStop(0,'rgba(255,255,255,1)');
+      gr.addColorStop(.25,'rgba(255,255,255,.6)');gr.addColorStop(1,'rgba(255,255,255,0)');g.fillStyle=gr;g.fillRect(0,0,s,s);
+      return new THREE.CanvasTexture(c); })();
+
+    function neb(col,x,y,z,size,op){ const sp=new THREE.Sprite(new THREE.SpriteMaterial({map:ct,color:col,transparent:true,blending:THREE.AdditiveBlending,depthWrite:false,opacity:op})); sp.position.set(x,y,z); sp.scale.set(size,size,1); return sp; }
+    const nebGrp=new THREE.Group();
+    nebGrp.add(
+      neb(0x123a72,-5,-0.5,2,16,0.011), neb(0x123a72,6.5,1.5,-3,18,0.01),
+      neb(0x3a2a66,3,-2.5,5,12,0.008),  neb(0x0e5a4a,1.5,2.5,-7,15,0.006),
+      neb(0x1a3a6e,-7,2,-5,17,0.008),   neb(0x5a4a2f,8,-2,4,13,0.005)
+    );
+    scene.add(nebGrp);
+
+    const G = { count: reduce ? 22000 : (isMobile ? 55000 : 165000), radius:6.5, branches:4,
+      randomnessPower:3.0, randomness:0.42,
+      inside:new THREE.Color(0x59A87E), mid:new THREE.Color(0x3FCF94),
+      outside:new THREE.Color(0x05633c), gold:new THREE.Color(0xE6C766) };
+    const positions=new Float32Array(G.count*3), colors=new Float32Array(G.count*3), scales=new Float32Array(G.count);
+    const tmp=new THREE.Color();
+    let _s=20260626;
+    const rnd=()=>{ _s|=0; _s=_s+0x6D2B79F5|0; let t=Math.imul(_s^_s>>>15,1|_s); t=t+Math.imul(t^t>>>7,61|t)^t; return ((t^t>>>14)>>>0)/4294967296; };
+    for(let i=0;i<G.count;i++){
+      const i3=i*3, radius=Math.pow(rnd(),1.5)*G.radius;
+      const branch=(i%G.branches)/G.branches*Math.PI*2;
+      const ang=branch + radius*SPIN;
+      const rp=()=>Math.pow(rnd(),G.randomnessPower)*(rnd()<0.5?1:-1);
+      positions[i3]  =Math.cos(ang)*radius + rp()*G.randomness*radius;
+      positions[i3+1]=rp()*G.randomness*radius*0.4;
+      positions[i3+2]=Math.sin(ang)*radius + rp()*G.randomness*radius;
+      const t=radius/G.radius;
+      if(t<0.16) tmp.copy(G.inside).lerp(G.mid,t/0.16); else tmp.copy(G.mid).lerp(G.outside,(t-0.16)/0.84);
+      if(t>0.5&&rnd()<0.05) tmp.copy(G.gold);
+      tmp.multiplyScalar(0.6+rnd()*0.65);
+      colors[i3]=tmp.r;colors[i3+1]=tmp.g;colors[i3+2]=tmp.b;
+      scales[i]=(t<0.1?1.3:1.0)*(0.5+rnd()*1.3);
+    }
+    const geo=new THREE.BufferGeometry();
+    geo.setAttribute('position',new THREE.BufferAttribute(positions,3));
+    geo.setAttribute('aColor',new THREE.BufferAttribute(colors,3));
+    geo.setAttribute('aScale',new THREE.BufferAttribute(scales,1));
+    const mat=new THREE.ShaderMaterial({ transparent:true, depthWrite:false, blending:THREE.AdditiveBlending,
+      uniforms:{ uTime:{value:0}, uHue:{value:0}, uSize:{value:(isMobile?34:30)*renderer.getPixelRatio()} },
+      vertexShader:`uniform float uTime;uniform float uSize;attribute float aScale;attribute vec3 aColor;
+        varying vec3 vColor;varying float vTw;varying float vd;
+        void main(){ vec4 mp=modelMatrix*vec4(position,1.0); vec4 vp=viewMatrix*mp; gl_Position=projectionMatrix*vp;
+          vd=-vp.z;
+          float tw=0.55+0.45*sin(uTime*1.5+aScale*42.0); vTw=tw;
+          gl_PointSize=min(uSize*aScale*tw*(1.0/-vp.z), 42.0); vColor=aColor; }`,
+      fragmentShader:`uniform float uHue;varying vec3 vColor;varying float vTw;varying float vd;
+        vec3 hue(vec3 c,float a){ const vec3 k=vec3(0.57735); float ca=cos(a); return c*ca+cross(k,c)*sin(a)+k*dot(k,c)*(1.0-ca); }
+        void main(){ float s=1.0-distance(gl_PointCoord,vec2(0.5))*2.0; if(s<=0.0)discard;
+          s=pow(s,3.4); float nf=smoothstep(0.2,1.9,vd);
+          vec3 c=hue(vColor,uHue); gl_FragColor=vec4(c*(0.55+0.7*vTw)*s*nf, s*nf); }` });
+    const galaxy=new THREE.Points(geo,mat); galaxy.rotation.x=0.5; scene.add(galaxy);
+
+    function core(col,sz,op){ const sp=new THREE.Sprite(new THREE.SpriteMaterial({map:ct,color:col,transparent:true,blending:THREE.AdditiveBlending,depthWrite:false,opacity:op})); sp.scale.set(sz,sz,1); return sp; }
+    const coreGrp=new THREE.Group(); coreGrp.add(core(0x0a5a3a,1.2,0.03),core(0x2f9d6e,0.55,0.03),core(0x9fe6c8,0.22,0.04));
+    coreGrp.rotation.x=0.5; scene.add(coreGrp);
+
+    const sC=reduce?900:2400, spp=new Float32Array(sC*3), scl=new Float32Array(sC);
+    for(let i=0;i<sC;i++){const i3=i*3,r=8+rnd()*26,a=rnd()*Math.PI*2,b=(rnd()-0.5)*Math.PI*0.8;
+      spp[i3]=Math.cos(a)*Math.cos(b)*r;spp[i3+1]=Math.sin(b)*r;spp[i3+2]=Math.sin(a)*Math.cos(b)*r;scl[i]=rnd();}
+    const sg=new THREE.BufferGeometry();sg.setAttribute('position',new THREE.BufferAttribute(spp,3));
+    const stars=new THREE.Points(sg,new THREE.PointsMaterial({size:0.06,color:0x9fded0,transparent:true,opacity:0.5,depthWrite:false,blending:THREE.AdditiveBlending,map:ct,alphaTest:0.01,sizeAttenuation:true}));
+    scene.add(stars);
+
+    const composer=new EffectComposer(renderer);
+    composer.addPass(new RenderPass(scene,camera));
+    const bloom=new UnrealBloomPass(new THREE.Vector2(innerWidth,innerHeight), 0.34, 0.5, 0.26);
+    composer.addPass(bloom);
+
+    const tiltX=0.5, cT=Math.cos(tiltX), sT=Math.sin(tiltX);
+    const tilt=(v)=>{ const y=v.y*cT - v.z*sT, z=v.y*sT + v.z*cT; v.y=y; v.z=z; return v; };
+    function armPoint(radius,a){ return new THREE.Vector3(Math.cos(a)*radius, 0, Math.sin(a)*radius); }
+    function smoother(a,b,x){ x=(x-a)/(b-a); x=x<0?0:x>1?1:x; return x*x*x*(x*(x*6-15)+10); }
+    function pathPos(fp){
+      const r=5.8*Math.pow(Math.abs(2*fp-1),0.9);
+      const a=r*SPIN + (fp<0.5?0:Math.PI);
+      const pos=armPoint(r,a);
+      pos.x+=Math.cos(a)*0.12; pos.z+=Math.sin(a)*0.12;
+      tilt(pos);
+      pos.y+=0.26+0.12*r;
+      return pos;
+    }
+    const _fe=pathPos(1), _eAng=Math.atan2(_fe.z,_fe.x), _eRad=Math.hypot(_fe.x,_fe.z);
+    function revealPos(p){
+      const w=smoother(0.66,1.0,p);
+      const ang=_eAng + w*0.30;
+      const rad=V(_eRad,7.6,w);
+      return new THREE.Vector3(Math.cos(ang)*rad, V(_fe.y,4.2,w), Math.sin(ang)*rad);
+    }
+    function camAt(p){
+      const fp=Math.min(1,p/0.65), w=smoother(0.66,1.0,p);
+      return pathPos(fp).lerp(revealPos(p), w);
+    }
+    function lookAt(p){
+      const fp=Math.min(1,p/0.65), e=0.012;
+      const fwd=pathPos(Math.min(1,fp+e)).sub(pathPos(Math.max(0,fp-e)));
+      if(fwd.lengthSq()<1e-6) fwd.set(0,0,-1);
+      const flyLook=pathPos(fp).add(fwd.normalize().multiplyScalar(3.5));
+      const wLook=smoother(0.42,0.74,p);
+      return flyLook.lerp(new THREE.Vector3(0,0,0), wLook);
+    }
+
+    let prog=0, target=0; const m={x:0,y:0}, mt={x:0,y:0};
+    addEventListener('mousemove',e=>{mt.x=(e.clientX/innerWidth-0.5);mt.y=(e.clientY/innerHeight-0.5);},{passive:true});
+    function onScroll(){ const max=document.body.scrollHeight-innerHeight; target=max>0?Math.min(1,Math.max(0,scrollY/max)):0; }
+    addEventListener('scroll',onScroll,{passive:true}); onScroll();
+    addEventListener('resize',()=>{camera.aspect=innerWidth/innerHeight;camera.updateProjectionMatrix();
+      renderer.setSize(innerWidth,innerHeight);composer.setSize(innerWidth,innerHeight);onScroll();},{passive:true});
+
+    const clock=new THREE.Clock();
+    let _cpos, _clook, _warp=0;
+    let baseSize=mat.uniforms.uSize.value; const baseBloom=bloom.strength;
+    // ── adaptive quality governor: steps quality down until this device holds a smooth frame rate ──
+    let tier=0, bloomOn=true, fCount=0, fT0=performance.now(), badWin=0;
+    function applyTier(){
+      if(tier===1){ renderer.setPixelRatio(Math.min(devicePixelRatio,1.2)); }
+      else if(tier===2){ renderer.setPixelRatio(1); geo.setDrawRange(0,Math.floor(G.count*0.62)); }
+      else if(tier===3){ bloomOn=false; geo.setDrawRange(0,Math.floor(G.count*0.4)); }
+      renderer.setSize(innerWidth,innerHeight); composer.setSize(innerWidth,innerHeight);
+      baseSize=(isMobile?34:30)*renderer.getPixelRatio(); mat.uniforms.uSize.value=baseSize;
+      window.__quality=tier;
+    }
+    function frame(){
+      const t=clock.getElapsedTime(); mat.uniforms.uTime.value=t;
+      prog += (target-prog)*0.12;
+      mat.uniforms.uHue.value = prog*5.0;   // galaxy hue shifts across the spectrum as you scroll
+      const hueV=((155+prog*286)%360).toFixed(0);              // write --accent ONLY when it changes → no per-frame page restyle
+      if(hueV!==window.__hueLast){ window.__hueLast=hueV; window.__accentVal='hsl('+hueV+',62%,63%)';
+        document.documentElement.style.setProperty('--accent',window.__accentVal); }
+      m.x += (mt.x-m.x)*0.04; m.y += (mt.y-m.y)*0.04;
+      // ── warp surge while gliding between stops: wider FOV + brighter bloom + swollen stars ──
+      _warp += ((window.__warp||0)-_warp)*0.14;
+      if(_warp>0.002){ camera.fov=62+_warp*8; camera.updateProjectionMatrix();
+        bloom.strength=baseBloom+_warp*0.5; mat.uniforms.uSize.value=baseSize*(1+_warp*0.7); }
+      else if(camera.fov!==62){ camera.fov=62; camera.updateProjectionMatrix(); bloom.strength=baseBloom; mat.uniforms.uSize.value=baseSize; }
+      const cp=camAt(prog), la=lookAt(prog);
+      if(!_cpos){ _cpos=cp.clone(); _clook=la.clone(); }
+      _cpos.lerp(cp, 0.09);
+      _clook.lerp(la, 0.09);
+      var fx=Math.sin(t*0.23)*0.018, fy=Math.sin(t*0.30)*0.013;
+      camera.position.set(_cpos.x + m.x*0.25 + fx, _cpos.y - m.y*0.18 + fy, _cpos.z);
+      camera.lookAt(_clook);
+      stars.rotation.y = t*0.006;
+      if(bloomOn) composer.render(); else renderer.render(scene,camera);
+      if(!window.__gxUp){ window.__gxUp=1; canvas.classList.add('ready'); }   // progressive entrance: fade in on first frame
+      // fps sampling (2s windows; windows stretched by tab-throttling are discarded)
+      fCount++; const nowMs=performance.now(), span=nowMs-fT0;
+      if(span>=2000){
+        if(span<3500){ const fps=fCount*1000/span;
+          if(fps<48 && tier<3){ if(++badWin>=2){ tier++; badWin=0; applyTier(); } } else badWin=0; }
+        fCount=0; fT0=nowMs;
+      }
+      if(!reduce) requestAnimationFrame(frame);
+    }
+    frame();
+  } catch(e){ console.error('Galaxy background failed:', e); }
+  </script>
+
   <script src="assets/js/taxbot.js"></script>
+
+  <!-- ── Burj Khalifa 3D model inside the Corporate Tax HUD card ── -->
+  <script type="module">
+  import * as THREE from 'three';
+  (function(){
+    var canvas=document.getElementById('bk-canvas'); if(!canvas) return;
+    var rnd,scene,cam,burj,glass,spire,beacon,rim,scan,scanMat, started=false, running=false, raf=null, shownAt=0, hov=0, accent=new THREE.Color('#5ECFA0');
+    function facadeMat(){
+      var Wd=64,Ht=64,c=document.createElement('canvas'),e=document.createElement('canvas');
+      c.width=e.width=Wd;c.height=e.height=Ht; var x=c.getContext('2d'),g=e.getContext('2d');
+      x.fillStyle='#14291f';x.fillRect(0,0,Wd,Ht); g.fillStyle='#000';g.fillRect(0,0,Wd,Ht);
+      var cols=8,rows=10,mw=Wd/cols,mh=Ht/rows;
+      for(var r=0;r<rows;r++)for(var k=0;k<cols;k++){ var lit=Math.random()<0.62,px=k*mw+1,py=r*mh+1,pw=mw-2,ph=mh-2;
+        if(lit){ x.fillStyle='#e6f5ea'; x.fillRect(px,py,pw,ph); g.fillStyle='#ffffff'; g.fillRect(px,py,pw,ph); }
+        else { x.fillStyle='#0e231a'; x.fillRect(px,py,pw,ph); } }
+      var mt=new THREE.CanvasTexture(c),em=new THREE.CanvasTexture(e);
+      mt.colorSpace=THREE.SRGBColorSpace; mt.wrapS=mt.wrapT=em.wrapS=em.wrapT=THREE.RepeatWrapping; mt.repeat.set(3,1); em.repeat.set(3,1);
+      return new THREE.MeshStandardMaterial({color:0x244034,map:mt,emissive:0x5ECFA0,emissiveMap:em,emissiveIntensity:0.95,metalness:0.6,roughness:0.26});
+    }
+    function triLobe(){ var s=new THREE.Shape(),N=60; for(var i=0;i<=N;i++){ var th=i/N*6.2831,r=1+0.5*Math.cos(3*th); r=Math.max(0.52,r); var X=Math.cos(th)*r,Z=Math.sin(th)*r; i?s.lineTo(X,Z):s.moveTo(X,Z);} return s; }
+    function init(){
+      rnd=new THREE.WebGLRenderer({canvas:canvas,alpha:true,antialias:true}); rnd.setPixelRatio(1);
+      scene=new THREE.Scene(); cam=new THREE.PerspectiveCamera(42,1,0.1,100);
+      glass=facadeMat();
+      var sliceGeo=new THREE.ExtrudeGeometry(triLobe(),{depth:0.26,bevelEnabled:false,steps:1}); sliceGeo.rotateX(-Math.PI/2);
+      burj=new THREE.Group(); var N=28, step=0.235;
+      for(var i=0;i<N;i++){ var t=i/N, sc=1-0.82*Math.pow(t,1.12); var m=new THREE.Mesh(sliceGeo,glass); m.scale.set(sc,1,sc); m.position.y=i*step; m.rotation.y=t*0.7; burj.add(m); }
+      var pod=new THREE.Mesh(new THREE.CylinderGeometry(1.55,1.85,0.5,3),new THREE.MeshStandardMaterial({color:0x16352a,metalness:0.5,roughness:0.45})); pod.position.y=-0.25; pod.rotation.y=0.5; burj.add(pod);
+      var topY=N*step*0.55;
+      spire=new THREE.Mesh(new THREE.CylinderGeometry(0.015,0.12,3.2,8),new THREE.MeshStandardMaterial({color:0xeafff4,metalness:0.85,roughness:0.25,emissive:0x5ECFA0,emissiveIntensity:0.6})); spire.position.y=topY+1.6; burj.add(spire);
+      beacon=new THREE.Mesh(new THREE.SphereGeometry(0.06,12,12),new THREE.MeshBasicMaterial({color:0xff5a5a})); beacon.position.y=topY+3.25; burj.add(beacon);
+      scanMat=new THREE.MeshBasicMaterial({color:0x5ECFA0,transparent:true,opacity:0.55});
+      scan=new THREE.Mesh(new THREE.TorusGeometry(1.16,0.022,8,48),scanMat); scan.rotation.x=Math.PI/2; burj.add(scan);
+      scene.add(burj);
+      scene.add(new THREE.AmbientLight(0x2c4a40,0.6)); scene.add(new THREE.HemisphereLight(0x4a7a66,0x05140d,0.5));
+      var key=new THREE.DirectionalLight(0xffffff,0.95); key.position.set(4,8,5); scene.add(key);
+      rim=new THREE.PointLight(0x5ECFA0,2.2,40); rim.position.set(-5,3,4); scene.add(rim);
+      var back=new THREE.PointLight(0x3fcf94,1.4,40); back.position.set(3,6,-5); scene.add(back);
+      fit();
+    }
+    function fit(){ if(!burj||!cam)return; var box=new THREE.Box3().setFromObject(burj), s=box.getSize(new THREE.Vector3()), c=box.getCenter(new THREE.Vector3());
+      var fov=cam.fov*Math.PI/180, dist=(s.y*0.52)/Math.tan(fov/2)*1.06; cam.position.set(0,c.y,dist); cam.lookAt(0,c.y,0); }
+    function resize(){ if(!rnd)return; var w=canvas.clientWidth||240,h=canvas.clientHeight||160; rnd.setSize(w,h,false); cam.aspect=w/h; cam.updateProjectionMatrix(); fit(); }
+    var lastAcc='';
+    function loop(){ if(!running){ raf=null; return; }
+      var as=window.__accentVal||'';
+      if(as && as!==lastAcc){ lastAcc=as; try{ accent.setStyle(as); glass.emissive.copy(accent); spire.material.emissive.copy(accent); rim.color.copy(accent); if(scanMat) scanMat.color.copy(accent); }catch(e){} }
+      burj.rotation.y += (hov?0.011:0.004);                       // spins up under the cursor
+      if(beacon) beacon.visible = (Math.sin(Date.now()/280)>0);
+      if(scan){ var kk=(Date.now()/1000*0.16)%1;                  // scanner ring sweeps up the tower
+        scan.position.y=kk*3.6; var ss=Math.max(0.1,1-0.8*Math.pow(kk,1.1));
+        scan.scale.set(ss,ss,ss); scanMat.opacity=0.55*Math.sin(kk*Math.PI); }
+      var ep=Math.min(1,(Date.now()-shownAt)/900);                // elastic pop-in on arrival
+      var ev=1-Math.pow(2,-10*ep)*Math.cos(ep*12);
+      burj.scale.setScalar(Math.max(0.001,0.6+0.4*ev));
+      rnd.render(scene,cam); raf=requestAnimationFrame(loop);
+    }
+    window.addEventListener('resize',resize,{passive:true});
+    var io=new IntersectionObserver(function(es){ es.forEach(function(e){
+      if(e.isIntersecting){ if(!started){ started=true; try{init();}catch(err){console.error('burj',err);return;} } shownAt=Date.now(); running=true; resize(); if(!raf) raf=requestAnimationFrame(loop); }
+      else { running=false; }
+    });},{threshold:0.12});
+    io.observe(canvas);
+    var hudEl=canvas.closest('.hud');
+    if(hudEl){ hudEl.addEventListener('pointerenter',function(){ hov=1; });
+      hudEl.addEventListener('pointerleave',function(){ hov=0; }); }
+  })();
+  </script>
+
+  <!-- ── 3D models for the other HUD cards: VAT coin · Bookkeeping ledgers · Advisory gem ── -->
+  <script type="module">
+  import * as THREE from 'three';
+  (function(){
+    function stdMat(o){ return new THREE.MeshStandardMaterial(Object.assign({color:0x123a2a,emissive:0x5ECFA0,emissiveIntensity:0.5,metalness:0.6,roughness:0.3},o||{})); }
+    var builders={
+      'hud3d-coin': function(reg){
+        var g=new THREE.Group(), spinner=new THREE.Group(); g.add(spinner);
+        var face=stdMat({color:0x2a5644,metalness:0.85,roughness:0.28,emissiveIntensity:0.4});
+        var rim=stdMat({color:0x9fe6c8,metalness:0.7,roughness:0.2,emissiveIntensity:0.85});
+        function coin(y,dx,dz,r){
+          var c=new THREE.Mesh(new THREE.CylinderGeometry(r,r,0.17,48),face); c.position.set(dx,y,dz); spinner.add(c);
+          var t=new THREE.Mesh(new THREE.TorusGeometry(r-0.16,0.04,10,48),rim); t.rotation.x=Math.PI/2; t.position.set(dx,y+0.09,dz); spinner.add(t);
+        }
+        coin(-0.05,-0.11,0.07,1.26); coin(0.17,0.12,-0.06,1.26); coin(0.4,0,0,1.3);
+        // raised % emblem on the top coin
+        var pm=stdMat({color:0xeafff4,metalness:0.4,roughness:0.3,emissiveIntensity:0.95});
+        var o1=new THREE.Mesh(new THREE.TorusGeometry(0.17,0.05,10,26),pm); o1.rotation.x=Math.PI/2; o1.position.set(-0.34,0.51,-0.3); spinner.add(o1);
+        var o2=o1.clone(); o2.position.set(0.34,0.51,0.3); spinner.add(o2);
+        var bar=new THREE.Mesh(new THREE.BoxGeometry(0.1,0.05,1.02),pm); bar.rotation.y=0.85; bar.position.y=0.51; spinner.add(bar);
+        g.rotation.x=0.55; g.rotation.z=-0.07; g.position.y=-0.15;
+        reg.tint=[face,rim,pm]; reg.spinner=spinner;
+        reg.anim=function(t){ var c=t%6;                        // every ~6s: a full coin flip
+          if(c<1.15){ var p=c/1.15, e=p<.5?4*p*p*p:1-Math.pow(-2*p+2,3)/2; spinner.rotation.x=e*6.283; }
+          else spinner.rotation.x=0; };
+        return g;
+      },
+      'hud3d-books': function(reg){
+        var g=new THREE.Group(), mats=[];
+        var sizes=[[2.5,0.42,1.7],[2.3,0.42,1.6],[2.42,0.42,1.66],[2.2,0.4,1.5]];
+        var edgeMat=new THREE.LineBasicMaterial({color:0x9fe6c8,transparent:true,opacity:0.7});
+        var books=[];
+        for(var i=0;i<sizes.length;i++){
+          var bm=stdMat({color:0x143226,emissiveIntensity:0.35,metalness:0.5,roughness:0.4});
+          var geo=new THREE.BoxGeometry(sizes[i][0],sizes[i][1],sizes[i][2]);
+          var book=new THREE.Mesh(geo,bm);
+          book.position.y=-0.85+i*0.46; book.rotation.y=(i%2?-1:1)*(0.18+i*0.07);
+          book.add(new THREE.LineSegments(new THREE.EdgesGeometry(geo),edgeMat));   // edges ride along
+          g.add(book); mats.push(bm);
+          books.push({m:book,by:book.position.y,bz:book.rotation.y});
+        }
+        var mark=new THREE.Mesh(new THREE.BoxGeometry(0.16,0.5,0.05),stdMat({color:0xeafff4,emissiveIntensity:0.9}));
+        mark.position.set(0.7,0.07,0.5); books[books.length-1].m.add(mark); mats.push(mark.material);
+        reg.tint=mats; reg.edge=edgeMat; g.rotation.x=0.32;
+        reg.anim=function(t){                                    // living stack: sway + the top ledger hops
+          for(var bi=0;bi<books.length;bi++){ var B=books[bi]; B.m.rotation.z=Math.sin(t*1.1+bi*1.3)*0.03; }
+          var top=books[books.length-1], c=t%5;
+          if(c<0.9){ var p=c/0.9; top.m.position.y=top.by+Math.sin(p*Math.PI)*0.2; top.m.rotation.y=top.bz+Math.sin(p*Math.PI)*0.25; }
+          else { top.m.position.y=top.by; top.m.rotation.y=top.bz; } };
+        return g;
+      },
+      'hud3d-gem': function(reg){
+        var g=new THREE.Group();
+        var gm=stdMat({color:0x123a2a,emissiveIntensity:0.55,metalness:0.45,roughness:0.15});
+        gm.flatShading=true;
+        var gem=new THREE.Mesh(new THREE.OctahedronGeometry(1.55,0),gm); g.add(gem);
+        var edge=new THREE.LineBasicMaterial({color:0x9fe6c8,transparent:true,opacity:0.9});
+        gem.add(new THREE.LineSegments(new THREE.EdgesGeometry(gem.geometry),edge));   // edges pulse with the gem
+        var halo=new THREE.Mesh(new THREE.TorusGeometry(1.9,0.02,10,72),stdMat({color:0x9fe6c8,emissiveIntensity:0.9,metalness:0.4,roughness:0.3}));
+        halo.rotation.x=Math.PI/2.4; g.add(halo);
+        reg.tint=[gm,halo.material]; reg.edge=edge;
+        reg.anim=function(t){                                    // heartbeat: gem pulses, halo counter-rotates
+          var s=1+0.05*Math.sin(t*2.1); gem.scale.setScalar(s);
+          gm.emissiveIntensity=0.45+0.3*Math.sin(t*2.1+1);
+          halo.rotation.z=t*0.9; };
+        return g;
+      }
+    };
+    Object.keys(builders).forEach(function(id){
+      var canvas=document.getElementById(id); if(!canvas) return;
+      var reg={tint:[],edge:null}, rnd,scene,cam,obj, started=false, running=false, raf=null, accent=new THREE.Color('#5ECFA0');
+      function init(){
+        rnd=new THREE.WebGLRenderer({canvas:canvas,alpha:true,antialias:true}); rnd.setPixelRatio(1);
+        scene=new THREE.Scene(); cam=new THREE.PerspectiveCamera(40,1,0.1,50); cam.position.set(0,0.25,5.6);
+        scene.add(new THREE.AmbientLight(0x3c5a4e,0.7)); scene.add(new THREE.HemisphereLight(0x4a7a66,0x05140d,0.45));
+        var key=new THREE.DirectionalLight(0xffffff,0.9); key.position.set(2.5,3.5,4); scene.add(key);
+        var rim=new THREE.PointLight(0x5ECFA0,1.8,26); rim.position.set(-3,1.5,3); scene.add(rim); reg.rim=rim;
+        obj=builders[id](reg); scene.add(obj);
+        // orbiting sparks — tiny glowing motes circling the model
+        var stx=(function(){ var c=document.createElement('canvas'); c.width=c.height=32; var g=c.getContext('2d');
+          var gr=g.createRadialGradient(16,16,0,16,16,16); gr.addColorStop(0,'rgba(255,255,255,1)'); gr.addColorStop(.4,'rgba(255,255,255,.5)'); gr.addColorStop(1,'rgba(255,255,255,0)');
+          g.fillStyle=gr; g.fillRect(0,0,32,32); return new THREE.CanvasTexture(c); })();
+        reg.sparks=[];
+        for(var si=0;si<5;si++){ var smx=new THREE.SpriteMaterial({map:stx,color:0x9fe6c8,transparent:true,opacity:0.9,depthWrite:false,blending:THREE.AdditiveBlending});
+          var spx=new THREE.Sprite(smx); var sscl=0.09+Math.random()*0.09; spx.scale.set(sscl,sscl,1);
+          spx.userData={ph:Math.random()*6.283,sp:0.4+Math.random()*0.5,rx:2.0+Math.random()*0.5,ry:0.5+Math.random()*0.6,rz:2.0+Math.random()*0.5};
+          scene.add(spx); reg.sparks.push(spx); }
+      }
+      function resize(){ if(!rnd)return; var w=canvas.clientWidth||240,h=canvas.clientHeight||160; rnd.setSize(w,h,false); cam.aspect=w/h; cam.updateProjectionMatrix(); }
+      var lastAcc='';
+      function loop(){ if(!running){ raf=null; return; }
+        var as=window.__accentVal||'';
+        if(as && as!==lastAcc){ lastAcc=as; try{ accent.setStyle(as);
+          reg.tint.forEach(function(m){ m.emissive.copy(accent); });
+          if(reg.edge) reg.edge.color.copy(accent);
+          if(reg.rim) reg.rim.color.copy(accent);
+          if(reg.sparks) reg.sparks.forEach(function(s){ s.material.color.copy(accent); });
+        }catch(e){} }
+        var tNow=Date.now()/1000;
+        (reg.spinner||obj).rotation.y += (reg.hover?0.016:0.006);          // spins up under the cursor
+        obj.position.y=Math.sin(tNow*1.1)*0.06;
+        if(reg.anim) reg.anim(tNow);                                        // per-model personality moment
+        if(reg.sparks) for(var s9=0;s9<reg.sparks.length;s9++){ var k9=reg.sparks[s9],u9=k9.userData,a9=tNow*u9.sp+u9.ph;
+          k9.position.set(Math.cos(a9)*u9.rx, Math.sin(tNow*u9.sp*0.8+u9.ph)*u9.ry, Math.sin(a9)*u9.rz);
+          k9.material.opacity=0.45+0.45*Math.sin(tNow*2+u9.ph); }
+        var ep=Math.min(1,(Date.now()-(reg.shownAt||0))/900);               // elastic pop-in on arrival
+        var ev=1-Math.pow(2,-10*ep)*Math.cos(ep*12);
+        obj.scale.setScalar(Math.max(0.001,0.6+0.4*ev));
+        rnd.render(scene,cam); raf=requestAnimationFrame(loop);
+      }
+      addEventListener('resize',resize,{passive:true});
+      var io=new IntersectionObserver(function(es){ es.forEach(function(e){
+        if(e.isIntersecting){ if(!started){ started=true; try{init();}catch(err){console.error(id,err);return;} } reg.shownAt=Date.now(); running=true; resize(); if(!raf) raf=requestAnimationFrame(loop); }
+        else running=false;
+      });},{threshold:0.12});
+      io.observe(canvas);
+      var hudEl=canvas.closest('.hud');
+      if(hudEl){ hudEl.addEventListener('pointerenter',function(){ reg.hover=1; });
+        hudEl.addEventListener('pointerleave',function(){ reg.hover=0; }); }
+    });
+  })();
+  </script>
 </body>
 </html>
