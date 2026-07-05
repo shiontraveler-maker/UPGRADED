@@ -819,23 +819,45 @@
     const tiltX=0.5, cT=Math.cos(tiltX), sT=Math.sin(tiltX);
     const tilt=(v)=>{ const y=v.y*cT - v.z*sT, z=v.y*sT + v.z*cT; v.y=y; v.z=z; return v; };
     function armPoint(radius,a){ return new THREE.Vector3(Math.cos(a)*radius, 0, Math.sin(a)*radius); }
-    // ── camera rides the spiral arm for the WHOLE scroll: outer edge → in along the arm →
-    //    through the galactic core at the halfway point → out along the opposite arm. Never leaves the line.
-    function pathPos(fp){
-      const r=5.8*Math.pow(Math.abs(2*fp-1),0.9);
+    function smoother(a,b,x){ x=(x-a)/(b-a); x=x<0?0:x>1?1:x; return x*x*x*(x*(x*6-15)+10); }
+    // ── camera rides the spiral arm: outer edge → in along the arm → through the galactic core
+    //    at the halfway point → out along the opposite arm. Final two stops: rise off the arm
+    //    for the full-galaxy reveal (as before).
+    function laneR(fp){ return 5.8*Math.pow(Math.abs(2*fp-1),0.9); }
+    function lanePoint(fp){                                // a point ON the arm line itself (no hover)
+      const r=laneR(fp);
       const a=r*SPIN + (fp<0.5?0:Math.PI);
       const pos=armPoint(r,a);
       pos.x+=Math.cos(a)*0.12; pos.z+=Math.sin(a)*0.12;
       tilt(pos);
-      pos.y+=0.2+0.05*r;                                  // hug the arm — just above the star lane
       return pos;
     }
-    function camAt(p){ return pathPos(p); }
+    function pathPos(fp){
+      const pos=lanePoint(fp);
+      pos.y+=0.2+0.05*laneR(fp);                           // hover just above the star lane
+      return pos;
+    }
+    const _fe=pathPos(1), _eAng=Math.atan2(_fe.z,_fe.x), _eRad=Math.hypot(_fe.x,_fe.z);
+    function revealPos(p){                                  // stops 7–8: pull up & out to see the whole galaxy
+      const w=smoother(0.72,1.0,p);
+      const ang=_eAng + w*0.30;
+      const rad=_eRad+(7.6-_eRad)*w;
+      return new THREE.Vector3(Math.cos(ang)*rad, _fe.y+(4.2-_fe.y)*w, Math.sin(ang)*rad);
+    }
+    function camAt(p){
+      const w=smoother(0.72,1.0,p);
+      return pathPos(p).lerp(revealPos(p), w);
+    }
     function lookAt(p){
       const e=0.012;
-      const fwd=pathPos(Math.min(1,p+e)).sub(pathPos(Math.max(0,p-e)));
+      const fwd=lanePoint(Math.min(1,p+e)).sub(lanePoint(Math.max(0,p-e)));
       if(fwd.lengthSq()<1e-6) fwd.set(0,0,-1);
-      return pathPos(p).add(fwd.normalize().multiplyScalar(3.5));   // always look down the lane ahead
+      const level=pathPos(p).add(fwd.normalize().multiplyScalar(3.5));   // level, down the lane
+      const lane=lanePoint(Math.min(1,p+0.06)); lane.y+=0.05;            // aimed AT the lane ahead
+      const dip=smoother(0.5,0.6,p);                       // after the core: keep the line centre-frame
+      const flyLook=level.lerp(lane,dip);
+      const wLook=smoother(0.7,0.9,p);                     // finale: turn back to take in the core
+      return flyLook.lerp(new THREE.Vector3(0,0,0), wLook);
     }
 
     let prog=0, target=0; const m={x:0,y:0}, mt={x:0,y:0};
