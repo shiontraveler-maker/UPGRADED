@@ -96,19 +96,19 @@
   .lead{margin:0;color:var(--text-2);font-size:clamp(15px,1.35vw,18px);line-height:1.66;max-width:48ch;text-shadow:0 2px 18px rgba(0,0,0,.9),0 1px 6px rgba(0,0,0,.85)}
   .stop.right .lead{margin-left:auto}
   .stop.center .lead{margin:0 auto}
-  .dustline{margin-top:20px;height:56px;opacity:0;transition:opacity .8s ease .9s}
-  .stop.in .dustline{opacity:1}
-  .dustline canvas{display:block;width:100%;height:56px}
+  .keylines{list-style:none;margin:18px 0 0;padding:0;display:flex;flex-direction:column;gap:9px}
+  .keylines li{font-size:14.5px;font-weight:500;color:var(--text-2);text-shadow:0 1px 8px rgba(0,0,0,.9)}
+  .keylines li::before{content:'—';color:var(--accent);margin-right:10px;text-shadow:0 0 12px var(--accent)}
 
   /* ── cinematic reveal choreography: kicker → headline lines → lead → actions ── */
-  .panel .kicker,.panel .lead,.panel .btns,.panel .lines,.panel .stats{opacity:0;transform:translateY(18px);
+  .panel .kicker,.panel .lead,.panel .btns,.panel .lines,.panel .keylines,.panel .stats{opacity:0;transform:translateY(18px);
     transition:opacity .7s ease,transform .85s cubic-bezier(.16,1,.3,1)}
   .stop.in .panel .kicker{transition-delay:.04s}
   .stop.in .panel .lead{transition-delay:.52s}
   .stop.in .panel .btns{transition-delay:.66s}
   .stop.in .panel .lines{transition-delay:.55s}
   .stop.in .panel .stats{transition-delay:.68s}
-  .stop.in .panel .kicker,.stop.in .panel .lead,.stop.in .panel .btns,.stop.in .panel .lines,.stop.in .panel .stats{opacity:1;transform:none}
+  .stop.in .panel .kicker,.stop.in .panel .lead,.stop.in .panel .btns,.stop.in .panel .lines,.stop.in .panel .keylines,.stop.in .panel .stats{opacity:1;transform:none}
   .big .rl{display:block;overflow:hidden;padding:0.06em 0.15em 0;margin:0 -0.15em}
   .big .rli{display:block;transform:translateY(114%);opacity:0;filter:blur(9px);
     transition:transform .9s cubic-bezier(.16,1,.3,1),opacity .75s ease,filter .9s ease}
@@ -127,7 +127,7 @@
   @keyframes ctaPulse{0%,100%{box-shadow:0 0 0 1px rgba(255,255,255,.12),0 16px 38px -12px var(--accent)}
     50%{box-shadow:0 0 0 1px rgba(255,255,255,.2),0 18px 52px -10px var(--accent),0 0 30px -4px var(--accent)}}
   @media(prefers-reduced-motion:reduce){
-    .panel .kicker,.panel .lead,.panel .btns,.panel .lines,.panel .stats,.big .rli{opacity:1!important;transform:none!important;filter:none!important;transition:none!important}
+    .panel .kicker,.panel .lead,.panel .btns,.panel .lines,.panel .keylines,.panel .stats,.big .rli{opacity:1!important;transform:none!important;filter:none!important;transition:none!important}
     .btn.primary{animation:none}
     #ctrail{display:none}
   }
@@ -233,7 +233,8 @@
     .stop .lead,.stop.right .lead{margin-left:auto;margin-right:auto}
     .stop .btns{justify-content:center}
     .big{margin:8px 0 10px}
-    .dustline{margin-top:10px}
+    .keylines{margin-top:8px;gap:6px}
+    .keylines li{font-size:13px}
     .aside{flex:0 0 auto}
     .hud{width:250px;padding:0}
     .hud::before{inset:-8% -16%}
@@ -343,7 +344,12 @@
         <span class="kicker"><span class="num">01</span> Corporate Tax</span>
         <h2 class="big">Always<br><em>compliant.</em></h2>
         <p class="lead">UAE corporate tax registration, filing and planning — handled end-to-end and penalty-free, with Small Business Relief claimed whenever you qualify.</p>
-        <div class="dustline" data-lines="Corporate structuring that saves tax.|Registration &amp; filing, end-to-end.|Small Business Relief claimed for you.|Zero penalties to date."><canvas></canvas></div>
+        <ul class="keylines">
+          <li>Corporate structuring that saves tax.</li>
+          <li>Registration &amp; filing, end-to-end.</li>
+          <li>Small Business Relief claimed for you.</li>
+          <li>Zero penalties to date.</li>
+        </ul>
       </div>
       <div class="aside">
         <div class="hud" style="--off:0">
@@ -361,7 +367,12 @@
         <span class="kicker"><span class="num">02</span> UAE VAT</span>
         <h2 class="big">Every quarter,<br><em>on time.</em></h2>
         <p class="lead">VAT registration in Dubai &amp; across the UAE, and every VAT return filed before its deadline with full FTA compliance — no scramble, no penalties.</p>
-        <div class="dustline" data-lines="VAT registration in Dubai &amp; the UAE.|Every return filed before its deadline.|AED 100M+ in refunds approved.|Full FTA compliance, always."><canvas></canvas></div>
+        <ul class="keylines">
+          <li>VAT registration in Dubai &amp; the UAE.</li>
+          <li>Every return filed before its deadline.</li>
+          <li>AED 100M+ in refunds approved.</li>
+          <li>Full FTA compliance, always.</li>
+        </ul>
       </div>
       <div class="aside">
         <div class="hud" style="--off:14">
@@ -379,7 +390,12 @@
         <span class="kicker"><span class="num">03</span> Bookkeeping</span>
         <h2 class="big">Always<br><em>reconciled.</em></h2>
         <p class="lead">Clean, audit-ready records every month — every transaction recorded and matched, so your accounts stay tidy year-round.</p>
-        <div class="dustline" data-lines="Every transaction recorded &amp; matched.|Audit-ready records, every month.|500+ cases handled, 98% accuracy.|Clean books, month after month."><canvas></canvas></div>
+        <ul class="keylines">
+          <li>Every transaction recorded &amp; matched.</li>
+          <li>Audit-ready records, every month.</li>
+          <li>500+ cases handled, 98% accuracy.</li>
+          <li>Clean books, month after month.</li>
+        </ul>
       </div>
       <div class="aside">
         <div class="hud" style="--off:7">
@@ -397,7 +413,12 @@
         <span class="kicker"><span class="num">04</span> Planning &amp; Advisory</span>
         <h2 class="big">Advice when<br><em>it counts.</em></h2>
         <p class="lead">Real guidance from approved tax agents — smart structure, timing and legal savings that grow your wealth, before you need them.</p>
-        <div class="dustline" data-lines="Corporate structuring that saves tax.|Timing that protects your cash flow.|AED 380K saved on average, every year.|Real agents. Real answers."><canvas></canvas></div>
+        <ul class="keylines">
+          <li>Smart structure, set up early.</li>
+          <li>Timing that protects your cash flow.</li>
+          <li>AED 380K saved on average, every year.</li>
+          <li>Real agents. Real answers.</li>
+        </ul>
       </div>
       <div class="aside">
         <div class="hud" style="--off:34">
@@ -658,103 +679,6 @@
   })();
   </script>
 
-  <!-- ── dust lines: rotating content that streams up from dust, holds crisp, blows away ── -->
-  <script>
-  (function(){
-    var els=[].slice.call(document.querySelectorAll('.dustline'));
-    if(!els.length) return;
-    if(window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches){
-      els.forEach(function(el){ var l=(el.getAttribute('data-lines')||'').split('|')[0]||'';
-        el.innerHTML='<div style="font:600 16px Inter,sans-serif;color:var(--accent);opacity:.85">'+l+'</div>'; });
-      return;
-    }
-    function sm(a,b,x){ x=(x-a)/(b-a); return x<0?0:x>1?1:x; }
-    var sprCache={};
-    function sprite(h){ if(sprCache[h]) return sprCache[h];
-      var c=document.createElement('canvas'); c.width=c.height=16; var g=c.getContext('2d');
-      var gr=g.createRadialGradient(8,8,0,8,8,8);
-      gr.addColorStop(0,'hsla('+h+',85%,96%,1)'); gr.addColorStop(.35,'hsla('+h+',75%,72%,.85)'); gr.addColorStop(1,'hsla('+h+',70%,40%,0)');
-      g.fillStyle=gr; g.fillRect(0,0,16,16); sprCache[h]=c; return c; }
-    var insts=[];
-    function Dust(el){
-      var lines=(el.getAttribute('data-lines')||'').split('|');
-      var stop=el.closest('.stop');
-      var align='left';   // resolved from computed style in size() — follows the mobile centered layout
-      var cv=el.querySelector('canvas'), ctx=cv.getContext('2d');
-      var DPR=Math.min(window.devicePixelRatio||1,1.5), W=0,H=56, ps=[], built=-1, idx=0, arrivals=0, state='hidden', t0=0, running=false, raf=null;
-      var myIndex=[].slice.call(document.querySelectorAll('.stop')).indexOf(stop);
-      var FONT='600 16.5px Inter,system-ui,sans-serif';
-      function size(){ W=el.clientWidth||460; cv.width=Math.round(W*DPR); cv.height=Math.round(H*DPR); ctx.setTransform(DPR,0,0,DPR,0,0);
-        var ta=getComputedStyle(stop).textAlign; align=(ta==='center')?'center':(ta==='right'?'right':'left'); built=-1; }
-      function tx(){ return align==='center'?W/2:(align==='right'?W-2:2); }
-      function build(i){
-        var off=document.createElement('canvas'); off.width=W; off.height=H; var og=off.getContext('2d');
-        og.font=FONT; og.textAlign=align; og.textBaseline='middle'; og.fillStyle='#fff';
-        og.fillText(lines[i], tx(), H/2-6);
-        var d=og.getImageData(0,0,W,H).data; ps=[];
-        for(var y=0;y<H;y+=2) for(var x=0;x<W;x+=2){ if(d[(y*W+x)*4+3]>110){
-          var a1=Math.random()*6.283,m1=40+Math.random()*110, a2=Math.random()*6.283,m2=45+Math.random()*130;
-          ps.push({tx:x,ty:y, ix:x+Math.cos(a1)*m1, iy:y+Math.abs(Math.sin(a1))*m1*0.5+46,
-            ox:x+Math.cos(a2)*m2+70, oy:y+Math.sin(a2)*m2*0.4-30,
-            sd:Math.random(), tw:Math.random()*6.283, r:0.45+Math.random()*0.8}); } }
-        built=i;
-      }
-      function drawCrisp(a,h){ if(a<=0.004) return;
-        ctx.save(); ctx.globalAlpha=a; ctx.font=FONT; ctx.textAlign=align; ctx.textBaseline='middle';
-        ctx.shadowColor='hsla('+h+',75%,65%,.95)'; ctx.shadowBlur=16; ctx.fillStyle='hsl('+h+',70%,84%)';
-        ctx.fillText(lines[idx],tx(),H/2-6);
-        ctx.shadowBlur=0; ctx.globalAlpha=a*0.8; ctx.fillStyle='hsl('+h+',30%,97%)'; ctx.fillText(lines[idx],tx(),H/2-6); ctx.restore(); }
-      function frame(now){
-        if(!running){ raf=null; return; }
-        var p=(now-t0)/1000, t=now/1000, h=window.__hueLast||'155';
-        ctx.clearRect(0,0,W,H);
-        if(state==='forming'){                                    // arrival: dust streams up and settles into the line
-          if(built!==idx) build(idx);
-          drawCrisp(sm(1.3,1.85,p),h);
-          var wIn=1-sm(1.45,1.95,p);
-          if(wIn>0.004){ var spr=sprite(h); ctx.globalCompositeOperation='lighter';
-            for(var i2=0;i2<ps.length;i2++){ var q=ps[i2];
-              var f=sm(0,1,(p-q.sd*0.55)/1.2), e=1-Math.pow(1-f,3);
-              var x=q.ix+(q.tx-q.ix)*e+Math.sin(t*1.2+q.tw)*2.5*(1-e), y=q.iy+(q.ty-q.iy)*e;
-              ctx.globalAlpha=Math.max(0,Math.min(1,(0.25+0.75*f)*wIn*(0.8+0.2*Math.sin(t*2.6+q.tw))));
-              ctx.drawImage(spr,x-q.r,y-q.r,q.r*2,q.r*2); }
-            ctx.globalAlpha=1; ctx.globalCompositeOperation='source-over'; }
-          if(p>=2.05){ state='holding'; ctx.clearRect(0,0,W,H); drawCrisp(1,h); running=false; raf=null; return; }
-        } else if(state==='dissolving'){                          // departure: the line blows away as sand
-          drawCrisp(1-sm(0.05,0.45,p),h);
-          var spr2=sprite(h); ctx.globalCompositeOperation='lighter';
-          for(var i3=0;i3<ps.length;i3++){ var q2=ps[i3];
-            var d2=sm(0,1,(p-q2.sd*0.45)/1.05); if(d2>=1) continue; var e2=d2*d2*(3-2*d2);
-            var x2=q2.tx+(q2.ox-q2.tx)*e2+Math.sin(t*1.3+q2.tw)*3, y2=q2.ty+(q2.oy-q2.ty)*e2;
-            ctx.globalAlpha=Math.max(0,Math.min(1,(1-d2)*0.8*(0.8+0.2*Math.sin(t*2.6+q2.tw))));
-            ctx.drawImage(spr2,x2-q2.r,y2-q2.r,q2.r*2,q2.r*2); }
-          ctx.globalAlpha=1; ctx.globalCompositeOperation='source-over';
-          if(p>1.75){ state='hidden'; ctx.clearRect(0,0,W,H); running=false; raf=null; return; }
-        } else { running=false; raf=null; return; }
-        raf=requestAnimationFrame(frame);
-      }
-      function start(){ running=true; if(!raf) raf=requestAnimationFrame(frame); }
-      // scroll-driven: form on arrival at this stop, dissolve when scrolling away; next visit shows the next line
-      window.addEventListener('ahca:stop',function(ev){
-        var i=ev.detail;
-        if(i===myIndex){
-          if(state==='forming'||state==='holding') return;
-          idx=arrivals%lines.length; arrivals++; built=-1;
-          state='forming'; t0=performance.now(); start();
-        } else if(state==='forming'||state==='holding'){
-          if(built!==idx) build(idx);
-          state='dissolving'; t0=performance.now(); start();
-        }
-      });
-      size();
-      addEventListener('resize',function(){ size(); },{passive:true});
-      if(window.__stopNear===myIndex){ idx=0; arrivals=1; state='forming'; t0=performance.now(); start(); }
-      insts.push({inval:function(){ built=-1; if(state==='holding'){ build(idx); ctx.clearRect(0,0,W,H); drawCrisp(1,window.__hueLast||'155'); } }});
-    }
-    els.forEach(function(e){ Dust(e); });
-    if(document.fonts&&document.fonts.ready) document.fonts.ready.then(function(){ insts.forEach(function(i){ i.inval(); }); });
-  })();
-  </script>
 
   <!-- ── GALAXY 3D BACKGROUND — Three.js fly-through, driven by page scroll ── -->
   <script type="importmap">
