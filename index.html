@@ -96,19 +96,18 @@
   .lead{margin:0;color:var(--text-2);font-size:clamp(15px,1.35vw,18px);line-height:1.66;max-width:48ch;text-shadow:0 2px 18px rgba(0,0,0,.9),0 1px 6px rgba(0,0,0,.85)}
   .stop.right .lead{margin-left:auto}
   .stop.center .lead{margin:0 auto}
-  .keylines{list-style:none;margin:18px 0 0;padding:0;display:flex;flex-direction:column;gap:9px}
-  .keylines li{font-size:14.5px;font-weight:500;color:var(--text-2);text-shadow:0 1px 8px rgba(0,0,0,.9)}
-  .keylines li::before{content:'—';color:var(--accent);margin-right:10px;text-shadow:0 0 12px var(--accent)}
+  .keyline{margin-top:18px;min-height:24px;font-size:15px;font-weight:600;color:var(--text-2);text-shadow:0 1px 8px rgba(0,0,0,.9)}
+  .keyline::before{content:'—';color:var(--accent);margin-right:10px;text-shadow:0 0 12px var(--accent)}
 
   /* ── cinematic reveal choreography: kicker → headline lines → lead → actions ── */
-  .panel .kicker,.panel .lead,.panel .btns,.panel .lines,.panel .keylines,.panel .stats{opacity:0;transform:translateY(18px);
+  .panel .kicker,.panel .lead,.panel .btns,.panel .lines,.panel .keyline,.panel .stats{opacity:0;transform:translateY(18px);
     transition:opacity .7s ease,transform .85s cubic-bezier(.16,1,.3,1)}
   .stop.in .panel .kicker{transition-delay:.04s}
   .stop.in .panel .lead{transition-delay:.52s}
   .stop.in .panel .btns{transition-delay:.66s}
   .stop.in .panel .lines{transition-delay:.55s}
   .stop.in .panel .stats{transition-delay:.68s}
-  .stop.in .panel .kicker,.stop.in .panel .lead,.stop.in .panel .btns,.stop.in .panel .lines,.stop.in .panel .keylines,.stop.in .panel .stats{opacity:1;transform:none}
+  .stop.in .panel .kicker,.stop.in .panel .lead,.stop.in .panel .btns,.stop.in .panel .lines,.stop.in .panel .keyline,.stop.in .panel .stats{opacity:1;transform:none}
   .big .rl{display:block;overflow:hidden;padding:0.06em 0.15em 0;margin:0 -0.15em}
   .big .rli{display:block;transform:translateY(114%);opacity:0;filter:blur(9px);
     transition:transform .9s cubic-bezier(.16,1,.3,1),opacity .75s ease,filter .9s ease}
@@ -127,7 +126,7 @@
   @keyframes ctaPulse{0%,100%{box-shadow:0 0 0 1px rgba(255,255,255,.12),0 16px 38px -12px var(--accent)}
     50%{box-shadow:0 0 0 1px rgba(255,255,255,.2),0 18px 52px -10px var(--accent),0 0 30px -4px var(--accent)}}
   @media(prefers-reduced-motion:reduce){
-    .panel .kicker,.panel .lead,.panel .btns,.panel .lines,.panel .keylines,.panel .stats,.big .rli{opacity:1!important;transform:none!important;filter:none!important;transition:none!important}
+    .panel .kicker,.panel .lead,.panel .btns,.panel .lines,.panel .keyline,.panel .stats,.big .rli{opacity:1!important;transform:none!important;filter:none!important;transition:none!important}
     .btn.primary{animation:none}
     #ctrail{display:none}
   }
@@ -233,8 +232,7 @@
     .stop .lead,.stop.right .lead{margin-left:auto;margin-right:auto}
     .stop .btns{justify-content:center}
     .big{margin:8px 0 10px}
-    .keylines{margin-top:8px;gap:6px}
-    .keylines li{font-size:13px}
+    .keyline{margin-top:8px;font-size:13.5px}
     .aside{flex:0 0 auto}
     .hud{width:250px;padding:0}
     .hud::before{inset:-8% -16%}
@@ -344,12 +342,7 @@
         <span class="kicker"><span class="num">01</span> Corporate Tax</span>
         <h2 class="big">Always<br><em>compliant.</em></h2>
         <p class="lead">UAE corporate tax registration, filing and planning — handled end-to-end and penalty-free, with Small Business Relief claimed whenever you qualify.</p>
-        <ul class="keylines">
-          <li>Corporate structuring that saves tax.</li>
-          <li>Registration &amp; filing, end-to-end.</li>
-          <li>Small Business Relief claimed for you.</li>
-          <li>Zero penalties to date.</li>
-        </ul>
+        <div class="keyline" data-lines="Corporate structuring that saves tax.|Registration &amp; filing, end-to-end.|Small Business Relief claimed for you.|Zero penalties to date.">Corporate structuring that saves tax.</div>
       </div>
       <div class="aside">
         <div class="hud" style="--off:0">
@@ -367,12 +360,7 @@
         <span class="kicker"><span class="num">02</span> UAE VAT</span>
         <h2 class="big">Every quarter,<br><em>on time.</em></h2>
         <p class="lead">VAT registration in Dubai &amp; across the UAE, and every VAT return filed before its deadline with full FTA compliance — no scramble, no penalties.</p>
-        <ul class="keylines">
-          <li>VAT registration in Dubai &amp; the UAE.</li>
-          <li>Every return filed before its deadline.</li>
-          <li>AED 100M+ in refunds approved.</li>
-          <li>Full FTA compliance, always.</li>
-        </ul>
+        <div class="keyline" data-lines="VAT registration in Dubai &amp; the UAE.|Every return filed before its deadline.|AED 100M+ in refunds approved.|Full FTA compliance, always.">VAT registration in Dubai &amp; the UAE.</div>
       </div>
       <div class="aside">
         <div class="hud" style="--off:14">
@@ -390,12 +378,7 @@
         <span class="kicker"><span class="num">03</span> Bookkeeping</span>
         <h2 class="big">Always<br><em>reconciled.</em></h2>
         <p class="lead">Clean, audit-ready records every month — every transaction recorded and matched, so your accounts stay tidy year-round.</p>
-        <ul class="keylines">
-          <li>Every transaction recorded &amp; matched.</li>
-          <li>Audit-ready records, every month.</li>
-          <li>500+ cases handled, 98% accuracy.</li>
-          <li>Clean books, month after month.</li>
-        </ul>
+        <div class="keyline" data-lines="Every transaction recorded &amp; matched.|Audit-ready records, every month.|500+ cases handled, 98% accuracy.|Clean books, month after month.">Every transaction recorded &amp; matched.</div>
       </div>
       <div class="aside">
         <div class="hud" style="--off:7">
@@ -413,12 +396,7 @@
         <span class="kicker"><span class="num">04</span> Planning &amp; Advisory</span>
         <h2 class="big">Advice when<br><em>it counts.</em></h2>
         <p class="lead">Real guidance from approved tax agents — smart structure, timing and legal savings that grow your wealth, before you need them.</p>
-        <ul class="keylines">
-          <li>Smart structure, set up early.</li>
-          <li>Timing that protects your cash flow.</li>
-          <li>AED 380K saved on average, every year.</li>
-          <li>Real agents. Real answers.</li>
-        </ul>
+        <div class="keyline" data-lines="Smart structure, set up early.|Timing that protects your cash flow.|AED 380K saved on average, every year.|Real agents. Real answers.">Smart structure, set up early.</div>
       </div>
       <div class="aside">
         <div class="hud" style="--off:34">
@@ -571,6 +549,16 @@
       navSeg.style.left=(r.left-hair.left+r.width/2-28)+'px'; navSeg.classList.add('show');
     }
     window.addEventListener('ahca:stop',function(e){ setNav(e.detail); });
+
+    // keyline rotation: one sentence at a time; swaps to the next while you're away — no animation
+    document.querySelectorAll('.keyline').forEach(function(el){
+      var lines=(el.getAttribute('data-lines')||'').split('|');
+      var my=stops.indexOf(el.closest('.stop')), n=1, here=false;
+      window.addEventListener('ahca:stop',function(ev){
+        if(ev.detail===my){ here=true; }
+        else if(here){ here=false; el.textContent=lines[n%lines.length]; n++; }
+      });
+    });
     addEventListener('resize',function(){ if(typeof window.__stopNear==='number') setNav(window.__stopNear); },{passive:true});
     if(typeof window.__stopNear==='number') setNav(window.__stopNear);
 
