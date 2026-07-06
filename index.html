@@ -31,12 +31,13 @@
   svg.ic{width:1em;height:1em;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;display:inline-block}
   :root{ --green:#02B36A; --green-l:#5ECFA0; --accent:#5ECFA0; --gold:#C9A84C;
          --text:#EAF6EE; --text-2:#bcd8cc; --text-3:#83a899; --head-h:64px; }
-  *{box-sizing:border-box}
+  *{box-sizing:border-box;-webkit-user-select:none;-moz-user-select:none;user-select:none;-webkit-user-drag:none;-webkit-touch-callout:none}
   html,body{margin:0;overflow-x:hidden}
   html{background:#000;-webkit-text-size-adjust:100%}
   body{font-family:Inter,system-ui,sans-serif;color:var(--text);background:transparent;-webkit-font-smoothing:antialiased}
   a{color:inherit}
-  ::selection{background:rgba(94,207,160,.32)}
+  ::selection{background:transparent}   /* selection disabled site-wide — no highlight */
+  img{pointer-events:none;-webkit-user-drag:none}
 
   /* ── galaxy background ── */
   #gx{position:fixed;inset:0;width:100vw;height:100vh;z-index:-2;display:block;pointer-events:none;
@@ -295,6 +296,25 @@
   </style>
 </head>
 <body>
+  <script>
+  // ── content protection: block selection, copy/cut, right-click, drag, devtools shortcuts ──
+  (function(){
+    var stop=function(e){ e.preventDefault(); return false; };
+    ['contextmenu','copy','cut','dragstart','selectstart'].forEach(function(ev){
+      document.addEventListener(ev, stop, {capture:true});
+    });
+    document.addEventListener('keydown', function(e){
+      var k=(e.key||'').toLowerCase();
+      // block Ctrl/⌘ + C/X/A/S/P/U  and  F12 / view-source / save
+      if((e.ctrlKey||e.metaKey) && ['c','x','a','s','p','u'].indexOf(k)>-1){ return stop(e); }
+      if(k==='f12'){ return stop(e); }
+      // PrintScreen: overwrite whatever just landed on the clipboard (best-effort deterrent only)
+      if(k==='printscreen'){
+        if(navigator.clipboard && navigator.clipboard.writeText){ navigator.clipboard.writeText('© AHCA — ahca.ae').catch(function(){}); }
+      }
+    }, {capture:true});
+  })();
+  </script>
   <svg xmlns="http://www.w3.org/2000/svg" style="display:none" aria-hidden="true"><defs>
     <symbol id="tico-brand-whatsapp" viewBox="0 0 24 24"><path fill="currentColor" stroke="none" d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5.1-1.3A10 10 0 1 0 12 2zm5.2 14.2c-.2.6-1.2 1.2-1.7 1.2-.4.1-1 .1-1.6-.1-.4-.1-.9-.3-1.5-.5-2.6-1.1-4.3-3.8-4.4-4-.1-.2-1.1-1.4-1.1-2.7s.7-1.9.9-2.2c.2-.2.5-.3.7-.3h.5c.2 0 .4 0 .6.4l.9 2.1c.1.2.1.4 0 .6l-.4.6-.5.5c-.1.1-.3.3-.1.6.2.3.8 1.3 1.7 2.1 1.2 1 2.1 1.4 2.4 1.5.3.1.5.1.7-.1l1-1.2c.2-.3.4-.2.7-.1l2 1c.3.1.5.2.6.4 0-.1 0 .5-.2 1.2z"/></symbol>
     <symbol id="tico-calendar" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="17" rx="2"/><path d="M16 2v4M8 2v4M3 9h18"/></symbol>
