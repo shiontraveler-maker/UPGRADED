@@ -1,0 +1,92 @@
+{% extends "base.html" %}
+{% block title %}GoNow — your trips{% endblock %}
+
+{% block content %}
+<section class="results-head">
+    <a class="back" href="{{ url_for('index') }}">← change details</a>
+    <h2>
+        {{ packages|length }} trip{{ '' if packages|length == 1 else 's' }} for
+        {{ '{:,}'.format(req.budget) }} {{ currency }}
+    </h2>
+    <p class="meta">
+        {{ req.nights }} nights · {{ req.travelers }} traveler{{ '' if req.travelers == 1 else 's' }}
+        · {{ passport_label }} passport
+        {% if req.start_date %} · from {{ req.start_date }}{% endif %}
+    </p>
+</section>
+
+{% if not packages %}
+<div class="alert">
+    Nothing fits that budget yet. Try a few more nights' budget, fewer travelers,
+    or a slightly higher amount — last-minute deals move fast.
+</div>
+{% endif %}
+
+{% for p in packages %}
+<article class="card">
+    <div class="card-head">
+        <div>
+            <h3>{{ p.label }} <small>{{ p.city }}, {{ p.country }}</small></h3>
+            <div class="tags">
+                {% for t in p.tags %}<span class="tag">{{ t }}</span>{% endfor %}
+            </div>
+        </div>
+        <div class="price">
+            <strong>{{ '{:,}'.format(p.costs.total) }} {{ currency }}</strong>
+            <span>total · {{ '{:,}'.format(p.costs.leftover) }} {{ currency }} to spare</span>
+        </div>
+    </div>
+
+    <div class="card-grid">
+        <div class="block">
+            <h4>✈ Flight</h4>
+            <p>{{ p.flight.from }} → {{ p.flight.to }} · ~{{ p.flight.hours }}h<br>
+               {{ '{:,}'.format(p.flight.price_pp) }} {{ currency }} pp ×
+               {{ p.flight.travelers }} = {{ '{:,}'.format(p.flight.total) }} {{ currency }}</p>
+        </div>
+        <div class="block">
+            <h4>🏨 Hotel</h4>
+            <p>{{ p.hotel.name }} {{ '★' * p.hotel.stars }}<br>
+               {{ p.hotel.area }} · {{ p.hotel.rooms }} room(s) × {{ p.hotel.nights }} nights
+               = {{ '{:,}'.format(p.hotel.total) }} {{ currency }}</p>
+        </div>
+        <div class="block">
+            <h4>🛂 Entry · {{ p.visa.label }}</h4>
+            <p>{{ p.visa.note }}<br>
+               <small>Passport valid ≥ {{ p.visa.passport_valid_months }} months.</small></p>
+        </div>
+    </div>
+
+    <details class="plan">
+        <summary>📋 Your day-by-day plan</summary>
+        <ol class="days">
+            {% for day in p.itinerary %}
+            <li>
+                <span class="dnum">Day {{ day.n }}{% if day.date %} · {{ day.date }}{% endif %}</span>
+                <ul>
+                    {% for item in day['items'] %}
+                    <li class="{{ 'trimmed' if item.trimmed else '' }}">
+                        {{ item.name }}
+                        {% if item.cost_pp and item.cost_pp > 0 %}
+                            <span class="ic">{{ item.cost_pp }} {{ currency }} pp</span>
+                        {% endif %}
+                        {% if item.trimmed %}<span class="ic muted">(skipped to fit budget)</span>{% endif %}
+                    </li>
+                    {% endfor %}
+                </ul>
+            </li>
+            {% endfor %}
+        </ol>
+    </details>
+
+    <form action="{{ url_for('checkout', pkg_id=p.id) }}" method="post" class="bookrow">
+        <input type="hidden" name="budget" value="{{ req.budget }}">
+        <input type="hidden" name="nights" value="{{ req.nights }}">
+        <input type="hidden" name="travelers" value="{{ req.travelers }}">
+        <input type="hidden" name="passport" value="{{ req.passport }}">
+        {% if req.start_date %}<input type="hidden" name="start_date" value="{{ req.start_date }}">{% endif %}
+        <button type="submit" class="cta small">Book this trip →</button>
+    </form>
+</article>
+{% endfor %}
+{% endblock %}

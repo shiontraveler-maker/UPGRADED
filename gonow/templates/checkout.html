@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+{% block title %}GoNow — checkout{% endblock %}
+
+{% block content %}
+<section class="results-head">
+    <a class="back" href="javascript:history.back()">← back to trips</a>
+    <h2>Confirm & pay</h2>
+    <p class="meta">{{ pkg.label }} · {{ req.nights }} nights · {{ req.travelers }} traveler(s)</p>
+</section>
+
+<article class="card">
+    <div class="summary">
+        <div><span>Flights</span><b>{{ '{:,}'.format(pkg.costs.flights) }} {{ currency }}</b></div>
+        <div><span>{{ pkg.hotel.name }} {{ '★' * pkg.hotel.stars }}</span>
+             <b>{{ '{:,}'.format(pkg.costs.hotel) }} {{ currency }}</b></div>
+        <div><span>Activities</span><b>{{ '{:,}'.format(pkg.costs.activities) }} {{ currency }}</b></div>
+        <div class="total"><span>Total</span>
+             <b>{{ '{:,}'.format(pkg.costs.total) }} {{ currency }}</b></div>
+    </div>
+
+    <div class="visa-note">
+        🛂 {{ passport_label }} passport · <b>{{ pkg.visa.label }}</b> — {{ pkg.visa.note }}
+    </div>
+
+    <form method="post" class="pay">
+        <input type="hidden" name="budget" value="{{ req.budget }}">
+        <input type="hidden" name="nights" value="{{ req.nights }}">
+        <input type="hidden" name="travelers" value="{{ req.travelers }}">
+        <input type="hidden" name="passport" value="{{ req.passport }}">
+        {% if req.start_date %}<input type="hidden" name="start_date" value="{{ req.start_date }}">{% endif %}
+
+        <h4>Pay with</h4>
+        <div class="methods">
+            {% for m in methods %}
+            <label class="method">
+                <input type="radio" name="method" value="{{ m.id }}"
+                       {% if loop.first %}checked{% endif %}>
+                <span class="m-label">{{ m.label }}</span>
+                <span class="m-kind">{{ m.kind }}</span>
+            </label>
+            {% endfor %}
+        </div>
+
+        <button type="submit" class="cta">Pay {{ '{:,}'.format(pkg.costs.total) }} {{ currency }}</button>
+        <p class="fineprint">Demo checkout — no real payment is taken.</p>
+    </form>
+</article>
+{% endblock %}

@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Tasks{% endblock %}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <main class="container">
+        <header class="app-header">
+            <h1>✓ Tasks</h1>
+            <p class="tagline">A tiny Flask web app starter</p>
+        </header>
+        {% block content %}{% endblock %}
+        <footer class="app-footer">
+            <span>Built with Flask + SQLite</span>
+        </footer>
+    </main>
+</body>
+</html>

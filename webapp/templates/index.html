@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+
+{% block content %}
+<form class="add-form" action="{{ url_for('add') }}" method="post">
+    <input type="text" name="title" placeholder="What needs doing?" autofocus required>
+    <button type="submit">Add</button>
+</form>
+
+<p class="status">
+    {% if tasks %}
+        {{ remaining }} of {{ tasks|length }} remaining
+    {% else %}
+        Nothing here yet — add your first task above.
+    {% endif %}
+</p>
+
+<ul class="task-list">
+    {% for task in tasks %}
+    <li class="task {% if task.done %}done{% endif %}">
+        <form action="{{ url_for('toggle', task_id=task.id) }}" method="post" class="inline">
+            <button type="submit" class="check" title="Toggle done">
+                {{ "✓" if task.done else "○" }}
+            </button>
+        </form>
+        <span class="title">{{ task.title }}</span>
+        <form action="{{ url_for('delete', task_id=task.id) }}" method="post" class="inline">
+            <button type="submit" class="delete" title="Delete">✕</button>
+        </form>
+    </li>
+    {% endfor %}
+</ul>
+{% endblock %}

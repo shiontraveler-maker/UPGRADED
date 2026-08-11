@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+{% block title %}GoNow — tell us your budget, we'll do the rest{% endblock %}
+
+{% block content %}
+<section class="hero">
+    <h1>Don't search. <span class="accent">Just go.</span></h1>
+    <p class="sub">
+        Tell GoNow your budget, dates and who's coming — we hand you ready-to-book
+        last-minute trips with flights, hotel, a plan, and your visa info.
+    </p>
+</section>
+
+{% if errors %}
+<div class="alert">
+    <ul>{% for e in errors %}<li>{{ e }}</li>{% endfor %}</ul>
+</div>
+{% endif %}
+
+<form class="ask" action="{{ url_for('results') }}" method="post">
+    <label class="field">
+        <span>Your budget (AED, total)</span>
+        <input type="number" name="budget" min="1" step="50"
+               value="{{ form.budget if form else '8000' }}"
+               placeholder="e.g. 8000" required>
+    </label>
+
+    <div class="row">
+        <label class="field">
+            <span>Nights</span>
+            <input type="number" name="nights" min="1" max="21"
+                   value="{{ form.nights if form else '4' }}" required>
+        </label>
+        <label class="field">
+            <span>Travelers</span>
+            <input type="number" name="travelers" min="1" max="12"
+                   value="{{ form.travelers if form else '2' }}" required>
+        </label>
+    </div>
+
+    <label class="field">
+        <span>Departure date (optional)</span>
+        <input type="date" name="start_date" value="{{ form.start_date if form else '' }}">
+    </label>
+
+    <label class="field">
+        <span>Your passport <small>— so we show visa & documents</small></span>
+        <select name="passport">
+            {% for p in passports %}
+            <option value="{{ p.code }}"
+                {% if form and form.passport == p.code %}selected{% endif %}>
+                {{ p.label }}
+            </option>
+            {% endfor %}
+        </select>
+    </label>
+
+    <button type="submit" class="cta">Show me where I can go →</button>
+</form>
+{% endblock %}
